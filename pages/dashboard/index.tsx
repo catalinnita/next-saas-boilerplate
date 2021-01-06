@@ -1,12 +1,13 @@
-import React from 'react'
-import { NextPage, NextPageContext } from 'next'
-import Head from 'next/head'
+import React from "react"
+import { NextPage, NextPageContext } from "next"
+import Head from "next/head"
 
 interface Props {
+  asPath: string
 }
 
 export const dataTestIds = {
-  container: 'dashboard-page'
+  container: "dashboard-page"
 }
 
 const Page: NextPage<Props> = (props) => {
@@ -22,8 +23,9 @@ const Page: NextPage<Props> = (props) => {
 }
 
 
-Page.getInitialProps = async ({ req, res }: NextPageContext): Promise<Props> => {
-  return { res }
+Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
+  const { asPath } = ctx
+  return { asPath }
 }
 
 export default Page
