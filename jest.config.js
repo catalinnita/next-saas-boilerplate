@@ -3,7 +3,6 @@ module.exports = {
   modulePathIgnorePatterns: [
     "dist",
     "build",
-    // ".next",
   ],
   preset: 'ts-jest',
   setupFilesAfterEnv: [
@@ -12,6 +11,11 @@ module.exports = {
   testEnvironment: 'jest-environment-jsdom-sixteen',
   testMatch: ["**/*.test.+(ts|tsx)"],
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+      "^.+\\.tsx?$": "ts-jest"
+  },
+  globals: {
+    "ts-jest": {
+      tsconfig: "tsconfig.jest.json"
+    }
   }
 };
