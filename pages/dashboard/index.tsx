@@ -3,7 +3,7 @@ import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
 
 interface Props {
-  asPath: string
+  asPath?: string
 }
 
 export const dataTestIds = {
