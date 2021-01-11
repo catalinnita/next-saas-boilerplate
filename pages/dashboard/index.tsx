@@ -25,11 +25,10 @@ const Page: NextPage<Props> = (props) => {
 
 Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const { asPath, res, req } = ctx
-
   const session = await auth0.getSession(req);
 
   if (!session) {
-    res.writeHead(302, { Location: '/api/login' });
+    res.writeHead(302, { Location: `https://${req.headers.host}/api/login` });
     res.end();
     return;
   }
