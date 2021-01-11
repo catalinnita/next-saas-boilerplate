@@ -1,7 +1,7 @@
 import React from "react"
 import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
-
+import auth0 from '../../utils/auth0'
 interface Props {
   asPath?: string
 }
@@ -24,7 +24,16 @@ const Page: NextPage<Props> = (props) => {
 
 
 Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
-  const { asPath } = ctx
+  const { asPath, res, req } = ctx
+
+  const session = await auth0.getSession(req);
+
+  if (!session) {
+    res.writeHead(302, { Location: '/api/login' });
+    res.end();
+    return;
+  }
+
   return { asPath }
 }
 
