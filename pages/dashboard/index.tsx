@@ -28,7 +28,7 @@ Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const session = await auth0.getSession(req);
 
   if (!session) {
-    res.writeHead(302, { Location: `https://${req.headers.host}/api/login` });
+    res.writeHead(302, { Location: '/api/login' });
     res.end();
     return;
   }
