@@ -1,7 +1,9 @@
 import React from "react"
+import { Flex, Heading, Link } from "rebass"
 import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
-import auth0 from '../../utils/auth0'
+import auth0 from "../../utils/auth0"
+
 interface Props {
   asPath?: string
 }
@@ -17,7 +19,10 @@ const Page: NextPage<Props> = (props) => {
       <Head>
         <title>{title}</title>
       </Head>
-      <h1>{title}</h1>
+      <Flex maxWidth="1080px" mx="auto" justifyContent="space-between">
+        <Heading>{title}</Heading>
+        <Link href="/api/logout">Logout</Link>
+      </Flex>
     </div>
   )
 }
@@ -28,7 +33,7 @@ Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const session = await auth0.getSession(req);
 
   if (!session) {
-    res.writeHead(302, { Location: '/api/login' });
+    res.writeHead(302, { Location: "/api/login" });
     res.end();
     return;
   }
