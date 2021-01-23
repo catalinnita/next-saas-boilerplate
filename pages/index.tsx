@@ -1,6 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import { NextPage } from "next"
+import { Link, Flex } from "rebass"
 
 const Page: NextPage = () => {
   return (
@@ -11,9 +12,10 @@ const Page: NextPage = () => {
       </Head>
 
       <main>
-        <h1>
-          Hello world
-        </h1>
+        <Flex width="100%" justifyContent="center">
+          <Link padding="0.2rem" href="/api/login">Login</Link>
+          <Link padding="0.2rem" href="/api/register">Create account</Link>
+        </Flex>
       </main>
 
     </div>
