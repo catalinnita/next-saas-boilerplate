@@ -2,7 +2,7 @@ import React from "react"
 import { Flex, Heading, Link } from "rebass"
 import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
-import auth0 from "../../utils/auth0"
+import { auth0 } from "../../utils/auth0"
 
 interface Props {
   asPath?: string
@@ -22,6 +22,10 @@ const Page: NextPage<Props> = (props) => {
       <Flex maxWidth="1080px" mx="auto" justifyContent="space-between">
         <Heading>{title}</Heading>
         <Link href="/api/logout">Logout</Link>
+      </Flex>
+      <Flex maxWidth="1080px" mx="auto" justifyContent="space-between" flexDirection="column">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/profile">Profile</a>
       </Flex>
     </div>
   )

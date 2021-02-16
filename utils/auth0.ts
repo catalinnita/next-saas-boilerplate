@@ -1,7 +1,8 @@
 import { initAuth0 } from "@auth0/nextjs-auth0"
+import { Url } from "url";
 
-export default initAuth0({
-  domain: process.env.AUTH0_DOMAIN,
+export const auth0 = initAuth0({
+  domain: process.env.NEXT_PUBLIC_AUTH0_DOMAIN,
   clientId: process.env.AUTH0_CLIENT_ID,
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
   scope: "openid profile",
@@ -30,3 +31,77 @@ export default initAuth0({
     clockTolerance: 10000
   }
 });
+
+export interface auth0Token {
+  "access_token": string,
+  "refresh_token": string,
+  "id_token": string,
+  "token_type": string,
+  "expires_in": number
+}
+
+export const getToken = async (): Promise<auth0Token> => {
+  const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/oauth/token`
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      client_id: process.env.AUTH0_CLIENT_ID,
+      client_secret: process.env.AUTH0_CLIENT_SECRET,
+      audience: `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/`,
+      grant_type: "client_credentials",
+    })
+  })
+
+  return response.json()
+}
+
+export interface auth0User {
+  "blocked": boolean,
+  "email_verified": boolean,
+  "email": string,
+  "phone_number": string,
+  "phone_verified": boolean,
+  "user_metadata": Record<string, any>,
+  "app_metadata": Record<string, any>,
+  "given_name": string,
+  "family_name": string,
+  "name": string,
+  "nickname": string,
+  "picture": Url,
+  "verify_email": boolean,
+  "verify_phone_number": boolean,
+  "password": string,
+  "connection": string,
+  "client_id": string,
+  "username": string,
+}
+
+export const getUserById = async (id: string, token: string): Promise<auth0User> => {
+  const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${id}`
+  const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+      "authorization": `Bearer ${token}`
+    }
+  });
+
+  return response.json()
+}
+
+export const updateUserById = async (token: string, userId: string, userData: Record<string,any>): Promise<Response> => {
+  const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${userId}`
+
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(userData)
+  });
+
+  return response.json()
+}
