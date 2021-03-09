@@ -1,4 +1,5 @@
 import { initAuth0 } from "@auth0/nextjs-auth0"
+import useSWR from "swr";
 import { Url } from "url";
 
 export const auth0 = initAuth0({
@@ -59,6 +60,7 @@ export const getToken = async (): Promise<auth0Token> => {
 }
 
 export interface auth0User {
+  "user_id": string,
   "blocked": boolean,
   "email_verified": boolean,
   "email": string,
@@ -79,17 +81,27 @@ export interface auth0User {
   "username": string,
 }
 
-export const getUserById = async (id: string, token: string): Promise<auth0User> => {
-  const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${id}`
+export const getUser = async (userId: string, token: auth0Token, fields?: string[]): Promise<auth0User> => {
+  const fieldsUrl = fields ? `?fields=${fields.join(",")}` : ""
+  const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${userId}${fieldsUrl}`
+  console.log(url)
   const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+      "authorization": `Bearer ${token.access_token}`,
+    },
+  })
+
+  return response.json()
+}
+
+export const fetchUser = (url: string, token: string): Promise<Response> =>
+  fetch(url, {
     headers: {
       "Content-Type": "application/json",
       "authorization": `Bearer ${token}`
     }
-  });
-
-  return response.json()
-}
+  }).then(res => res.json())
 
 export const updateUserById = async (token: string, userId: string, userData: Record<string,any>): Promise<Response> => {
   const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${userId}`
@@ -104,4 +116,20 @@ export const updateUserById = async (token: string, userId: string, userData: Re
   });
 
   return response.json()
+}
+
+export const useUser = (id: string, token: string): Record<string, any> => {
+  const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${id}`
+  const { data, error, mutate } = useSWR([url, token], fetchUser)
+
+  const setUser = (token: string, userId: string, userData: Record<string,any>): void => {
+    mutate(updateUserById(token, userId, userData))
+  }
+
+  return {
+    user: data,
+    isLoading: !error && !data,
+    isError: error,
+    setUser
+  }
 }

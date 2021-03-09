@@ -2,13 +2,14 @@ import React from "react"
 import { Box, Flex, Heading, Link } from "rebass"
 import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
-import { auth0, getToken, getUserById } from "../../utils/auth0"
+import { auth0, getToken, useUser } from "../../utils/auth0"
+import { useStripe } from "../../utils/stripe"
 import { FormPassword } from "../../components/formPassword"
 import { FormProfile } from "../../components/formProfile"
 import { Navigation } from "../../components/navigation"
 
 export interface Props {
-  user?: Record<any, any>
+  userId?: string,
   token?: string
 }
 
@@ -16,8 +17,10 @@ export const dataTestIds = {
   container: "profile-page"
 }
 
-const Page: NextPage<Props> = ({ user, token }) => {
+const Page: NextPage<Props> = ({ userId, token }) => {
   const title = "Profile page"
+  const { user, setUser } = useUser(userId, token)
+  const { userStatus } = useStripe(user?.app_metadata?.stripe_customer_id)
 
   return (
     <div data-testid={dataTestIds.container}>
@@ -35,8 +38,8 @@ const Page: NextPage<Props> = ({ user, token }) => {
           <Navigation />
         </Box>
         <Box width={3 / 4}>
-          <FormProfile user={user} token={token} />
-          <FormPassword user={user} token={token} />
+          {user && <FormProfile user={user} token={token} setUser={setUser} />}
+          {user && <FormPassword user={user} token={token} />}
         </Box>
 
       </Flex>
@@ -47,26 +50,10 @@ const Page: NextPage<Props> = ({ user, token }) => {
 Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const { res, req } = ctx
 
-  const session = await auth0.getSession(req);
-  if (!session) {
-    res.writeHead(302, { Location: "/api/login" });
-    res.end();
-    return;
-  }
-
-  const token = await getToken()
-  const user = await getUserById(session.user.sub, token.access_token)
-
-  if (!user) {
-    res.writeHead(302, { Location: "/api/login" });
-    res.end();
-    return;
-  }
-
   return {
-    user,
-    token: token.access_token,
-   }
+    res,
+    req,
+  }
 }
 
 

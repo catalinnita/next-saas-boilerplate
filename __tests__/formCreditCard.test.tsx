@@ -37,6 +37,11 @@ it("renders the CVC input component", async () => {
   expect(getByTestId(dataTestIds.cvc)).toBeInTheDocument()
 })
 
+it("renders the Add Payment Method button", async () => {
+  const { getByTestId } = render(<FormCreditCard />)
+  expect(getByTestId(dataTestIds.submitButton)).toBeInTheDocument()
+})
+
 it("sets the input values according with the state value", async () => {
   useStateMock.mockImplementation(() => realUseState(stubInitialState))
   const { getByTestId } = render(<FormCreditCard />)

@@ -29,15 +29,16 @@ export const dataTestIds = {
   submitButton: "form-profile-submit-button",
 }
 
-export const FormProfile: React.FC<Props> = ({ user, token }) => {
+export const FormProfile: React.FC<Props> = ({ user, token, setUser }) => {
   const [userData, setUserData] = useState({
     email: user.email,
     nickname: user.nickname
   } as Profile)
   const [validation, setValidation] = useState({} as ProfileErrors)
 
-  const updateProfile = async (): Promise<Response> => {
-    return updateUserById(token, user.user_id, userData)
+  const updateProfile = (): void => {
+    // return updateUserById(token, user.user_id, userData)
+    setUser(token, user.user_id, userData)
   }
 
   const validateAndSetProfileData = ({ email, nickname }: {email?: string, nickname?: string}): void => {
