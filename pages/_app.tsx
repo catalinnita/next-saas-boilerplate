@@ -21,7 +21,8 @@ class MyApp extends App<AppProps> {
 
 MyApp.getInitialProps = async (ctx: AppContextType<Router>):Promise<AppInitialProps> => {
   const { pageProps } = await App.getInitialProps(ctx);
-  const { res, req } = pageProps
+
+  const { res = ctx.ctx.res, req = ctx.ctx.req } = pageProps || ctx.ctx
 
   // check if user is logged in
   const session = await auth0.getSession(req)
