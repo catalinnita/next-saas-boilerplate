@@ -1,30 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-typescript-app`](https://www.npmjs.com/package/create-next-typescript-app).
+## WIP
+
+-----
 
 ## Getting Started
 
-First, run the development server:
+#1. CREATE AN AUTH0 FREE ACCOUNT -> https://www.auth0.com
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+In auth0 > applications > settings set:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Application Login URI: 
+https://{yourIP}:3000/api/login
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Allowed Callback URLs:
+https://{yourIP}:3000/api/callback, 
+https://{yourIP}:3000/dashboard, 
+https://{yourIP}:3000/api/logout
 
-## Learn More
+Allowed Logout URLs:
+https://{yourIP}:3000/
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#2. CREATE A STRIPE ACCOUNT -> https://www.stripe.com
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Create a price in Products > Pricing > Add another price
 
-## Deploy on Vercel
+#3. SET ENV VARIABLES:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+APP_DOMAIN=https://{yourIP}:3000
+NEXT_PUBLIC_AUTH0_DOMAIN={auth0 > applications > settings > domain}
+AUTH0_CLIENT_ID={auth0 > applications > settings > clientId}
+AUTH0_CLIENT_SECRET={auth0 > applications > settings > clientSecret}
+AUTH0_COOKIE_SECRET={generate one}
+NEXT_PUBLIC_STRIPE_KEY={stripe > developers > API Keys}
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+#4. CLONE THE REPO
+
+#5. RUN YARN
+
+#6. UPDATE APP CONFIG
+
+In config > appConfig.ts add the priceId for the price you've set above
+
+#7. RUN YARD DEV for dev mode
+
+----
+
+Use vercel for serverless one click deployment ... It's all you need ;)
