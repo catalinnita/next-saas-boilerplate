@@ -32,11 +32,11 @@ Create a price in Products > Pricing > Add another price
 
 __Set .env variables:__
 ```
-APP_DOMAIN=https://{yourIP}:3000 \
-NEXT_PUBLIC_AUTH0_DOMAIN={auth0 > applications > settings > domain} \
-AUTH0_CLIENT_ID={auth0 > applications > settings > clientId} \
-AUTH0_CLIENT_SECRET={auth0 > applications > settings > clientSecret} \
-AUTH0_COOKIE_SECRET={generate one} \
+APP_DOMAIN=https://{yourIP}:3000
+NEXT_PUBLIC_AUTH0_DOMAIN={auth0 > applications > settings > domain}
+AUTH0_CLIENT_ID={auth0 > applications > settings > clientId}
+AUTH0_CLIENT_SECRET={auth0 > applications > settings > clientSecret}
+AUTH0_COOKIE_SECRET={generate one}
 NEXT_PUBLIC_STRIPE_KEY={stripe > developers > API Keys} 
 ```
 __Install the modules:__ \
