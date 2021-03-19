@@ -1,10 +1,8 @@
-import React, { useContext, useState } from "react"
+import React from "react"
 import { Box, Flex, Heading, Link } from "rebass"
 import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
 import { IncomingMessage, ServerResponse } from "http"
-import { UserContext } from "../../context/userContext"
-import { useStripe } from "../../utils/stripe"
 import { Navigation } from "../../components/navigation"
 import { PopupsWrapper } from "../../components/popupsWrapper"
 
@@ -18,7 +16,6 @@ export const dataTestIds = {
 }
 
 const Page: NextPage = () => {
-  // const { userStatus: defaultUserStatus, userPayment } = useStripe(user?.app_metadata?.stripe_customer_id)
 
   const title = "Dashboard page"
 
