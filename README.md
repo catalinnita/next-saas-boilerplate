@@ -1,9 +1,9 @@
 ###### WIP
 ----
 
-### Getting Started
+###Getting Started
 <br>
-##### 1. CREATE AN AUTH0 FREE ACCOUNT ... [https://www.auth0.com](https://www.auth0.com)
+#####1. CREATE AN AUTH0 FREE ACCOUNT ... [https://www.auth0.com](https://www.auth0.com)
 
 **In auth0 > applications > settings set:**
 
@@ -25,12 +25,12 @@ https://{yourIP}:3000/
 ```
 
 <br>
-##### 2. CREATE A STRIPE ACCOUNT ... [https://www.stripe.com](https://www.stripe.com)
+#####2. CREATE A STRIPE ACCOUNT ... [https://www.stripe.com](https://www.stripe.com)
 
 Create a price in Products > Pricing > Add another price
 
 <br>
-##### 3. CLONE THE REPO
+#####3. CLONE THE REPO
 
 __Set .env variables:__
 ```
