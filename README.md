@@ -1,30 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-typescript-app`](https://www.npmjs.com/package/create-next-typescript-app).
+###### WIP
+----
 
-## Getting Started
+### Getting Started
 
-First, run the development server:
+#### 1. CREATE AN AUTH0 FREE ACCOUNT ... [https://www.auth0.com](https://www.auth0.com)
 
-```bash
-npm run dev
-# or
-yarn dev
+**In auth0 > applications > settings set:**
+
+Application Login URI:
+```
+https://{yourIP}:3000/api/login 
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Allowed Callback URLs:
+```
+https://{yourIP}:3000/api/callback,
+https://{yourIP}:3000/dashboard,
+https://{yourIP}:3000/api/logout
+```
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Allowed Logout URLs:
+```
+https://{yourIP}:3000/
+```
 
-## Learn More
+#### 2. CREATE A STRIPE ACCOUNT ... [https://www.stripe.com](https://www.stripe.com)
 
-To learn more about Next.js, take a look at the following resources:
+Create a price in Products > Pricing > Add another price
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### 3. CLONE THE REPO
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+__Set .env variables:__
+```
+APP_DOMAIN=https://{yourIP}:3000
+NEXT_PUBLIC_AUTH0_DOMAIN={auth0 > applications > settings > domain}
+AUTH0_CLIENT_ID={auth0 > applications > settings > clientId}
+AUTH0_CLIENT_SECRET={auth0 > applications > settings > clientSecret}
+AUTH0_COOKIE_SECRET={generate one}
+NEXT_PUBLIC_STRIPE_KEY={stripe > developers > API Keys} 
+```
+__Install the modules:__ \
+`yarn`
 
-## Deploy on Vercel
+__Update the app config:__ \
+In `./config/appConfig.ts` add the __priceId__ for the price you've set above
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+__Run the server:__ \
+`yarn dev`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+---- 
+
+Use vercel for serverless one click deployment ... It's all you need ;)
