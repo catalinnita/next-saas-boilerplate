@@ -40,13 +40,13 @@ AUTH0_COOKIE_SECRET={generate one} \
 NEXT_PUBLIC_STRIPE_KEY={stripe > developers > API Keys} 
 ```
 __Install the modules:__ \
-`YARN`
+`yarn`
 
 __Update the app config:__ \
 In `./config/appConfig.ts` add the __priceId__ for the price you've set above
 
 __Run the server:__ \
-`YARD DEV`
+`yarn dev`
 
 ---- 
 
