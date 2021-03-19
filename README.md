@@ -1,9 +1,9 @@
 ###### WIP
 ----
 
-###Getting Started
-<br>
-#####1. CREATE AN AUTH0 FREE ACCOUNT ... [https://www.auth0.com](https://www.auth0.com)
+### Getting Started
+
+#### 1. CREATE AN AUTH0 FREE ACCOUNT ... [https://www.auth0.com](https://www.auth0.com)
 
 **In auth0 > applications > settings set:**
 
@@ -24,13 +24,11 @@ Allowed Logout URLs:
 https://{yourIP}:3000/
 ```
 
-<br>
-#####2. CREATE A STRIPE ACCOUNT ... [https://www.stripe.com](https://www.stripe.com)
+#### 2. CREATE A STRIPE ACCOUNT ... [https://www.stripe.com](https://www.stripe.com)
 
 Create a price in Products > Pricing > Add another price
 
-<br>
-#####3. CLONE THE REPO
+#### 3. CLONE THE REPO
 
 __Set .env variables:__
 ```
@@ -50,7 +48,6 @@ In `./config/appConfig.ts` add the __priceId__ for the price you've set above
 __Run the server:__ \
 `YARD DEV`
 
-<br>
 ---- 
 
 Use vercel for serverless one click deployment ... It's all you need ;)
