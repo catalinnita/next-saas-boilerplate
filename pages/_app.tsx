@@ -4,21 +4,17 @@ import { Router } from "next/dist/client/router"
 import { AppContextType, AppInitialProps } from "next/dist/next-server/lib/utils"
 import { ThemeProvider } from "theme-ui"
 import { theme } from "../config/theme"
-import { auth0, getToken, getUser, useUser } from "../utils/auth0"
-import { UserContext } from "../context/userContext"
+import { auth0, getToken, getUser } from "../utils/auth0"
+import { UserContextProvider } from "../context/userContext"
 
 class MyApp extends App<AppProps> {
   render(): React.ReactElement {
     const { Component, pageProps } = this.props
-    const { token, user } = pageProps
     return (
       <ThemeProvider theme={theme}>
-        <UserContext.Provider value={{
-          token,
-          user
-        }}>
+        <UserContextProvider pageProps={pageProps}>
           <Component {...pageProps} />
-        </UserContext.Provider>
+        </UserContextProvider>
       </ThemeProvider>)
   }
 }

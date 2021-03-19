@@ -27,14 +27,15 @@ export const dataTestIds = {
 export type Props = {
   user: Record<string, any>,
   token: string,
+  setUser: (userData: Record<string, any>) => void,
 }
 
-export const FormPassword: React.FC<Props> = ({user, token}) => {
+export const FormPassword: React.FC<Props> = ({user, setUser}) => {
   const [passwordData, setPasswordData] = useState({} as Passwords)
   const [validation, setValidation] = useState({} as PasswordsErrors)
 
-  const updatePassword = async (): Promise<Response> => {
-    return updateUserById(token, user.user_id, { password: passwordData.password1 })
+  const updatePassword = (): void => {
+    setUser({ password: passwordData.password1 })
   }
 
   const validateAndSetPasswordData = ({ password1, password2 }): void => {

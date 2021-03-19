@@ -103,14 +103,14 @@ export const fetchUser = (url: string, token: string): Promise<Response> =>
     }
   }).then(res => res.json())
 
-export const updateUserById = async (token: string, userId: string, userData: Record<string,any>): Promise<Response> => {
+export const updateUserById = async (token: auth0Token, userId: string, userData: Record<string,any>): Promise<Response> => {
   const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${userId}`
 
   const response = await fetch(url, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      "authorization": `Bearer ${token}`
+      "authorization": `Bearer ${token.access_token}`
     },
     body: JSON.stringify(userData)
   });

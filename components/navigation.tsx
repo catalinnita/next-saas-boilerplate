@@ -10,6 +10,8 @@ export const Navigation: React.FC = () => {
     <Flex flexDirection="column" data-testid={dataTestIds.container} >
       <Link href="/dashboard">Dashboard</Link>
       <Link href="/profile">Profile</Link>
+      <Link href="/membership">Membership</Link>
+      <Link href="/membership">Payment</Link>
     </Flex>
   )
 }

@@ -10,10 +10,24 @@ const colors = {
   muted: "#f6f6f6",
   red: "#e74c3c",
   green: "#27ae60",
+  grey: "#efefef"
 }
+const space = {
+  none: 0,
+  xxs: 3,
+  xs: 4,
+  s: 8,
+  m: 16,
+  l: 32,
+  xl: 64,
+  xxl: 128,
+  xxxl: 256,
+  max: 512,
+}
+
 export const theme = {
   breakpoints: ["40em", "52em", "64em"],
-  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
+  space: Object.values(space),
   fonts: {
     body: "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", sans-serif",
     heading: "inherit",
@@ -36,6 +50,12 @@ export const theme = {
     },
     success: {
       color: colors.green,
+    },
+    infoBanner: {
+      bg: colors.grey,
+      p: space.xxs,
+      textAlign: "center",
+      mb: space.xs,
     }
   },
   text: {

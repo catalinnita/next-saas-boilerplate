@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { Box, Button, Flex, Heading } from "rebass"
 import { Label, Input } from "@rebass/forms"
-import { updateUserById } from "../utils/auth0"
 import { InputMessage } from "./inputMessage"
 import { validateEmail, validateNickname, Error } from "../utils/formValidation"
 
@@ -18,6 +17,7 @@ type ProfileErrors = {
 export type Props = {
   user: Record<string, any>,
   token: string,
+  setUser: (userData: Record<string, any>) => void,
 }
 
 export const dataTestIds = {
@@ -29,7 +29,7 @@ export const dataTestIds = {
   submitButton: "form-profile-submit-button",
 }
 
-export const FormProfile: React.FC<Props> = ({ user, token, setUser }) => {
+export const FormProfile: React.FC<Props> = ({ user, setUser }) => {
   const [userData, setUserData] = useState({
     email: user.email,
     nickname: user.nickname
@@ -38,7 +38,7 @@ export const FormProfile: React.FC<Props> = ({ user, token, setUser }) => {
 
   const updateProfile = (): void => {
     // return updateUserById(token, user.user_id, userData)
-    setUser(token, user.user_id, userData)
+    setUser(userData)
   }
 
   const validateAndSetProfileData = ({ email, nickname }: {email?: string, nickname?: string}): void => {

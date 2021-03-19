@@ -1,14 +1,10 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Box, Flex, Heading, Link } from "rebass"
 import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
 import { IncomingMessage, ServerResponse } from "http"
-import Cookies from "js-cookie"
 import { UserContext } from "../../context/userContext"
-import { FreePremiumPopup } from "../../components/freePremiumPopup"
-import { PaymentMethodPopup } from "../../components/paymentMethodPopup"
 import { useStripe } from "../../utils/stripe"
-import appConfig from "../../config/appConfig"
 import { Navigation } from "../../components/navigation"
 import { PopupsWrapper } from "../../components/popupsWrapper"
 
@@ -21,10 +17,9 @@ export const dataTestIds = {
   container: "dashboard-page"
 }
 
-const Page: NextPage<Props> = () => {
-  const { user } = useContext(UserContext)
-  const { userStatus: defaultUserStatus, userPayment } = useStripe(user?.app_metadata?.stripe_customer_id)
-  const [ userStatus, setUserStatus ] = useState(defaultUserStatus)
+const Page: NextPage = () => {
+  // const { userStatus: defaultUserStatus, userPayment } = useStripe(user?.app_metadata?.stripe_customer_id)
+
   const title = "Dashboard page"
 
   return (
@@ -35,11 +30,7 @@ const Page: NextPage<Props> = () => {
 
       <Flex justifyContent="flex-start" flexDirection="column">
 
-        <PopupsWrapper
-          userStatus={userStatus}
-          setUserStatus={setUserStatus}
-          userPayment={userPayment}
-        >
+        <PopupsWrapper>
 
           <Flex width="100%" maxWidth="1080px" p={3} mx="auto" justifyContent="space-between">
             <Heading>{title}</Heading>
@@ -66,8 +57,6 @@ Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const { res, req } = ctx
 
   return {
-    // userId: session.user.sub,
-    // token: token.access_token,
     res,
     req,
   }

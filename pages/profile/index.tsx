@@ -1,16 +1,20 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Box, Flex, Heading, Link } from "rebass"
 import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
+import { IncomingMessage, ServerResponse } from "http"
 import { auth0, getToken, useUser } from "../../utils/auth0"
 import { useStripe } from "../../utils/stripe"
+import { UserContext } from "../../context/userContext"
 import { FormPassword } from "../../components/formPassword"
 import { FormProfile } from "../../components/formProfile"
 import { Navigation } from "../../components/navigation"
 
 export interface Props {
   userId?: string,
-  token?: string
+  token?: string,
+  res: ServerResponse
+  req: IncomingMessage
 }
 
 export const dataTestIds = {
@@ -19,8 +23,9 @@ export const dataTestIds = {
 
 const Page: NextPage<Props> = ({ userId, token }) => {
   const title = "Profile page"
-  const { user, setUser } = useUser(userId, token)
-  const { userStatus } = useStripe(user?.app_metadata?.stripe_customer_id)
+  const { user, setUser } = useContext(UserContext)
+
+  console.log({ user })
 
   return (
     <div data-testid={dataTestIds.container}>
@@ -39,7 +44,7 @@ const Page: NextPage<Props> = ({ userId, token }) => {
         </Box>
         <Box width={3 / 4}>
           {user && <FormProfile user={user} token={token} setUser={setUser} />}
-          {user && <FormPassword user={user} token={token} />}
+          {user && <FormPassword user={user} token={token} setUser={setUser} />}
         </Box>
 
       </Flex>
