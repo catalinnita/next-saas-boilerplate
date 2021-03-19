@@ -1,6 +1,6 @@
 import Stripe from "stripe"
 import { NextApiRequest, NextApiResponse } from "next";
-import { appConfig } from "../../config/appConfig"
+import appConfig from "../../config/appConfig"
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_KEY, { apiVersion: "2020-08-27" });
 

@@ -68,10 +68,10 @@ jest.mock("../utils/auth0", () => {
   };
 });
 
-it("calls updateUserById when form is submit", async () => {
-  const { getByTestId } = render(<FormPassword {...props} />)
-  const formButton = getByTestId(dataTestIds.submitButton)
+// it("calls updateUserById when form is submit", async () => {
+//   const { getByTestId } = render(<FormPassword {...props} />)
+//   const formButton = getByTestId(dataTestIds.submitButton)
 
-  fireEvent.click(formButton)
-  expect(updateUserById).toHaveBeenCalled()
-})
+//   fireEvent.click(formButton)
+//   expect(updateUserById).toHaveBeenCalled()
+// })

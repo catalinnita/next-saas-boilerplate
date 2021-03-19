@@ -122,8 +122,8 @@ export const useUser = (id: string, token: string): Record<string, any> => {
   const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${id}`
   const { data, error, mutate } = useSWR([url, token], fetchUser)
 
-  const setUser = (token: string, userId: string, userData: Record<string,any>): void => {
-    mutate(updateUserById(token, userId, userData))
+  const setUser = (auth0token: auth0Token, userId: string, userData: Record<string,any>): void => {
+    mutate(updateUserById(auth0token, userId, userData))
   }
 
   return {

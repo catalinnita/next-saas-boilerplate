@@ -27,7 +27,7 @@ export const dataTestIds = {
 export type Props = {
   user: Record<string, any>,
   token: string,
-  setUser: (userData: Record<string, any>) => void,
+  setUser?: (userData: Record<string, any>) => void,
 }
 
 export const FormPassword: React.FC<Props> = ({user, setUser}) => {
