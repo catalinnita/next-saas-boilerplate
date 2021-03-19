@@ -46,3 +46,4 @@ In config > appConfig.ts add the priceId for the price you've set above
 ----
 
 Use vercel for serverless one click deployment ... It's all you need ;)
+
