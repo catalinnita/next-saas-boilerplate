@@ -11,7 +11,7 @@ export const Navigation: React.FC = () => {
       <Link href="/dashboard">Dashboard</Link>
       <Link href="/profile">Profile</Link>
       <Link href="/membership">Membership</Link>
-      <Link href="/membership">Payment</Link>
+      <Link href="/billing">Billing</Link>
     </Flex>
   )
 }
