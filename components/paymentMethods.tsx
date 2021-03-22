@@ -24,7 +24,7 @@ export const PaymentMethods: React.FC<Props> = ({ cards }) => {
         <Flex data-testid={dataTestIds.card} variant={isExpired(card) ? "disabled" : null} key={card.id} alignItems="center" justifyContent="space-between">
           <Box>{card.brand}</Box>
           <Box>**** **** **** {card.last4}</Box>
-          <Box>`${card.exp_month}/${card.exp_year}`</Box>
+          <Box>{`${card.exp_month}/${card.exp_year}`}</Box>
           <Box><Button variant="secondary">remove</Button></Box>
         </Flex>
       ))}

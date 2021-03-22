@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Flex, Link } from "rebass"
+import { Box, Flex, Heading, Link } from "rebass"
 import Stripe from "stripe"
 import getSymbolFromCurrency from "currency-symbol-map"
 
@@ -20,6 +20,7 @@ export const Invoices: React.FC<Props> = ({ invoices }) => {
   }
   return (
     <Box data-testid={dataTestIds.container}>
+      <Heading as="h2">Invoices</Heading>
       {invoices.map(invoice => (
         <Flex data-testid={dataTestIds.invoice} key={invoice.id}>
           <Box>{invoice.lines.data[0].description}</Box>

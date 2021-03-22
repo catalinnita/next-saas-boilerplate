@@ -6,6 +6,9 @@ import { IncomingMessage, ServerResponse } from "http"
 import { Navigation } from "../../components/navigation"
 import { PopupsWrapper } from "../../components/popupsWrapper"
 import { PaymentMethods } from "../../components/paymentMethods"
+import { Invoices } from "../../components/invoices"
+import CardsMock from "../../__tests__/_mockCards"
+import InvoicesMock from "../../__tests__/_mockInvoices"
 
 interface Props {
   res: ServerResponse
@@ -40,8 +43,8 @@ const Page: NextPage = () => {
               <Navigation />
             </Box>
             <Box width={3 / 4}>
-              <PaymentMethods />
-              <Invoices />
+              <PaymentMethods cards={CardsMock} />
+              <Invoices invoices={InvoicesMock} />
               <Box>Invoices</Box>
             </Box>
           </Flex>
