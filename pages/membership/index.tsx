@@ -5,6 +5,8 @@ import Head from "next/head"
 import { IncomingMessage, ServerResponse } from "http"
 import { Navigation } from "../../components/navigation"
 import { PopupsWrapper } from "../../components/popupsWrapper"
+import { subscriptionActiveMock } from "../../__tests__/_mockSubscription"
+import { SubscriptionDetails } from "../../components/subscriptionDetails"
 
 interface Props {
   res: ServerResponse
@@ -39,7 +41,7 @@ const Page: NextPage = () => {
               <Navigation />
             </Box>
             <Box width={3 / 4}>
-              <Box>Membership details</Box>
+              <SubscriptionDetails subscription={subscriptionActiveMock} />
             </Box>
           </Flex>
 

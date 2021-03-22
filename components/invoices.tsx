@@ -2,6 +2,7 @@ import React from "react"
 import { Box, Flex, Heading, Link } from "rebass"
 import Stripe from "stripe"
 import getSymbolFromCurrency from "currency-symbol-map"
+import { getDate } from "../utils/getDate"
 
 export const dataTestIds = {
   container: "invoices-container",
@@ -14,10 +15,6 @@ export type Props = {
 }
 
 export const Invoices: React.FC<Props> = ({ invoices }) => {
-  const getDate = (timestamp: number): string => {
-    const date = new Date(timestamp * 1000)
-    return date.toString().slice(4, 15)
-  }
   return (
     <Box data-testid={dataTestIds.container}>
       <Heading as="h2">Invoices</Heading>
