@@ -41,6 +41,7 @@ const Page: NextPage = () => {
             </Box>
             <Box width={3 / 4}>
               <PaymentMethods />
+              <Invoices />
               <Box>Invoices</Box>
             </Box>
           </Flex>

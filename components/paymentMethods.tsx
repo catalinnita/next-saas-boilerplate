@@ -21,7 +21,7 @@ export const PaymentMethods: React.FC<Props> = ({ cards }) => {
     <Box data-testid={dataTestIds.container}>
       <Heading as="h2">Payment methods</Heading>
       {cards.map(card => (
-        <Flex data-testid={dataTestIds.card} disabled={isExpired(card)} key={card.id} alignItems="center" justifyContent="space-between">
+        <Flex data-testid={dataTestIds.card} variant={isExpired(card) ? "disabled" : null} key={card.id} alignItems="center" justifyContent="space-between">
           <Box>{card.brand}</Box>
           <Box>**** **** **** {card.last4}</Box>
           <Box>`${card.exp_month}/${card.exp_year}`</Box>
