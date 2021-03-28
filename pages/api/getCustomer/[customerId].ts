@@ -9,10 +9,14 @@ export default async function getCustomer(req: NextApiRequest, res: NextApiRespo
   } = req
 
   try {
-    const customer = await stripe.customers.retrieve( customerId.toString() )
-    res.end(JSON.stringify(customer))
+    const customer = await stripe.customers.list({
+      email: customerId.toString()
+    })
+
+    res.end(JSON.stringify({ customer: customer.data[0] }))
+
   } catch (error) {
     console.error(error);
-    res.status(error.status || 400).end(error.message);
+    res.status(error.status || 400).end(JSON.stringify(error));
   }
 }

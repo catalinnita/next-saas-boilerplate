@@ -10,7 +10,6 @@ type userContextType = {
   user: auth0User
   userStatus?: userStatusType
   updateUserStatus?: (status: string) => void
-  userPayment: Stripe.Source.Card
   setUser?: (userDetails: auth0User) => void
   hadTrial: boolean
 }
@@ -26,11 +25,6 @@ export const UserContextProvider: React.FC<userContextProvider> = ({ pageProps, 
   const defaultUserStatus = user?.user_metadata?.userStatus || "NEW"
 
   const [userStatus, setUserStatus] = useState(defaultUserStatus as userStatusType)
-  const [userPayment, setUserPayment] = useState(null)
-  const [customer, setCustomer] = useState(null)
-  const [subscription, setSubscription] = useState(null)
-
-  // console.log({ updateUserById })
 
   const updateUserStatus = (newStatus: userStatusType): void => {
     updateUserById(token, user.user_id, {
@@ -40,10 +34,6 @@ export const UserContextProvider: React.FC<userContextProvider> = ({ pageProps, 
     }).then(() => {
       setUserStatus(newStatus)
     })
-  }
-
-  const updateUserPayment = (payment: Stripe.Source.Card): void => {
-    // ---
   }
 
   const setUser = (userDetails: auth0User): void => {
@@ -58,11 +48,7 @@ export const UserContextProvider: React.FC<userContextProvider> = ({ pageProps, 
     <UserContext.Provider value={{
       token,
       user,
-      // subcription,
-      // customer,
-      userPayment,
       userStatus,
-      // setUserStatus,
       updateUserStatus,
       setUser,
       hadTrial,

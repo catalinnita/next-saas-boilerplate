@@ -39,7 +39,7 @@ const Page: NextPage = () => {
               <Navigation />
             </Box>
             <Box width={3 / 4}>
-              Dashboard gauges here
+              Build your SPA here
             </Box>
           </Flex>
 

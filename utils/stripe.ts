@@ -4,7 +4,6 @@ import Stripe from "stripe";
 import useSWR from "swr";
 
 export const useStripe = (customerId: string): Record<string, any> => {
-
   const {
     data: customerData,
     error: customerError,
@@ -32,9 +31,10 @@ export const useStripe = (customerId: string): Record<string, any> => {
       })
     }).then(res => res.json())
     console.log(newCustomer)
-    // mutateCustomer(`/api/getCustomer/${customerId}`, { ...newCustomer })
-    // mutateSubscription(`/api/getSubscription/${customerId}`, { ...newSubscription })
-    // mutatePaymentMethods(`/api/getCards/${customerId}`, {...newCards})
+
+    mutateCustomer(`/api/getCustomer/${customerId}`, { ...newCustomer })
+    mutateSubscription(`/api/getSubscription/${customerId}`, { ...newSubscription })
+    mutatePaymentMethods(`/api/getCards/${customerId}`, {...newCards})
   }
 
   const userStatus = (): string => {

@@ -13,7 +13,7 @@ export default async function getSubscription(req: NextApiRequest, res: NextApiR
       customer: customerId.toString(),
       limit: 1,
     })
-    res.end(JSON.stringify(subscription))
+    res.end(JSON.stringify({ subscription: subscription.data[0] }))
   } catch (error) {
     console.error(error);
     res.status(error.status || 400).end(error.message)
