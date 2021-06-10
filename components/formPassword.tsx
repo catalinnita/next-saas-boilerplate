@@ -1,9 +1,10 @@
 import React, { useState } from "react"
-import { Box, Button, Flex, Heading } from "rebass"
+import { Box, Button, Flex, Heading, Text } from "rebass"
 import { Label, Input } from "@rebass/forms"
 import { updateUserById } from "../utils/auth0"
 import { InputMessage } from "./inputMessage"
 import { validatePassword, verifyPasswords, Error } from "../utils/formValidation"
+import Loader from "react-loader-spinner";
 
 type Passwords = {
   password1: string,
@@ -33,12 +34,22 @@ export type Props = {
 export const FormPassword: React.FC<Props> = ({user, setUser}) => {
   const [passwordData, setPasswordData] = useState({} as Passwords)
   const [validation, setValidation] = useState({} as PasswordsErrors)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  const updatePassword = (): void => {
-    setUser({ password: passwordData.password1 })
+  const updatePassword = async (): void => {
+    setLoading(true)
+    const updated = await setUser({ password: passwordData.password1 })
+    if (updated.error && updated.message) {
+      setErrorMessage(updated.message)
+    }
+    setLoading(false)
+    setSuccessMessage("Succesfully updated")
   }
 
   const validateAndSetPasswordData = ({ password1, password2 }): void => {
+
     setPasswordData({ password1, password2 })
     setValidation({
       password1: validatePassword(password1),
@@ -51,48 +62,83 @@ export const FormPassword: React.FC<Props> = ({user, setUser}) => {
       data-testid={dataTestIds.container}
       as='form'
       onSubmit={(e): void => e.preventDefault()}
-      mb={4}
     >
-      <Heading pb={2}>Update your password</Heading>
 
-      <Label htmlFor='name'>New password</Label>
-      <Flex>
-        <Input
-          data-testid={dataTestIds.password1Field}
-          width={1 / 2}
-          mb={2}
-          id='name'
-          name='new-password'
-          type="password"
-          onChange={(e: React.FormEvent<HTMLInputElement>): void => {
-            validateAndSetPasswordData({
-              ...passwordData,
-              password1: e.currentTarget.value
-            })
-          }}
-          />
-        <InputMessage data-testid={dataTestIds.password1FieldMessage} {...validation.password1} />
-      </Flex>
+      <Box
+        variant="tableStyle"
+        sx={{
+          gridTemplateColumns: "30% 70%",
+        }}
+      >
+        <Flex justifyContent="space-between" alignItems="center"
+          backgroundColor="white"
+          p="12px 16px"
+          sx={{
+            gridColumnStart: 1,
+            gridColumnEnd: 3
+          }}><Heading as="h3" fontSize="18px">Update your password</Heading></Flex>
 
-      <Label htmlFor='name'>Verify new password</Label>
-      <Flex width="100%">
-        <Input
-          data-testid={dataTestIds.password2Field}
-          width={1 / 2}
-          mb={2}
-          id='name'
-          name='new-password-v1'
-          type="password"
-          onChange={(e: React.FormEvent<HTMLInputElement>): void => {
-            validateAndSetPasswordData({
-              ...passwordData,
-              password2: e.currentTarget.value
-            })
-          }}
-        />
-        <InputMessage data-testid={dataTestIds.password2FieldMessage} {...validation.password2} />
+        <Box variant="rowStyle"><Label htmlFor='name'>New password</Label></Box>
+        <Flex variant="rowStyle" flexDirection="row">
+          <Input
+            data-testid={dataTestIds.password1Field}
+            width={2 / 3}
+            mb={2}
+            id='name'
+            name='new-password'
+            type="password"
+            onChange={(e: React.FormEvent<HTMLInputElement>): void => {
+              validateAndSetPasswordData({
+                ...passwordData,
+                password1: e.currentTarget.value
+              })
+            }}
+            />
+            <Box width={1/3}>
+              <InputMessage data-testid={dataTestIds.password1FieldMessage} {...validation.password1} />
+              </Box>
         </Flex>
 
-      <Button data-testid={dataTestIds.submitButton} variant="secondary" onClick={():void => { updatePassword() }}>Update password</Button>
+        <Box variant="rowStyle"><Label htmlFor='name'>Verify new password</Label></Box>
+        <Flex variant="rowStyle" flexDirection="row">
+          <Input
+            data-testid={dataTestIds.password2Field}
+            width={2 / 3}
+            mb={2}
+            id='name'
+            name='new-password-v1'
+            type="password"
+            onChange={(e: React.FormEvent<HTMLInputElement>): void => {
+              validateAndSetPasswordData({
+                ...passwordData,
+                password2: e.currentTarget.value
+              })
+            }}
+            />
+            <Box width={1/3}>
+              <InputMessage data-testid={dataTestIds.password2FieldMessage} {...validation.password2} />
+              </Box>
+          </Flex>
+
+        <Box variant="rowStyle"></Box>
+        <Box variant="rowStyle">
+          <Box>
+          {errorMessage && <Text variant="error" mb="8px">{errorMessage}</Text>}
+          {successMessage && <Text variant="success" mb="8px">{successMessage}</Text>}
+          <Button display="flex" data-testid={dataTestIds.submitButton} variant="small" onClick={(): void => { updatePassword() }}>
+            Update password
+            {loading &&
+              <Loader
+                type="ThreeDots"
+                height={12}
+                width={18}
+                color="#0984e3"
+                style={{marginLeft: "4px", marginBottom: "-4px"}}
+                />}
+            </Button>
+            </Box>
+        </Box>
+      </Box>
+
     </Box>)
 }

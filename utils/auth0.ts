@@ -7,7 +7,7 @@ export const auth0 = initAuth0({
   clientId: process.env.AUTH0_CLIENT_ID,
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
   scope: "openid profile",
-  redirectUri: `${process.env.APP_DOMAIN}/api/callback`,
+  redirectUri: `${process.env.APP_DOMAIN}/api/account/callback`,
   postLogoutRedirectUri: `${process.env.APP_DOMAIN}/`,
   session: {
     // The secret used to encrypt the cookie.
@@ -84,7 +84,6 @@ export interface auth0User {
 export const getUser = async (userId: string, token: auth0Token, fields?: string[]): Promise<auth0User> => {
   const fieldsUrl = fields ? `?fields=${fields.join(",")}` : ""
   const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${userId}${fieldsUrl}`
-  console.log(url)
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -110,7 +109,7 @@ export const updateUserById = async (token: auth0Token, userId: string, userData
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      "authorization": `Bearer ${token.access_token}`
+      "authorization": `Bearer ${token}`
     },
     body: JSON.stringify(userData)
   });

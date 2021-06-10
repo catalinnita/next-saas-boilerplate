@@ -1,0 +1,23 @@
+.ccField {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.expirationField {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 8px 0 0 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.ccvField {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 0 8px 8px 0;
+  border: 1px solid #ddd;
+  border-left: 0px;
+  text-align: center;
+}

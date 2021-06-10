@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import Stripe from "stripe";
 import { auth0Token, auth0User, updateUserById } from "../utils/auth0";
 
-
 type userStatusType = "FREE" | "PREMIUM" | "NEW"
 
 type userContextType = {
@@ -36,8 +35,8 @@ export const UserContextProvider: React.FC<userContextProvider> = ({ pageProps, 
     })
   }
 
-  const setUser = (userDetails: auth0User): void => {
-    updateUserById(token, user.user_id, {
+  const setUser = async (userDetails: auth0User): Promise<Response> => {
+    return await updateUserById(token, user.user_id, {
       ...userDetails
     })
   }

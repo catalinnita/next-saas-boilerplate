@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { auth0 } from "../../utils/auth0";
+import { auth0 } from "../../../utils/auth0"
 
 export default async function callback(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   try {
-    // console.log({ req })
     await auth0.handleCallback(req, res, {redirectTo: `${process.env.APP_DOMAIN}/dashboard`});
   } catch (error) {
     console.error(error);

@@ -1,6 +1,10 @@
-import React, { useState } from "react"
+import React from "react"
 import { Box, Button, Flex } from "rebass"
-import { Input, Label } from "theme-ui"
+import { CardElement, useStripe, useElements, CardNumberElement, CardCvcElement, CardExpiryElement } from '@stripe/react-stripe-js'
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../state/store"
+import { attachCard } from "../state/slices/cards"
+import { closeAllPopups } from "../state/slices/popups"
 
 export type Props = {
   buttonText?: string
@@ -25,76 +29,58 @@ export type CardInfo = {
 export const FormCreditCard: React.FC<Props> = ({
   buttonText = "Add payment method"
 }) => {
-  const [cardInfo, setCardInfo] = useState({} as CardInfo);
-  const submitPaymentMethod = (): void => {
-    console.log(cardInfo)
-    // ---
+  const inputStyle = {
+    base: {
+      fontFamily: '"Roboto Mono", Courier',
+      fontSize: '13px',
+      color: '#000',
+      lineHeight: '28px',
+      width: '100%',
+      padding: '8px 16px'
+    }
   }
+
+  const stripe = useStripe()
+  const elements = useElements()
+
+  const dispatch = useDispatch()
+  const customer = useSelector((state: RootState) => state.customer)
+
+  const submitPaymentMethod = async (): void => {
+    if (!stripe || !elements) {
+      return;
+    }
+
+    const cardElement = elements.getElement(CardNumberElement);
+    const {error, token} = await stripe.createToken(cardElement);
+
+    if (error) {
+      console.log('[error]', error)
+    } else {
+      dispatch(attachCard({ customerId: customer.id, cardToken: token.id }))
+      dispatch(closeAllPopups())
+    }
+  }
+
 
   return (
     <Box data-testid={dataTestIds.container} as="form" width="100%" onSubmit={(e): void => { e.preventDefault() }}>
 
-      <Label>Name of card</Label>
-      <Input
-        data-testid={dataTestIds.nameOnCard}
-        mb={2}
-        value={cardInfo.nameOnCard}
-        placeholder="John D"
-        onChange={(e): void => {
-          setCardInfo({
-            ...cardInfo,
-            nameOnCard: e.target.value
-          })
-        }}
-      />
-
-      <Label>Card Number</Label>
-      <Input
-        data-testid={dataTestIds.cardNumber}
-        mb={2}
-        value={cardInfo.cardNumber}
-        placeholder="xxxx-xxxx-xxxx-xxxx"
-        onChange={(e): void => {
-          setCardInfo({
-            ...cardInfo,
-            cardNumber: e.target.value
-          })
-        }}/>
-
-      <Flex justifyContent="space-between" mb={2}>
-        <Box width={1/2}>
-          <Label>Expiry Date</Label>
-          <Input
-            data-testid={dataTestIds.expiryDate}
-            value={cardInfo.expiryDate}
-            placeholder="08/22"
-            maxLength={5}
-            onChange={(e): void => {
-              setCardInfo({
-                ...cardInfo,
-                expiryDate: e.target.value
-              })
-            }}
+      <Flex py="16px">
+        <Box variant="cardInput" width={3 / 5} mr="16px">
+          <CardNumberElement className="ccField" options={{ style: inputStyle }}
           />
         </Box>
-        <Box width={1/2}>
-          <Label>CVC</Label>
-          <Input
-            data-testid={dataTestIds.cvc}
-            value={cardInfo.cvc}
-            placeholder="123"
-            maxLength={3}
-            onChange={(e): void => {
-              setCardInfo({
-                ...cardInfo,
-                cvc: e.target.value
-              })
-            }}
-            />
+        <Box variant="cardInput" width={1 / 5}>
+          <CardExpiryElement className="expirationField" options={{ style: inputStyle }} />
+        </Box>
+        <Box variant="cardInput" width={1 / 5}>
+          <CardCvcElement className="ccvField" options={{ style: inputStyle }} />
         </Box>
       </Flex>
 
-      <Button data-testid={dataTestIds.submitButton} variant="secondary" onClick={(): void => { submitPaymentMethod()}}>{ buttonText }</Button>
+      <Button data-testid={dataTestIds.submitButton} variant="primary" onClick={(): void => { submitPaymentMethod() }}>{buttonText}</Button>
+
     </Box>
   )
 }

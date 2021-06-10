@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
-import { Box, Button } from "rebass"
+import { Flex, Button, Text } from "rebass"
 import { UserContext } from "../context/userContext"
-import { useStripe } from "../utils/testHookEmail"
+import { useStripe } from "../utils/useStripe"
 
 export const dataTestIds = {
   container: "upgrade-banner-container",
@@ -15,13 +15,12 @@ export type Props = {
 export const UpgradeBanner: React.FC<Props> = ({ openPopup }) => {
   const { user, hadTrial } = useContext(UserContext)
   const upgradeText = hadTrial ? "Upgrade to premium" : "Start premium trial"
-  // console.log(user)
-  const { customer, setCustomer, subscription } = useStripe(user)
-
-  console.log({ customer })
-  console.log({ subscription })
+  const { customer, subscription } = useStripe(user)
 
   return (
-    <Box data-testid={dataTestIds.container} variant="infoBanner">You are missing very useful features ... <Button data-testid={dataTestIds.button} variant="secondary" onClick={():void => openPopup("paymentMethod")}>{upgradeText}</Button></Box>
+    <Flex data-testid={dataTestIds.container} variant="infoBanner" justifyContent="center" alignItems="center">
+      <Text fontSize="13px" fontWeight={400} mr="8px">FREE version is nice, but you are missing very important features ...</Text>
+      <Button data-testid={dataTestIds.button} variant="smallGhostGreen" onClick={(): void => openPopup("paymentMethod")}>{upgradeText}</Button>
+    </Flex>
   )
 }

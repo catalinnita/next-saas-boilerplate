@@ -6,15 +6,27 @@ import { ThemeProvider } from "theme-ui"
 import { theme } from "../config/theme"
 import { auth0, getToken, getUser } from "../utils/auth0"
 import { UserContextProvider } from "../context/userContext"
-
+import Head from "next/head"
+import store from '../state/store'
+import { Provider } from 'react-redux'
+import '../components/formCreditCard.css'
 class MyApp extends App<AppProps> {
   render(): React.ReactElement {
     const { Component, pageProps } = this.props
+
     return (
       <ThemeProvider theme={theme}>
-        <UserContextProvider pageProps={pageProps}>
-          <Component {...pageProps} />
-        </UserContextProvider>
+        <Provider store={store}>
+          <UserContextProvider pageProps={pageProps}>
+            <Head>
+              <link rel="preconnect" href="https://fonts.gstatic.com" />
+              <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet" />
+              <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+              <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+            </Head>
+            <Component {...pageProps} />
+          </UserContextProvider>
+        </Provider>
       </ThemeProvider>)
   }
 }
@@ -27,20 +39,18 @@ MyApp.getInitialProps = async (ctx: AppContextType<Router>):Promise<AppInitialPr
 
     // check if user is logged in
     const session = await auth0.getSession(req)
-
     // if it's not logged in redirect to login page
     if (!session) {
-      res.writeHead(302, { Location: "/api/login" })
+      res.writeHead(302, { Location: "/api/account/login" })
       res.end()
     }
 
     // generate a token for auth0 requests
     const token = await getToken()
-
     // get user details, including stripe_customer_id
     const user = await getUser(session.user.sub, token)
     if (!user.user_id) {
-      res.writeHead(302, { Location: "/api/login" })
+      res.writeHead(302, { Location: "/api/account/login" })
       res.end()
     }
 

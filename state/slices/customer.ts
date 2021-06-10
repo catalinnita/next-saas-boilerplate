@@ -1,0 +1,66 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import Stripe from 'stripe'
+
+export const getCustomer = createAsyncThunk(
+  'api/customers/',
+  async (email: string) => {
+    const response = await fetch(`/api/customers/${email}`)
+    const customer = await response.json()
+    return customer as Stripe.Customer
+  }
+)
+
+export const updateDefaultCard = createAsyncThunk(
+  'api/cards/setDefault',
+  async ({ customerId, sourceId }: { customerId: string, sourceId: string }) => {
+    const response = await fetch(`/api/cards/${customerId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        sourceId
+      })
+    })
+    const customer = await response.json()
+    return customer
+  }
+)
+
+export interface customerState {
+  id: string
+  defaultCardId: string
+  loading: {
+    creatingCustomer: boolean
+  }
+}
+
+const initialState = {
+  id: null,
+  defaultCardId: null,
+  loading: {
+    creatingCustomer: false,
+  }
+} as customerState
+
+export const customer = createSlice({
+  name: 'customer',
+  initialState,
+  reducers: {
+    setDefaultCard: (state, action) => {
+      console.log(action)
+      state.defaultCardId = action.payload.default_source
+    }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getCustomer.fulfilled,  (state, action) => {
+      state.id = action.payload.id
+      state.defaultCardId = action.payload.default_source.toString()
+    })
+
+    builder.addCase(updateDefaultCard.fulfilled, (state, action) => {
+      customer.caseReducers.setDefaultCard(state, action)
+    })
+  }
+})
+
+export const { setDefaultCard } = customer.actions
+
+export default customer.reducer

@@ -4,7 +4,10 @@ import { FreePremiumPopup } from "./freePremiumPopup"
 import { PaymentMethodPopup } from "./paymentMethodPopup"
 import { UserContext } from "../context/userContext"
 import { UpgradeBanner } from "./upgradeBanner"
-
+import { useStripe } from "../utils/useStripe"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../state/store"
+import { showPopup, closeAllPopups } from "../state/slices/popups"
 
 export const dataTestIds = {
   container: "popupsWrapper-container",
@@ -12,47 +15,56 @@ export const dataTestIds = {
   paymentMethodPopup: "popupsWrapper-paymentMethod"
 }
 
-export const PopupsWrapper: React.FC = ({ children }) => {
-  const { userStatus, updateUserStatus, userPayment } = useContext(UserContext)
-  const [ popupToShow, setPopupToShow ] = useState(null)
+export type Props = {
+  defaultPopup?: string
+}
 
-  const showFreePremiumPopup = (status?: string): boolean => {
-    return status !== "FREE" && status !== "PREMIUM" && appConfig.acceptFree
-  }
+export const PopupsWrapper: React.FC<Props> = ({ children, defaultPopup }) => {
+  // const { user, userStatus, updateUserStatus } = useContext(UserContext)
 
-  const showPaymentMethodPopup = (hasPayment: boolean, status?: string): boolean => {
-    return (status === "PREMIUM" && !hasPayment) ||
-      (status !== "FREE" && status !== "PREMIUM" && !appConfig.acceptFree)
-  }
+  const dispatch = useDispatch()
+  const { popupToShow } = useSelector((state: RootState) => state.popups)
+  const { status } = useSelector((state: RootState) => state.subscription)
 
-  useEffect(() => {
-    if (showFreePremiumPopup(userStatus)) {
-      setPopupToShow("freePremium")
-    } else if (showPaymentMethodPopup(userPayment !== null, userStatus)) {
-      setPopupToShow("paymentMethod")
-    } else {
-      setPopupToShow(null)
-    }
-  }, [userStatus, userPayment]);
+  // const { userPayment } = useStripe(user)
+
+  // const showFreePremiumPopup = (status?: string): boolean => {
+  //   return status !== "FREE" && status !== "PREMIUM" && appConfig.acceptFree
+  // }
+
+  // const showPaymentMethodPopup = (hasPayment: boolean, status?: string): boolean => {
+  //   return (status === "PREMIUM" && !hasPayment) ||
+  //     (status !== "FREE" && status !== "PREMIUM" && !appConfig.acceptFree)
+  // }
+
+  // useEffect(() => {
+  //   if (showFreePremiumPopup(userStatus)) {
+  //     setPopupToShow("freePremium")
+  //   } else if (defaultPopup === "paymentMethod" || showPaymentMethodPopup(userPayment !== null, userStatus)) {
+  //     setPopupToShow("paymentMethod")
+  //   } else {
+  //     setPopupToShow(null)
+  //   }
+  // }, [userStatus, userPayment, defaultPopup]);
 
   return (
     <div data-testid={dataTestIds.container}>
-      { !popupToShow &&
-        <UpgradeBanner openPopup={setPopupToShow} />}
+    {/* { !popupToShow && ( status === 'canceled' || status === null ) &&
+        <UpgradeBanner openPopup={(popupName) => { dispatch(showPopup({popup: popupName})) }} />} */}
 
-      { popupToShow === "freePremium" &&
+      {/* { popupToShow === "freePremium" &&
         <FreePremiumPopup
           dataTestid={dataTestIds.freePremiumPopup}
           freeClickCallback={(): void => { updateUserStatus("FREE") }}
           premiumClickCallback={(): void => { updateUserStatus("PREMIUM") }}
-        />}
+        />} */}
 
       { popupToShow === "paymentMethod" &&
         <PaymentMethodPopup
-          dataTestid={dataTestIds.paymentMethodPopup}
+        dataTestid={dataTestIds.paymentMethodPopup}
         />}
 
-      { !popupToShow && children}
+      { !popupToShow && children }
     </div>
   )
 }

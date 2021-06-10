@@ -29,15 +29,9 @@ const Page: NextPage = () => {
 
         <PopupsWrapper>
 
-          <Flex width="100%" maxWidth="1080px" p={3} mx="auto" justifyContent="space-between">
-            <Heading>{title}</Heading>
-            <Link href="/api/logout">Logout</Link>
-          </Flex>
+          <Navigation />
 
           <Flex width="100%" maxWidth="1080px" p={3} mx="auto" justifyContent="flex-start">
-            <Box width={1 / 4}>
-              <Navigation />
-            </Box>
             <Box width={3 / 4}>
               Build your SPA here
             </Box>
