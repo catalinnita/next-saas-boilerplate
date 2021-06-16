@@ -26,7 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
       const customer = await stripe.customers.create({
         email: email.toString()
       });
-      res.end(JSON.stringify({ customer }))
+      res.end(JSON.stringify(customer))
     }
 
   } catch (error) {

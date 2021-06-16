@@ -3,7 +3,7 @@ import { useThemeUI } from 'theme-ui'
 import { Box, Flex, Heading, Link } from "rebass"
 import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript"
 
-export const SidebarNavigation: React.FC = () => {
+export const NavigationSidebar: React.FC = () => {
   const { theme } = useThemeUI()
   const { colors } = theme
 

@@ -2,26 +2,26 @@ import React from  "react"
 import ReactTestRenderer from "react-test-renderer"
 import { render } from "@testing-library/react"
 import { Flex } from "rebass"
-import { PaymentMethods, dataTestIds, Props } from "../components/paymentMethods"
+import { BlockCards, dataTestIds, Props } from "../components/blockCards"
 import CardsMock from "./_mockCards"
 
 const props = {
   cards: CardsMock
 } as Props
 
-it("renders the PaymentMethods component", () => {
-  const { getByTestId } = render(<PaymentMethods {...props} />)
+it("renders the BlockCards component", () => {
+  const { getByTestId } = render(<BlockCards {...props} />)
   expect(getByTestId(dataTestIds.container)).toBeInTheDocument()
 })
 
 it("renders the one row for each card", () => {
-  const { queryAllByTestId } = render(<PaymentMethods {...props} />)
+  const { queryAllByTestId } = render(<BlockCards {...props} />)
   expect(queryAllByTestId(dataTestIds.card).length).toBe(2)
 })
 
 it("rendres a component with specific props", () => {
   const renderer = ReactTestRenderer.create(
-    <PaymentMethods {...props} />
+    <BlockCards {...props} />
   )
   const componentInstance = renderer.root
   expect(componentInstance.findAllByType(Flex)[0].props.variant).toBe(null)

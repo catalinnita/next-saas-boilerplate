@@ -1,13 +1,11 @@
 import React from "react"
 import { Box, Button, Flex } from "rebass"
-import { CardElement, useStripe, useElements, CardNumberElement, CardCvcElement, CardExpiryElement } from '@stripe/react-stripe-js'
-import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "../state/store"
-import { attachCard } from "../state/slices/cards"
-import { closeAllPopups } from "../state/slices/popups"
+import { useStripe, useElements, CardNumberElement, CardCvcElement, CardExpiryElement, Elements } from '@stripe/react-stripe-js'
+
 
 export type Props = {
   buttonText?: string
+  onSubmitCallback?: (args: Record<string, any>) => void
 }
 
 export const dataTestIds = {
@@ -27,8 +25,10 @@ export type CardInfo = {
 }
 
 export const FormCreditCard: React.FC<Props> = ({
-  buttonText = "Add payment method"
+  buttonText = "Submit",
+  onSubmitCallback
 }) => {
+
   const inputStyle = {
     base: {
       fontFamily: '"Roboto Mono", Courier',
@@ -43,9 +43,6 @@ export const FormCreditCard: React.FC<Props> = ({
   const stripe = useStripe()
   const elements = useElements()
 
-  const dispatch = useDispatch()
-  const customer = useSelector((state: RootState) => state.customer)
-
   const submitPaymentMethod = async (): void => {
     if (!stripe || !elements) {
       return;
@@ -55,10 +52,9 @@ export const FormCreditCard: React.FC<Props> = ({
     const {error, token} = await stripe.createToken(cardElement);
 
     if (error) {
-      console.log('[error]', error)
+      console.error(error)
     } else {
-      dispatch(attachCard({ customerId: customer.id, cardToken: token.id }))
-      dispatch(closeAllPopups())
+      onSubmitCallback({cardToken: token.id})
     }
   }
 

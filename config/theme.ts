@@ -98,10 +98,14 @@ export const theme = {
       maxWidth: "500px",
       paddingBottom: "32px"
     },
-    popupContent: {
-      //padding: "32px",
-      //borderRadius: "8px",
-      // border: `1px solid ${colors.grey200}`
+    dropDown: {
+      position: "absolute",
+      backgroundColor: colors.white,
+      border: `1px solid ${colors.grey200}`,
+      borderRadius: "8px",
+      marginTop: "32px",
+      overflow: "hidden",
+      boxShadow: "1px 1px 3px rgba(0,0,0,0.1)"
     },
     cardInput: {
       // borderRadius: "8px",
@@ -164,6 +168,10 @@ export const theme = {
     cardNumber: {
       fontSize: "12px",
       fontFamily: "\"Roboto Mono\", Courier"
+    },
+    skipLink: {
+      fontSize: "10px",
+      color: colors.grey800,
     }
   },
   styles: {
@@ -280,6 +288,23 @@ export const theme = {
       "&:hover": {
         bg: colors.white,
         color: colors.primary,
+      }
+    },
+    smallGreen: {
+      fontFamily: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+      letterSpacing: "-0.005rem",
+      fontWeight: 500,
+      fontSize: '10px',
+      border: `1px solid ${colors.green}`,
+      bg: colors.green,
+      color: colors.primaryBg,
+      borderRadius: "20px",
+      textTransform: "uppercase",
+      lineHeight: "11px",
+      padding: "8px 12px",
+      "&:hover": {
+        bg: colors.white,
+        color: colors.green,
       }
     },
     smallGhostGreen: {

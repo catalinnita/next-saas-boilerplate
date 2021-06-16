@@ -6,8 +6,8 @@ import { IncomingMessage, ServerResponse } from "http"
 import { UserContext } from "../../context/userContext"
 import { FormPassword } from "../../components/formPassword"
 import { FormProfile } from "../../components/formProfile"
-import { Navigation } from "../../components/navigation"
-import { SidebarNavigation } from "../../components/sidebarNavigation"
+import { Header } from "../../components/header"
+import { NavigationSidebar } from "../../components/navigationSidebar"
 import { useDispatch, useSelector } from "react-redux"
 import { setToken, setUser, updateProfile, updatePassword } from "../../state/slices/user"
 import { RootState } from "../../state/store"
@@ -48,20 +48,19 @@ const Page: NextPage<Props> = (props) => {
       </Head>
 
       <Flex justifyContent="flex-start" flexDirection="column">
-        <Navigation />
+        <Header />
 
-        {!popupToShow && (subscription.status === 'canceled' || subscription.status === null) &&
-              <Box width="100%" maxWidth="1080px" pt="32px" mx="auto">
-                <UpgradeBanner openPopup={(popupName) => { dispatch(showPopup({popup: popupName})) }} />
-              </Box>}
+        <UpgradeBanner />
 
         <Flex width="100%" maxWidth="1080px" py="32px" mx="auto" justifyContent="flex-start" minHeight="80vh">
+
           <Box width={1 / 4} mr="32px">
-            <SidebarNavigation />
+            <NavigationSidebar />
           </Box>
+
           <Box width={3 / 4} minHeight="80vh">
-            {initialUser && <FormProfile user={initialUser} token={token} setUser={(userDetails) => { dispatch(updateProfile(userDetails)) }} />}
-            {initialUser && <FormPassword user={initialUser} token={token} setUser={(userPassword) => { dispatch(updatePassword(userPassword)) }} />}
+            {initialUser && <FormProfile />}
+            {initialUser && <FormPassword />}
           </Box>
         </Flex>
 

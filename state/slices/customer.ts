@@ -1,6 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import Stripe from 'stripe'
 
+export const createCustomer = createAsyncThunk(
+  'api/customers/add',
+  async (email: string) => {
+    const response = await fetch(`/api/customers/${email}`, {
+      method: "POST",
+      body: JSON.stringify({
+        email
+      })
+    })
+    const customer = await response.json()
+    return customer as Stripe.Customer
+  }
+)
+
 export const getCustomer = createAsyncThunk(
   'api/customers/',
   async (email: string) => {
@@ -52,11 +66,15 @@ export const customer = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getCustomer.fulfilled,  (state, action) => {
       state.id = action.payload.id
-      state.defaultCardId = action.payload.default_source.toString()
+      state.defaultCardId = action.payload.default_source?.toString()
     })
 
     builder.addCase(updateDefaultCard.fulfilled, (state, action) => {
       customer.caseReducers.setDefaultCard(state, action)
+    })
+
+    builder.addCase(createCustomer.fulfilled, (state, action) => {
+      state.id = action.payload.id
     })
   }
 })

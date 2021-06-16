@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Link } from "rebass"
 import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
 import { IncomingMessage, ServerResponse } from "http"
-import { Navigation } from "../../components/navigation"
+import { Header } from "../../components/header"
 import { PopupsWrapper } from "../../components/popupsWrapper"
 
 interface Props {
@@ -29,7 +29,7 @@ const Page: NextPage = () => {
 
         <PopupsWrapper>
 
-          <Navigation />
+          <Header />
 
           <Flex width="100%" maxWidth="1080px" p={3} mx="auto" justifyContent="flex-start">
             <Box width={3 / 4}>

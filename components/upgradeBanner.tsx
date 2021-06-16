@@ -1,7 +1,11 @@
 import React, { useContext } from "react"
-import { Flex, Button, Text } from "rebass"
+import { useDispatch, useSelector } from "react-redux"
+import { Flex, Button, Text, Box } from "rebass"
 import { UserContext } from "../context/userContext"
-import { useStripe } from "../utils/useStripe"
+import { showPopup } from "../state/slices/popups"
+import { activateSubscription } from "../state/slices/subscription"
+import { useStateSelector } from "../utils/useStateSelector"
+
 
 export const dataTestIds = {
   container: "upgrade-banner-container",
@@ -13,14 +17,37 @@ export type Props = {
 }
 
 export const UpgradeBanner: React.FC<Props> = ({ openPopup }) => {
-  const { user, hadTrial } = useContext(UserContext)
+  const dispatch = useDispatch()
+  const { hasCard } = useStateSelector("cards")
+  const subscription = useStateSelector("subscription") // ?
+  const { popupToShow } = useStateSelector("popups")
+
+  const upgradeAction = () => {
+    if (!subscription.status) {
+      dispatch(showPopup({ popup: "setup" }))
+    } else if (!hasCard) {
+      dispatch(showPopup({ popup: "upgrade" }))
+    } else {
+      dispatch(activateSubscription())
+    }
+  }
+
+  const { hadTrial } = useContext(UserContext)
   const upgradeText = hadTrial ? "Upgrade to premium" : "Start premium trial"
-  const { customer, subscription } = useStripe(user)
+
+  if (
+    popupToShow ||
+    ['canceled', null].indexOf(subscription.status) !== -1
+   ) {
+    return null
+  }
 
   return (
-    <Flex data-testid={dataTestIds.container} variant="infoBanner" justifyContent="center" alignItems="center">
-      <Text fontSize="13px" fontWeight={400} mr="8px">FREE version is nice, but you are missing very important features ...</Text>
-      <Button data-testid={dataTestIds.button} variant="smallGhostGreen" onClick={(): void => openPopup("paymentMethod")}>{upgradeText}</Button>
-    </Flex>
+    <Box width="100%" maxWidth="1080px" pt="32px" mx="auto">
+      <Flex data-testid={dataTestIds.container} variant="infoBanner" justifyContent="center" alignItems="center">
+        <Text fontSize="13px" fontWeight={400} mr="8px">FREE version is nice, but you are missing very important features ...</Text>
+        <Button data-testid={dataTestIds.button} variant="smallGhostGreen" onClick={(): void => { upgradeAction() }}>{upgradeText}</Button>
+      </Flex>
+    </Box>
   )
 }

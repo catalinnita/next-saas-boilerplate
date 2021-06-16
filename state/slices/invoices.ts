@@ -1,20 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { RootState } from '../store'
 
 export const getInvoices = createAsyncThunk(
   'api/invoices/',
-  async (customerId: string) => {
+  async ({ customerId }: { customerId: string }, thunkApi) => {
     const response = await fetch(`/api/invoices/${customerId}`)
-    const invoices = response.json()
-    return invoices
+    const remoteInvoices = response.json()
+    return remoteInvoices
   }
 )
 
 export const loadMoreInvoices = createAsyncThunk(
   'api/loadMoreInvoices/',
-  async({ customerId, lastObject }: { customerId: string, lastObject: string }) => {
+  async ({ customerId, lastObject }: { customerId: string, lastObject: string }, thunkApi) => {
     const response = await fetch(`/api/invoices/${customerId}?lastObject=${lastObject}`)
-    const invoices = response.json()
-    return invoices
+    const remoteInvoices = await response.json()
+    return remoteInvoices
   }
 )
 
@@ -23,23 +24,27 @@ export const invoices = createSlice({
   initialState: {
     invoicesList: [],
     hasMore: false,
+    lastObject: ""
   },
   reducers: {
   },
   extraReducers: (builder) =>  {
+
     builder.addCase(getInvoices.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.invoicesList = action.payload.data
       state.hasMore = action.payload.has_more
+      state.lastObject = action.payload.data?.slice(-1)[0].id
     })
+
     builder.addCase(loadMoreInvoices.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.invoicesList = [
         ...state.invoicesList,
         ...action.payload.data
       ]
       state.hasMore = action.payload.has_more
+      state.lastObject = action.payload.data?.slice(-1)[0].id
     })
+
   }
 })
 

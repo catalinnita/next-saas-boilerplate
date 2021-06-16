@@ -105,16 +105,26 @@ export const fetchUser = (url: string, token: string): Promise<Response> =>
 export const updateUserById = async (token: auth0Token, userId: string, userData: Record<string,any>): Promise<Response> => {
   const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${userId}`
 
-  const response = await fetch(url, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify(userData)
-  });
+  try {
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(userData)
+    });
+    const res = await response.json()
+    console.log(res)
+    if (res.statusCode && res.statusCode !== 200) {
+      throw new Error(res.message);
+    }
+    return res
+  } catch (err) {
+    return Promise.reject(err)
+  }
 
-  return response.json()
+
 }
 
 export const useUser = (id: string, token: string): Record<string, any> => {

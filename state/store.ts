@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import userReducer from "./slices/user"
-import subscriptionReducer from "./slices/subscription/"
+import subscriptionReducer from "./slices/subscription"
 import customerReducer from "./slices/customer"
 import cardsReducer from "./slices/cards"
 import invoicesReducer from "./slices/invoices"

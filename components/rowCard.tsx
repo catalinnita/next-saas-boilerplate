@@ -1,0 +1,65 @@
+import Stripe from "stripe"
+import React from "react"
+import { Box, Button, Text } from "rebass"
+import { Label, Radio } from "@rebass/forms"
+import { CardIcon } from "./cardIcon"
+import { useStateSelector } from "../utils/useStateSelector"
+import { useDispatch } from "react-redux"
+import { updateDefaultCard } from "../state/slices/customer"
+import { removeCard } from "../state/slices/cards"
+
+export type Props = {
+  card: Stripe.Card
+}
+
+export const RowCard: React.FC<Props> = ({ card }) => {
+  const dispatch = useDispatch()
+  const { id, defaultCardId } = useStateSelector("customer")
+
+  return (
+    <>
+      <Box key={`${card.id}-default`} variant="rowStyle">
+        <Label>
+          <Radio
+            title="Set as default"
+            variant="defaultCardRadio"
+            size={18}
+            name="defaultCard"
+            value={card.id}
+            checked={defaultCardId === card.id}
+            onChange={() => {
+              dispatch(updateDefaultCard({
+                customerId: id,
+                sourceId: card.id,
+              }))
+            }}
+            />
+        </Label>
+      </Box>
+
+      <Box variant="rowStyle">
+        <CardIcon name={card.brand} />
+      </Box>
+
+      <Box variant="rowStyle">
+        <Text as="span" variant="cardNumber">**** **** **** {card.last4}</Text>
+      </Box>
+
+      <Box variant="rowStyle">
+        {`${card.exp_month}/${card.exp_year}`}
+      </Box>
+
+      <Box variant="rowStyle" sx={{ justifySelf: "end" }}>
+        <Button
+          variant="smallGhostGrey"
+          onClick={() => {
+            dispatch(
+              removeCard({
+                customerId: id,
+                sourceId: card.id
+              }))
+          }}>remove</Button>
+      </Box>
+    </>
+  )
+}

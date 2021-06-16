@@ -7,9 +7,13 @@ import { Transition } from "react-transition-group"
 
 
 type Props = {
+  showCloseButton: boolean
 }
 
-export const Popup: React.FC<Props> = ({ children }) => {
+export const Popup: React.FC<Props> = ({
+  showCloseButton=true,
+  children
+}) => {
   const [inProp, setInProp] = useState(false);
 
   const dispatch = useDispatch()
@@ -45,9 +49,10 @@ export const Popup: React.FC<Props> = ({ children }) => {
               ...transitionStyles[state]
           }}
             variant="popup" flexDirection="column">
-            <Button variant="popupClose" onClick={() => { closePopup() }}>
-              <IoMdClose size="20px" />
-            </Button>
+            {showCloseButton &&
+              <Button variant="popupClose" onClick={() => { closePopup() }}>
+                <IoMdClose size="20px" />
+              </Button>}
             <Box variant="popupContent">
               {children}
             </Box>
