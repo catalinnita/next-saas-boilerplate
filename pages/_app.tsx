@@ -5,7 +5,6 @@ import { AppContextType, AppInitialProps } from "next/dist/next-server/lib/utils
 import { ThemeProvider } from "theme-ui"
 import { theme } from "../config/theme"
 import { auth0, getToken, getUser } from "../utils/auth0"
-import { UserContextProvider } from "../context/userContext"
 import Head from "next/head"
 import store from '../state/store'
 import { Provider } from 'react-redux'
@@ -17,15 +16,13 @@ class MyApp extends App<AppProps> {
     return (
       <ThemeProvider theme={theme}>
         <Provider store={store}>
-          <UserContextProvider pageProps={pageProps}>
-            <Head>
-              <link rel="preconnect" href="https://fonts.gstatic.com" />
-              <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet" />
-              <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-              <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-            </Head>
-            <Component {...pageProps} />
-          </UserContextProvider>
+          <Head>
+            <link rel="preconnect" href="https://fonts.gstatic.com" />
+            <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+          </Head>
+          <Component {...pageProps} />
         </Provider>
       </ThemeProvider>)
   }

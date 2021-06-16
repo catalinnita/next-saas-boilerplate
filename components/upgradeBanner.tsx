@@ -1,7 +1,6 @@
-import React, { useContext } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import React from "react"
+import { useDispatch } from "react-redux"
 import { Flex, Button, Text, Box } from "rebass"
-import { UserContext } from "../context/userContext"
 import { showPopup } from "../state/slices/popups"
 import { activateSubscription } from "../state/slices/subscription"
 import { useStateSelector } from "../utils/useStateSelector"
@@ -32,7 +31,8 @@ export const UpgradeBanner: React.FC<Props> = ({ openPopup }) => {
     }
   }
 
-  const { hadTrial } = useContext(UserContext)
+  // add it to state
+  const hadTrial = false
   const upgradeText = hadTrial ? "Upgrade to premium" : "Start premium trial"
 
   if (

@@ -1,5 +1,4 @@
 import { initAuth0 } from "@auth0/nextjs-auth0"
-import useSWR from "swr";
 import { Url } from "url";
 
 export const auth0 = initAuth0({
@@ -40,6 +39,8 @@ export interface auth0Token {
   "token_type": string,
   "expires_in": number
 }
+
+// move them to /api !
 
 export const getToken = async (): Promise<auth0Token> => {
   const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/oauth/token`
@@ -94,14 +95,6 @@ export const getUser = async (userId: string, token: auth0Token, fields?: string
   return response.json()
 }
 
-export const fetchUser = (url: string, token: string): Promise<Response> =>
-  fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      "authorization": `Bearer ${token}`
-    }
-  }).then(res => res.json())
-
 export const updateUserById = async (token: auth0Token, userId: string, userData: Record<string,any>): Promise<Response> => {
   const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${userId}`
 
@@ -115,30 +108,11 @@ export const updateUserById = async (token: auth0Token, userId: string, userData
       body: JSON.stringify(userData)
     });
     const res = await response.json()
-    console.log(res)
     if (res.statusCode && res.statusCode !== 200) {
       throw new Error(res.message);
     }
     return res
   } catch (err) {
     return Promise.reject(err)
-  }
-
-
-}
-
-export const useUser = (id: string, token: string): Record<string, any> => {
-  const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${id}`
-  const { data, error, mutate } = useSWR([url, token], fetchUser)
-
-  const setUser = (auth0token: auth0Token, userId: string, userData: Record<string,any>): void => {
-    mutate(updateUserById(auth0token, userId, userData))
-  }
-
-  return {
-    user: data,
-    isLoading: !error && !data,
-    isError: error,
-    setUser
   }
 }

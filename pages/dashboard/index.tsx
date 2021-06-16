@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Flex, Heading, Link } from "rebass"
+import { Box, Flex } from "rebass"
 import { NextPage, NextPageContext } from "next"
 import Head from "next/head"
 import { IncomingMessage, ServerResponse } from "http"
