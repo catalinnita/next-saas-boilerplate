@@ -26,7 +26,7 @@ export const dataTestIds = {
   container: "membership-page"
 }
 
-const Page: NextPage = (props) => {
+const Page: NextPage<Props> = (props) => {
   const { token, user: initialUser } = props
   const dispatch = useDispatch()
 

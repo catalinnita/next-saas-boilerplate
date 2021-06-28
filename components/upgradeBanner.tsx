@@ -33,6 +33,7 @@ export const UpgradeBanner: React.FC<Props> = ({ openPopup, customerId }) => {
   }
 
   useEffect(() => {
+    console.log({customerId})
     customerId && dispatch(getSubscription(customerId))
   }, [customerId])
 
