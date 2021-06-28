@@ -26,32 +26,26 @@ export const PopupsWrapper: React.FC<Props> = ({ children, defaultPopup }) => {
   const { setupPopupDisplayed } = parseCookies()
 
   useEffect(() => {
-    // if (hasCard) return
-    console.log({setupPopupDisplayed})
     if (setupPopupDisplayed) return
-    dispatch(showPopup("afterRegister"))
+    dispatch(showPopup({ popup: "afterRegister" }))
   }, [hasCard, setupPopupDisplayed])
 
   return (
     <div data-testid={dataTestIds.container}>
       { popupToShow === "afterRegister" &&
         <PopupSetup
-        showCloseButton={false}
-        showSkipLink={appConfig.noCreditCardTrial}
+          showCloseButton={false}
+          showSkipLink={appConfig.noCreditCardTrial}
         />}
 
       { popupToShow === "setup" &&
         <PopupSetup />}
 
       { popupToShow === "paymentMethod" &&
-        <PopupAddPaymentMethod
-        dataTestid={dataTestIds.paymentMethodPopup}
-        />}
+        <PopupAddPaymentMethod />}
 
       { popupToShow === "upgrade" &&
-        <PopupUpgrade
-        dataTestid={dataTestIds.paymentMethodPopup}
-        />}
+        <PopupUpgrade />}
 
       { !popupToShow && children }
     </div>

@@ -9,6 +9,11 @@ type Props = {
   onSubmit?: (e: FormEvent) => void
 }
 
+export const dataTestIds = {
+  container: "block-container",
+  header: "header",
+}
+
 export const Block: React.FC<Props> = ({
   gridTemplateColumns,
   headerLeft,
@@ -18,24 +23,25 @@ export const Block: React.FC<Props> = ({
 }) => {
   return (
     <Box
-      variant="tableStyle"
+      data-testid={dataTestIds.container}
+      variant="block"
       sx={{
         gridTemplateColumns: `${gridTemplateColumns.join("% ")}%`,
       }}
       {...rest}
     >
-      <Flex
+      {(headerLeft || headerRight) && <Flex
+        data-testid={dataTestIds.header}
+        variant="blockHeader"
         justifyContent="space-between"
         alignItems="center"
-        backgroundColor="white"
-        p="12px 16px"
         sx={{
           gridColumnStart: 1,
           gridColumnEnd: gridTemplateColumns.length + 1
         }}>
-        { headerLeft }
-        { headerRight }
-      </Flex>
+        {headerLeft}
+        {headerRight}
+      </Flex>}
       { children}
     </Box>
   )

@@ -1,141 +1,103 @@
 import React from "react"
-import { render, fireEvent, act } from "@testing-library/react"
-import { PopupsWrapper, dataTestIds } from "../components/popupsWrapper"
-import { dataTestIds as freePremiumPopupDataTestIds } from "../components/freePremiumPopup"
-import appConfig from "../config/appConfig"
+import { act, fireEvent, render } from "@testing-library/react";
+import { PopupsWrapper } from "../components/popupsWrapper";
+import { useDispatch } from "react-redux"
+import { showPopup } from "../state/slices/popups"
+import { parseCookies } from 'nookies'
+import { useStateSelector } from "../utils/useStateSelector"
+import { dataTestIds as setupPopupTestIds } from "../components/popupSetup"
+import { dataTestIds as upgradePopupTestIds } from "../components/popupUpgrade"
+import { dataTestIds as paymentPopupTestIds } from "../components/popupAddPaymentMethod"
 
-jest.mock("../config/appConfig", () => ({}))
+const mockDispatch = jest.fn();
+const mockShowPopup = jest.fn((attr) => attr);
+const mockParseCookies = jest.fn(() => {});
+const mockUseStateSelector = jest.fn(() => {});
 
-const mockUpdateUserStatus = jest.fn().mockImplementation((userStatus) => userStatus)
-const mockUseContext = jest.fn().mockImplementation(() => ({
-  userPayment: null,
-  userStatus: "NEW",
-  updateUserStatus: mockUpdateUserStatus,
+jest.mock('react-redux', () => ({
+  useDispatch: () => () => mockDispatch()
+}));
+jest.mock("../state/slices/popups", () => ({
+  showPopup: (attr) => mockShowPopup(attr)
+}));
+jest.mock('nookies', () => ({
+  parseCookies: () => mockParseCookies()
+}));
+jest.mock('../utils/useStateSelector', () => ({
+  useStateSelector: () => mockUseStateSelector()
 }));
 
-React.useContext = mockUseContext;
-
-
 beforeEach(() => {
-  appConfig.acceptFree = true
-})
-
-it("renders the popups wrapper component", () => {
-  const { getByTestId } = render(<PopupsWrapper />)
-  expect(getByTestId(dataTestIds.container)).toBeInTheDocument()
-})
-
-// freePremium popup logic
-it("shows freePremium popup when it userStatus is NEW and appConfig.acceptFree is true", () => {
-  const { queryByTestId } = render(<PopupsWrapper />)
-  expect(queryByTestId(dataTestIds.freePremiumPopup)).toBeInTheDocument()
-})
-
-it("doesn't show freePremium popup when userStatus is NEW appConfig.acceptFree is false", () => {
-  appConfig.acceptFree = false
-  const { queryByTestId } = render(<PopupsWrapper />)
-  expect(queryByTestId(dataTestIds.freePremiumPopup)).not.toBeInTheDocument()
-})
-
-it("doesn't show freePremium popup when userStatus is FREE", () => {
-  mockUseContext.mockImplementation(() => ({
-    userStatus: "FREE"
+  mockDispatch.mockImplementation(() => { })
+  mockUseStateSelector.mockImplementation(() => ({
+    popupToShow: "",
+    hasCard: "",
   }))
-  const { queryByTestId } = render(<PopupsWrapper />)
-  expect(queryByTestId(dataTestIds.freePremiumPopup)).not.toBeInTheDocument()
-})
-
-it("doesn't show freePremium popup when userStatus is PREMIUM", () => {
-  mockUseContext.mockImplementation(() => ({
-    userStatus: "PREMIUM"
+  mockShowPopup.mockImplementation((attr) => attr)
+  mockParseCookies.mockImplementation(() => ({
+    setupPopupDisplayed: 1
   }))
-  const { queryByTestId } = render(<PopupsWrapper />)
-  expect(queryByTestId(dataTestIds.freePremiumPopup)).not.toBeInTheDocument()
 })
 
-// paymentMethod popup logic
+afterEach(() => {
+  mockDispatch.mockClear()
+  mockUseStateSelector.mockClear()
+  mockShowPopup.mockClear()
+  mockParseCookies.mockClear()
+})
 
-it("shows paymentMethod popup when userStatus is NEW and appConfig.acceptFree is false", () => {
-  mockUseContext.mockImplementation(() => ({
-    userStatus: "NEW"
+it("dispaches showPopup if setupPopupDisplayed cookie is missing", () => {
+  mockParseCookies.mockImplementation(() => ({}))
+  render(<PopupsWrapper><div data-testid="popups-wrapper-child"></div></PopupsWrapper >)
+  expect(mockDispatch).toBeCalledTimes(1)
+  expect(mockShowPopup).toBeCalledTimes(1)
+  expect(mockShowPopup).toBeCalledWith({ popup: "afterRegister" })
+})
+
+it("doesn't render PopupSetup popup if setupPopupDisplayed cookie is set", () => {
+  const { queryByTestId } = render(<PopupsWrapper><div data-testid="popups-wrapper-child"></div></PopupsWrapper >)
+  expect(queryByTestId(setupPopupTestIds.container)).not.toBeInTheDocument()
+})
+
+it("renders PopupSetup if popupToShow is afterRegister", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    popupToShow: "afterRegister"
   }))
-  appConfig.acceptFree = false
-  const { queryByTestId } = render(<PopupsWrapper />)
-  expect(queryByTestId(dataTestIds.paymentMethodPopup)).toBeInTheDocument()
+  const { queryByTestId } = render(<PopupsWrapper><div data-testid="popups-wrapper-child"></div></PopupsWrapper >)
+  expect(queryByTestId(setupPopupTestIds.container)).toBeInTheDocument()
+  expect(queryByTestId("popups-wrapper-child")).not.toBeInTheDocument()
 })
 
-it("shows paymentMethod popup when userStatus is PREMIUM and paymentMethod is not set", () => {
-  mockUseContext.mockImplementation(() => ({
-    userPayment: null,
-    userStatus: "PREMIUM"
+it("renders PopupSetup if popupToShow is setup", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    popupToShow: "setup"
   }))
-  const { queryByTestId } = render(<PopupsWrapper />)
-  expect(queryByTestId(dataTestIds.paymentMethodPopup)).toBeInTheDocument()
+  const { queryByTestId } = render(<PopupsWrapper><div data-testid="popups-wrapper-child"></div></PopupsWrapper >)
+  expect(queryByTestId(setupPopupTestIds.container)).toBeInTheDocument()
+  expect(queryByTestId("popups-wrapper-child")).not.toBeInTheDocument()
 })
 
-it("doesn't display paymentMethod popup when userStatus is PREMIUM and userPayment is set", () => {
-  mockUseContext.mockImplementation(() => ({
-    userPayment: {},
-    userStatus: "PREMIUM"
+it("renders PopupAddPaymentMethod if popupToShow is paymentMethod", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    popupToShow: "paymentMethod"
   }))
-  const { queryByTestId } = render(<PopupsWrapper />)
-  expect(queryByTestId(dataTestIds.paymentMethodPopup)).not.toBeInTheDocument()
+  const { queryByTestId } = render(<PopupsWrapper><div data-testid="popups-wrapper-child"></div></PopupsWrapper >)
+  expect(queryByTestId(paymentPopupTestIds.container)).toBeInTheDocument()
+  expect(queryByTestId("popups-wrapper-child")).not.toBeInTheDocument()
 })
 
-it("doesn't display paymentMethod popup when userStatus is not PREMIUM", () => {
-  mockUseContext.mockImplementation(() => ({
-    userStatus: "FREE"
+it("renders PopupUpgrade if popupToShow is upgrade", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    popupToShow: "upgrade"
   }))
-  const { queryByTestId } = render(<PopupsWrapper />)
-  expect(queryByTestId(dataTestIds.paymentMethodPopup)).not.toBeInTheDocument()
+  const { queryByTestId } = render(<PopupsWrapper><div data-testid="popups-wrapper-child"></div></PopupsWrapper >)
+  expect(queryByTestId(upgradePopupTestIds.container)).toBeInTheDocument()
+  expect(queryByTestId("popups-wrapper-child")).not.toBeInTheDocument()
 })
 
-// children logic
-
-it("shows the children when userStatus is FREE", () => {
-  mockUseContext.mockImplementation(() => ({
-    userStatus: "FREE"
+it("renders the children if popupToShow is missing", () => {
+  mockUseStateSelector.mockImplementation(() => ({
   }))
-  const { queryAllByText } = render(<PopupsWrapper><div>TestChildren</div></PopupsWrapper>)
-  expect(queryAllByText("TestChildren").length).toBe(1)
-})
-
-it("shows the children when userStatus is PREMIUM and userPayment is set", () => {
-  mockUseContext.mockImplementation(() => ({
-    userPayment: {},
-    userStatus: "PREMIUM"
-  }))
-  const { queryAllByText } = render(<PopupsWrapper><div>TestChildren</div></PopupsWrapper>)
-  expect(queryAllByText("TestChildren").length).toBe(1)
-})
-
-it("doesn't show the children when userStatus is NEW", () => {
-  mockUseContext.mockImplementation(() => ({
-    userStatus: "NEW"
-  }))
-  const { queryAllByText } = render(<PopupsWrapper><div>TestChildren</div></PopupsWrapper>)
-  expect(queryAllByText("TestChildren").length).toBe(0)
-})
-
-// setFree and setPremium
-
-it("calls set userStatus auth0 user_metadata value and updateUserStatus with argument FREE when setFree is called", () => {
-  mockUseContext.mockImplementation(() => ({
-    userStatus: "NEW",
-    updateUserStatus: mockUpdateUserStatus,
-  }))
-  const result = render(<PopupsWrapper><div>TestChildren</div></PopupsWrapper>)
-  act(() => {
-    fireEvent.click(result.getByTestId(freePremiumPopupDataTestIds.freeButton))
-  })
-
-  expect(mockUpdateUserStatus).toHaveBeenCalledWith("FREE")
-})
-
-it("calls set userStatus cookie value and setUserStatus with argument PREMIUM when setPremium is called", () => {
-  const { getByTestId } = render(<PopupsWrapper><div>TestChildren</div></PopupsWrapper>)
-  act(() => {
-    fireEvent.click(getByTestId(freePremiumPopupDataTestIds.premiumButton))
-  })
-  expect(mockUpdateUserStatus).toHaveBeenCalledWith("PREMIUM")
+  const { queryByTestId } = render(<PopupsWrapper><div data-testid="popups-wrapper-child"></div></PopupsWrapper >)
+  expect(queryByTestId("popups-wrapper-child")).toBeInTheDocument()
 })

@@ -6,11 +6,12 @@ import { RowCard } from "./rowCard"
 import { getCards } from "../state/slices/cards"
 import { useStateSelector } from "../utils/useStateSelector"
 import { Block } from "./block"
-import { Stripe } from "stripe"
+import { orderObjectById } from "../utils/orderObjectById"
 
 export const dataTestIds = {
-  container: "payment-methods-container",
-  card: "payment-methods-card"
+  card: "payment-methods-card",
+  addCardButton: "add-card-button",
+  cardRow: "card-row"
 }
 
 export type Props = {
@@ -22,9 +23,7 @@ export const BlockCards: React.FC<Props> = ({ customerId }) => {
   const { cardsList } = useStateSelector("cards")
 
   const canAddMoreCards = cardsList.length < 5
-  const orderedCards = Object.values(cardsList).sort((a: Stripe.Card, b: Stripe.Card) => {
-    return a.id < b.id ? -1 : 1;
-  }) as Stripe.Card[]
+  const orderedCards = orderObjectById(cardsList)
 
   useEffect(() => {
     dispatch(getCards({ customerId }))
@@ -38,12 +37,13 @@ export const BlockCards: React.FC<Props> = ({ customerId }) => {
     <Block
       gridTemplateColumns={[5, 5, 25, 55, 10]}
       headerLeft={
-        <Heading as="h3" fontSize="18px">Payment methods</Heading>
+        <Heading as="h3">Payment methods</Heading>
       }
       headerRight={
         canAddMoreCards &&
         <Button
-          variant="small"
+          data-testid={dataTestIds.addCardButton}
+          variant="primarySmall"
           onClick={() => {
             dispatch(showPopup({
               popup: "paymentMethod"

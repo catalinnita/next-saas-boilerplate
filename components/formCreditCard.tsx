@@ -2,7 +2,6 @@ import React from "react"
 import { Box, Button, Flex } from "rebass"
 import { useStripe, useElements, CardNumberElement, CardCvcElement, CardExpiryElement, Elements } from '@stripe/react-stripe-js'
 
-
 export type Props = {
   buttonText?: string
   onSubmitCallback?: (args: Record<string, any>) => void
@@ -42,14 +41,12 @@ export const FormCreditCard: React.FC<Props> = ({
 
   const stripe = useStripe()
   const elements = useElements()
-
-  const submitPaymentMethod = async (): void => {
+  const submitPaymentMethod = async(): Promise<any> => {
     if (!stripe || !elements) {
       return;
     }
-
     const cardElement = elements.getElement(CardNumberElement);
-    const {error, token} = await stripe.createToken(cardElement);
+    const { error, token } = await stripe.createToken(cardElement);
 
     if (error) {
       console.error(error)
@@ -58,9 +55,12 @@ export const FormCreditCard: React.FC<Props> = ({
     }
   }
 
-
   return (
-    <Box data-testid={dataTestIds.container} as="form" width="100%" onSubmit={(e): void => { e.preventDefault() }}>
+    <Box
+      data-testid={dataTestIds.container}
+      as="form"
+      width="100%"
+      onSubmit={(e): void => { e.preventDefault() }}>
 
       <Flex py="16px">
         <Box variant="cardInput" width={3 / 5} mr="16px">
@@ -75,7 +75,11 @@ export const FormCreditCard: React.FC<Props> = ({
         </Box>
       </Flex>
 
-      <Button data-testid={dataTestIds.submitButton} variant="primary" onClick={(): void => { submitPaymentMethod() }}>{buttonText}</Button>
+      <Button
+        data-testid={dataTestIds.submitButton}
+        variant="primaryMedium"
+        onClick={(): void => { submitPaymentMethod() }}
+      >{buttonText}</Button>
 
     </Box>
   )

@@ -1,86 +1,90 @@
-import React, { useState } from "react"
-import { fireEvent, render } from "@testing-library/react"
-import { FormCreditCard, dataTestIds } from "../components/formCreditCard"
+import React from "react"
+import { act, fireEvent, render, waitFor } from "@testing-library/react";
+import { FormCreditCard, dataTestIds } from "../components/formCreditCard";
+import { useStripe, useElements } from '@stripe/react-stripe-js'
+import { StripeElementsProvider } from "../components/stripeElementsProvider";
 
-const realUseState = React.useState
-const stubInitialState = {
-  nameOnCard: "John D",
-  cardNumber: "4444444444444444",
-  expiryDate: "12/21",
-  cvc: "777",
-}
+const mockUseStripe = jest.fn()
+const mockUseElements = jest.fn()
+const mockOnSubmitCallback = jest.fn((attr) => attr)
 
-const useStateMock = jest.spyOn(React, "useState")
+jest.mock('@stripe/react-stripe-js', () => ({
+  ...jest.requireActual('@stripe/react-stripe-js'),
+  useStripe: () => mockUseStripe(() => {}),
+  useElements: () => mockUseElements(() => {}),
+}))
 
-it("renders the FormCreditCard component", async () => {
-  const { getByTestId } = render(<FormCreditCard />)
-  expect(getByTestId(dataTestIds.container)).toBeInTheDocument()
+beforeEach(() => {
+  mockUseStripe.mockImplementation(() => ({
+    createToken: () => ({
+      error: null,
+      token: {
+        id: "mockedTokenId"
+      }
+    })
+  }))
+
+  mockUseElements.mockImplementation(() => ({
+    getElement: () => ({})
+  }))
+
+  mockOnSubmitCallback.mockImplementation((attr) => attr)
 })
 
-it("renders the NameOnCard input component", async () => {
-  const { getByTestId } = render(<FormCreditCard />)
-  expect(getByTestId(dataTestIds.nameOnCard)).toBeInTheDocument()
+afterEach(() => {
+  mockUseStripe.mockClear()
+  mockUseElements.mockClear()
+  mockOnSubmitCallback.mockClear()
 })
 
-it("renders the CardNumber input component", async () => {
-  const { getByTestId } = render(<FormCreditCard />)
-  expect(getByTestId(dataTestIds.cardNumber)).toBeInTheDocument()
+it("calls onSubmitCallback when submit button is called", async () => {
+  const { queryByTestId } = render(<StripeElementsProvider><FormCreditCard onSubmitCallback={(attr) => { mockOnSubmitCallback(attr) }} /></StripeElementsProvider>)
+  const submitButton = queryByTestId(dataTestIds.submitButton)
+  act(() => {
+    fireEvent.click(submitButton)
+  })
+
+  await waitFor(() => expect(mockOnSubmitCallback).toBeCalledTimes(1))
+  await waitFor(() => expect(mockOnSubmitCallback).toBeCalledWith({ cardToken: "mockedTokenId" }))
 })
 
-it("renders the ExpiryDate input component", async () => {
-  const { getByTestId } = render(<FormCreditCard />)
-  expect(getByTestId(dataTestIds.expiryDate)).toBeInTheDocument()
+it("doesn't call onSubmitCallback if there is an error", async () => {
+  mockUseStripe.mockImplementation(() => ({
+    createToken: () => ({
+      error: "error message",
+      token: {
+        id: "mockedTokenId"
+      }
+    })
+  }))
+
+  const { queryByTestId } = render(<StripeElementsProvider><FormCreditCard onSubmitCallback={(attr) => { mockOnSubmitCallback(attr) }} /></StripeElementsProvider>)
+  const submitButton = queryByTestId(dataTestIds.submitButton)
+  act(() => {
+    fireEvent.click(submitButton)
+  })
+
+  await waitFor(() => expect(mockOnSubmitCallback).toBeCalledTimes(0))
 })
 
-it("renders the CVC input component", async () => {
-  const { getByTestId } = render(<FormCreditCard />)
-  expect(getByTestId(dataTestIds.cvc)).toBeInTheDocument()
+it("doesn't call onSubmitCallback if stripe is not available", async () => {
+  mockUseStripe.mockImplementation(() => (null))
+  const { queryByTestId } = render(<StripeElementsProvider><FormCreditCard onSubmitCallback={(attr) => { mockOnSubmitCallback(attr) }} /></StripeElementsProvider>)
+  const submitButton = queryByTestId(dataTestIds.submitButton)
+  act(() => {
+    fireEvent.click(submitButton)
+  })
+
+  await waitFor(() => expect(mockOnSubmitCallback).toBeCalledTimes(0))
 })
 
-it("renders the Add Payment Method button", async () => {
-  const { getByTestId } = render(<FormCreditCard />)
-  expect(getByTestId(dataTestIds.submitButton)).toBeInTheDocument()
-})
+it("doesn't call onSubmitCallback if elements is not available", async () => {
+  mockUseElements.mockImplementation(() => (null))
+  const { queryByTestId } = render(<StripeElementsProvider><FormCreditCard onSubmitCallback={(attr) => { mockOnSubmitCallback(attr) }} /></StripeElementsProvider>)
+  const submitButton = queryByTestId(dataTestIds.submitButton)
+  act(() => {
+    fireEvent.click(submitButton)
+  })
 
-it("sets the input values according with the state value", async () => {
-  useStateMock.mockImplementation(() => realUseState(stubInitialState))
-  const { getByTestId } = render(<FormCreditCard />)
-  expect(getByTestId(dataTestIds.nameOnCard)).toHaveValue(stubInitialState.nameOnCard)
-  expect(getByTestId(dataTestIds.cardNumber)).toHaveValue(stubInitialState.cardNumber)
-  expect(getByTestId(dataTestIds.expiryDate)).toHaveValue(stubInitialState.expiryDate)
-  expect(getByTestId(dataTestIds.cvc)).toHaveValue(stubInitialState.cvc)
-})
-
-
-it("updates the cardInfo when nameOnCard field is changed", async () => {
-  const setState = jest.fn()
-  useStateMock.mockImplementation(() => [{}, setState]);
-  const { getByTestId } = render(<FormCreditCard />)
-  fireEvent.change(getByTestId(dataTestIds.nameOnCard), {target: { value: "Joe D" }})
-  expect(setState).toHaveBeenCalledWith(expect.objectContaining({nameOnCard: "Joe D"}))
-})
-
-it("updates the cardInfo when cardNumber field is changed", async () => {
-  const setState = jest.fn()
-  useStateMock.mockImplementation(() => [{}, setState]);
-  const { getByTestId } = render(<FormCreditCard />)
-  fireEvent.change(getByTestId(dataTestIds.cardNumber), {target: { value: "4444222211110000" }})
-  expect(setState).toHaveBeenCalledWith(expect.objectContaining({cardNumber: "4444222211110000"}))
-})
-
-it("updates the cardInfo when expiryDate field is changed", async () => {
-  const setState = jest.fn()
-  useStateMock.mockImplementation(() => [{}, setState]);
-  const { getByTestId } = render(<FormCreditCard />)
-  fireEvent.change(getByTestId(dataTestIds.expiryDate), {target: { value: "11/21" }})
-  expect(setState).toHaveBeenCalledWith(expect.objectContaining({expiryDate: "11/21"}))
-})
-
-
-it("updates the cardInfo when cvc field is changed", async () => {
-  const setState = jest.fn()
-  useStateMock.mockImplementation(() => [{}, setState]);
-  const { getByTestId } = render(<FormCreditCard />)
-  fireEvent.change(getByTestId(dataTestIds.cvc), {target: { value: "123" }})
-  expect(setState).toHaveBeenCalledWith(expect.objectContaining({cvc: "123"}))
+  await waitFor(() => expect(mockOnSubmitCallback).toBeCalledTimes(0))
 })

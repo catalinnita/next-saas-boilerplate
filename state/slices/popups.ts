@@ -12,7 +12,6 @@ export const popups = createSlice({
       state.showCloseButton = action.payload.showCloseButton || true
     },
     closeAllPopups: (state) => {
-      console.log("closeAllPopups")
       state.popupToShow = null
     }
   },

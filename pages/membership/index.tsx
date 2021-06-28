@@ -15,7 +15,9 @@ import { getCustomer } from '../../state/slices/customer'
 import { UpgradeBanner } from "../../components/upgradeBanner"
 import { useStateSelector } from "../../utils/useStateSelector"
 
-interface Props {
+export interface Props {
+  user?: Record<string, any>,
+  token?: string,
   res: ServerResponse
   req: IncomingMessage
 }
@@ -49,7 +51,7 @@ const Page: NextPage = (props) => {
         <PopupsWrapper>
 
           <Header />
-          <UpgradeBanner />
+          <UpgradeBanner customerId={customer.id} />
 
           <Flex width="100%" maxWidth="1080px" py="32px" mx="auto" justifyContent="flex-start" minHeight="80vh">
 

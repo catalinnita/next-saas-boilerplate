@@ -15,6 +15,9 @@ export const dataTestIds = {
   password1FieldMessage: "form-password-password1-message",
   password2FieldMessage: "form-password-password2-message",
   submitButton: "form-password-submit-button",
+  errorMessage: "form-password-error-message",
+  successMessage: "form-password-success-message",
+  loader: "form-password-loader-icon",
 }
 
 export type Props = {
@@ -38,7 +41,7 @@ export const FormPassword: React.FC<Props> = () => {
       data-testid={dataTestIds.container}
       as='form'
       onSubmit={(e): void => e.preventDefault()}
-      headerLeft={<Heading as="h3" fontSize="18px">Update your password</Heading>}
+      headerLeft={<Heading as="h3">Update your password</Heading>}
     >
         <Box variant="rowStyle"><Label htmlFor='new-password'>New password</Label></Box>
         <Flex variant="rowStyle" flexDirection="row">
@@ -83,22 +86,24 @@ export const FormPassword: React.FC<Props> = () => {
         <Box variant="rowStyle"></Box>
         <Box variant="rowStyle">
           <Box>
-          {error.password && <Text variant="error" mb="8px">{error.password}</Text>}
-          {success.password && <Text variant="success" mb="8px">{success.password}</Text>}
+          {error.password && <Text data-testid={dataTestIds.errorMessage} variant="error" mb="8px">{error.password}</Text>}
+          {success.password && <Text data-testid={dataTestIds.successMessage} variant="success" mb="8px">{success.password}</Text>}
           <Button
             display="flex"
             data-testid={dataTestIds.submitButton}
-            variant="small"
+            variant="primarySmall"
             onClick={(): void => { dispatch(updatePassword({ password })) }}>
             Update password
             {loading.password &&
-              <Loader
-                type="ThreeDots"
-                height={12}
-                width={18}
-                color="#0984e3"
-                style={{marginLeft: "4px", marginBottom: "-4px"}}
-                />}
+              <Box data-testid={dataTestIds.loader}>
+                <Loader
+                  type="ThreeDots"
+                  height={12}
+                  width={18}
+                  color="#0984e3"
+                  // style={{marginLeft: "4px", marginBottom: "-4px"}}
+                />
+                </Box>}
             </Button>
           </Box>
         </Box>

@@ -1,148 +1,254 @@
 import { isAbsolute } from "path"
 
 const colors = {
-  textOff: "#666",
-  text: "#000",
-  white: "#fff",
-  background: "#fff",
-  primary: "#273c75",
-  primaryBg: "#f2f2f2",
-  secondary: "#30c",
-  neutralOff: "#ddd",
-  neutral: "#bbb",
-  muted: "#f6f6f6",
+  navy: "#273c75",
+
   red: "#c23616",
   green: "#44bd32",
 
-  grey: "#efefef",
-  grey200: "#ddd",
-  grey800: "#666"
-}
-const space = {
-  none: 0,
-  xxs: 3,
-  xs: 4,
-  s: 8,
-  m: 16,
-  l: 32,
-  xl: 64,
-  xxl: 128,
-  xxxl: 256,
-  max: 512,
+  grey100: "#222",
+  grey200: "#444",
+  grey300: "#666",
+  grey400: "#888",
+  grey500: "#AAA",
+  grey600: "#BBB",
+  grey700: "#CCC",
+  grey800: "#DDD",
+  grey900: "#EFEFEF",
+
+  white: "#FFF",
+  black: "#000"
 }
 
+const themeColors = {
+  textOff: colors.grey600,
+  text: colors.black,
+  disabled: colors.grey700,
+
+  background: colors.white,
+  lightBackground: colors.grey900,
+
+  primary: colors.navy,
+  secondary: colors.green,
+
+  error: colors.red,
+  success: colors.green,
+}
+
+const space = {
+  none: 0,
+  xs: "4px",
+  s: "8px",
+  m: "12px",
+  l: "16px",
+  xl: "32px",
+  xxl: "64px",
+}
+
+const fonts = {
+  main: `Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif`,
+  mono: `"Roboto Mono", Courier`,
+  heading: `Rubik`,
+  menu: `Rubik`,
+}
+
+const themeFonts = {
+  body: fonts.main,
+  heading: fonts.heading,
+  input: fonts.main,
+  button: fonts.main,
+}
+
+const themeFontWeights = {
+  body: 400,
+  heading: 400,
+  input: 400,
+  button: 400,
+}
+
+const fontSizes = {
+  s: "10px",
+  m: "12px",
+  l: "14px",
+  xl: "16px",
+  xxl: "18px",
+  xxxl: "20px",
+}
+
+const lineHeight = {
+  title: "1.3em",
+  text: "1.6em",
+}
+
+const themeLineHeights = {
+  body: lineHeight.text,
+  heading: lineHeight.title,
+}
+
+const breakpoints = {
+  mobile: "40rem",
+  tablet: "52rem",
+  desktop: "64rem"
+}
+
+const radius = {
+  main: "8px",
+  round: "20px",
+}
+
+const border = {
+  grey: `1px solid ${colors.grey800}`,
+  green: `1px solid ${colors.green}`
+}
+
+
 export const theme = {
-  breakpoints: ["40em", "52em", "64em"],
+  breakpoints: Object.values(breakpoints),
   space: Object.values(space),
-  fonts: {
-    body: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-    heading: "Rubik",
-    monospace: "Menlo, monospace",
-  },
-  fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
-  fontWeights: {
-    body: 300,
-    heading: 400,
-    bold: 700,
-  },
-  lineHeights: {
-    body: 1.5,
-    heading: 1.125,
-  },
-  colors,
+  fontSizes: Object.values(fontSizes).map(val => parseInt(val)),
+  colors: { ...themeColors },
+  fonts: { ...themeFonts },
+  fontWeights: { ...themeFontWeights },
+  lineHeights: { ...themeLineHeights },
+
   variants: {
     error: {
-      color: colors.red
+      color: themeColors.error
     },
+
     success: {
-      color: colors.green,
+      color: themeColors.success,
     },
+
     infoBanner: {
-      bg: colors.primaryBg,
-      border: `1px solid ${colors.grey200}`,
-      p: "12px",
+      bg: themeColors.lightBackground,
+      border: border.grey,
+      p: space.m,
       textAlign: "center",
-      borderRadius: "8px"
+      borderRadius: radius.main
     },
+
+    block: {
+      overflow: "hidden",
+      display: "grid",
+      rowGap: "1px",
+      backgroundColor: colors.grey900,
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderColor: colors.grey900,
+      borderRadius: radius.main,
+      mb: space.xl,
+    },
+
+    blockHeader: {
+      backgroundColor: colors.white,
+      py: space.m,
+      px: space.l,
+    },
+
     rowStyle: {
-      padding: "12px 16px",
-      fontSize: "12px",
-      backgroundColor: "white",
       display: "flex",
       justifyContent: "center",
       flexDirection: "column",
+      px: space.l,
+      py: space.m,
+      bg: colors.white,
+      fontSize: fontSizes.m,
     },
-    tableStyle: {
-      display: "grid",
-      rowGap: "1px",
-      backgroundColor: "#e0e0e0",
-      border: "1px solid #e0e0e0",
-      borderRadius: "8px",
-      overflow: "hidden",
-      mb: "32px"
-    },
+
     menuStyle: {
+      overflow: "hidden",
       display: "grid",
       rowGap: "1px",
-      backgroundColor: "#e0e0e0",
-      border: "1px solid #e0e0e0",
-      borderRadius: "8px",
-      overflow: "hidden",
-      mb: "32px"
+      bg: colors.white,
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderColor: colors.grey900,
+      borderRadius: radius.main,
+      mb: space.xl,
     },
+
+    accountMenuLink: {
+      color: themeColors.text,
+      fontSize: fontSizes.m,
+      textDecoration: 'none',
+      px: space.l,
+      py: space.m,
+      minWidth: "200px",
+      "&:hover": {
+        bg: colors.grey900
+      }
+    },
+
+    sidebarMenuLink: {
+      bg: colors.white,
+      color: themeColors.text,
+      textDecoration: 'none',
+      px: space.l,
+      py: space.s,
+      fontSize: fontSizes.m,
+      "&:hover": {
+        bg: colors.grey900
+      }
+    },
+
+    topMenuLink: {
+      fontSize: fontSizes.l,
+      fontFamily: fonts.menu,
+      color: colors.white,
+      textDecoration: 'none',
+      fontWeight: 400,
+      mx: space.l,
+      "&:hover": {
+        opacity: 0.8
+      }
+    },
+
     defaultCardRadio: {
       width: "100px"
     },
+
     popup: {
       width: "100%",
       maxWidth: "500px",
-      paddingBottom: "32px"
+      paddingBottom: space.xl,
     },
+
     dropDown: {
+      overflow: "hidden",
       position: "absolute",
       backgroundColor: colors.white,
-      border: `1px solid ${colors.grey200}`,
-      borderRadius: "8px",
-      marginTop: "32px",
-      overflow: "hidden",
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderColor: colors.grey800,
+      borderRadius: radius.main,
+      marginTop: space.xl,
       boxShadow: "1px 1px 3px rgba(0,0,0,0.1)"
     },
+
     cardInput: {
-      // borderRadius: "8px",
-      // padding: "0 0 0 16px",
-      // borderWidth: '1px',
-      // borderStyle: 'solid',
-      // borderColor: colors.neutralOff,
-      // color: colors.textOff,
-      // outlineColor: colors.primary,
-      // margin: '16px 0',
       "&:hover": {
-        color: colors.text,
-        borderColor: colors.neutral,
+        color: themeColors.text,
+        borderColor: colors.grey600,
       },
       "&:focus": {
-        color: colors.text,
-        borderColor: colors.neutral,
+        color: themeColors.text,
+        borderColor: colors.grey500,
       }
     },
   },
+
   text: {
-    heading: {
-      fontFamily: "heading",
-      lineHeight: "heading",
-      fontWeight: 400,
-      letterSpacing: "-0.02rem"
-    },
     error: {
-      fontSize: "12px",
+      fontSize: fontSizes.m,
       fontWeight: 400,
-      lineHeight: "1.2em",
+      lineHeight: lineHeight.title,
       color: colors.red,
     },
     success: {
-      fontSize: "12px",
+      fontSize: fontSizes.m,
       fontWeight: 400,
-      lineHeight: "1.2em",
+      lineHeight: lineHeight.title,
       color: colors.green,
     },
 
@@ -157,99 +263,124 @@ export const theme = {
     },
     trialing: {
       fontWeight: 500,
-      color: colors.text,
+      color: themeColors.text,
     },
+
     // subscription
     subscriptionTitle: {
-      fontSize: "16px",
+      fontSize: fontSizes.m,
       fontWeight: 500,
       textTransform: "uppercase",
     },
     cardNumber: {
-      fontSize: "12px",
-      fontFamily: "\"Roboto Mono\", Courier"
+      fontSize: fontSizes.m,
+      fontFamily: fonts.mono,
     },
     skipLink: {
-      fontSize: "10px",
-      color: colors.grey800,
+      fontSize: fontSizes.s,
+      color: colors.grey500,
+      cursor: "pointer",
+      mt: space.xl,
+      textDecoration: "underline",
+      "&:hover": {
+        color: colors.grey300,
+      }
     }
   },
-  styles: {
-    root: {
-      fontFamily: "body",
-      lineHeight: "body",
-      fontWeight: "body",
-    },
-    h1: {
-      variant: "text.heading",
-      fontSize: 5,
-    },
-    h2: {
-      variant: "text.heading",
-      fontSize: 4,
-    },
-    h3: {
-      variant: "text.heading",
-      fontSize: 3,
-    },
-    h4: {
-      variant: "text.heading",
-      fontSize: 2,
-    },
-    h5: {
-      variant: "text.heading",
-      fontSize: 1,
-    },
-    h6: {
-      variant: "text.heading",
-      fontSize: 0,
-    },
-    pre: {
-      fontFamily: "monospace",
-      overflowX: "auto",
-      code: {
-        color: "inherit",
-      },
-    },
-    code: {
-      fontFamily: "monospace",
-      fontSize: "inherit",
-    },
-    table: {
-      width: "100%",
-      borderCollapse: "separate",
-      borderSpacing: 0,
-    },
-    th: {
-      textAlign: "left",
-      borderBottomStyle: "solid",
-    },
-    td: {
-      textAlign: "left",
-      borderBottomStyle: "solid",
-    },
-    button: {
-      fontSize: 1,
-    },
-  },
+
+
   buttons: {
-    primary: {
-      fontFamily: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-      letterSpacing: "-0.005rem",
+    base: {
+      fontFamily: fonts.main,
+      letterSpacing: "-0.005em",
       fontWeight: 500,
-      fontSize: '12px',
-      border: `1px solid ${colors.primary}`,
-      bg: colors.primary,
-      color: colors.primaryBg,
-      borderRadius: "20px",
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderRadius: radius.round,
       textTransform: "uppercase",
-      lineHeight: "11px",
-      padding: "12px 16px",
+      lineHeight: "1em",
+    },
+
+    baseMedium: {
+      variant: "buttons.base",
+      px: space.l,
+      py: space.m,
+      fontSize: fontSizes.m
+    },
+
+    baseSmall: {
+      variant: "buttons.base",
+      px: space.m,
+      py: space.s,
+      fontSize: fontSizes.s
+    },
+
+    primaryMedium: {
+      variant: "buttons.baseMedium",
+      borderColor: themeColors.primary,
+      bg: themeColors.primary,
+      color: colors.white,
       "&:hover": {
         bg: colors.white,
-        color: colors.primary,
+        color: themeColors.primary,
       }
     },
+
+    primarySmall: {
+      variant: "buttons.baseSmall",
+      borderColor: themeColors.primary,
+      bg: themeColors.primary,
+      color: colors.white,
+      "&:hover": {
+        bg: colors.white,
+        color: themeColors.primary,
+      }
+    },
+
+    secondarySmall: {
+      variant: "buttons.baseSmall",
+      borderColor: themeColors.secondary,
+      bg: themeColors.secondary,
+      color: colors.white,
+      "&:hover": {
+        bg: colors.white,
+        color: themeColors.secondary,
+      }
+    },
+
+    secondaryGhostMedium: {
+      variant: "buttons.baseMedium",
+      borderColor: themeColors.secondary,
+      bg: colors.white,
+      color: themeColors.secondary,
+      "&:hover": {
+        bg: themeColors.secondary,
+        color: colors.white,
+      }
+    },
+
+    primaryGhostSmall: {
+      variant: "buttons.baseSmall",
+      borderColor: themeColors.primary,
+      bg: colors.white,
+      color: themeColors.primary,
+      "&:hover": {
+        bg: themeColors.primary,
+        color: colors.white,
+      }
+    },
+
+    greyGhostSmall: {
+      variant: "buttons.baseSmall",
+      borderColor: colors.grey800,
+      bg: colors.white,
+      color: colors.grey300,
+      "&:hover": {
+        bg: colors.grey900,
+        color: themeColors.text,
+      }
+    },
+
     popupClose: {
       position: "absolute",
       top: "16px",
@@ -257,131 +388,43 @@ export const theme = {
       padding: "8px",
       lineHeight: 0,
       background: "transparent",
-      color: "grey800",
+      color: colors.grey600,
       "&:hover": {
-        color: colors.text
+        color: colors.grey200
       }
     },
-    secondary: {
-      fontSize: 1,
-      border: `1px solid ${colors.primary}`,
-      bg: colors.primaryBg,
-      color: colors.primary,
-      borderRadius: "20px",
-      "&:hover": {
-        bg: colors.primary,
-        color: colors.primaryBg,
-      }
-    },
-    small: {
-      fontFamily: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-      letterSpacing: "-0.005rem",
-      fontWeight: 500,
-      fontSize: '10px',
-      border: `1px solid ${colors.primary}`,
-      bg: colors.primary,
-      color: colors.primaryBg,
-      borderRadius: "20px",
-      textTransform: "uppercase",
-      lineHeight: "11px",
-      padding: "8px 12px",
-      "&:hover": {
-        bg: colors.white,
-        color: colors.primary,
-      }
-    },
-    smallGreen: {
-      fontFamily: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-      letterSpacing: "-0.005rem",
-      fontWeight: 500,
-      fontSize: '10px',
-      border: `1px solid ${colors.green}`,
-      bg: colors.green,
-      color: colors.primaryBg,
-      borderRadius: "20px",
-      textTransform: "uppercase",
-      lineHeight: "11px",
-      padding: "8px 12px",
-      "&:hover": {
-        bg: colors.white,
-        color: colors.green,
-      }
-    },
-    smallGhostGreen: {
-      fontFamily: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-      letterSpacing: "-0.005rem",
-      fontWeight: 500,
-      fontSize: '10px',
-      border: `1px solid ${colors.green}`,
-      bg: colors.white,
-      color: colors.green,
-      borderRadius: "20px",
-      textTransform: "uppercase",
-      lineHeight: "11px",
-      padding: "8px 12px",
-      "&:hover": {
-        bg: colors.green,
-        color: colors.primaryBg,
-      }
-    },
-    smallghost: {
-      fontFamily: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-      fontWeight: 500,
-      fontSize: '10px',
-      border: `1px solid ${colors.primary}`,
-      bg: colors.white,
-      color: colors.primary,
-      borderRadius: "20px",
-      textTransform: "uppercase",
-      lineHeight: "11px",
-      padding: "8px 12px",
-      "&:hover": {
-        bg: colors.primaryBg,
-        color: colors.primary,
-      }
-    },
-    smallGhostGrey: {
-      fontFamily: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-      fontWeight: 500,
-      fontSize: '10px',
-      border: `1px solid ${colors.grey200}`,
-      bg: colors.white,
-      color: colors.grey800,
-      borderRadius: "20px",
-      textTransform: "uppercase",
-      lineHeight: "11px",
-      padding: "8px 12px",
-      "&:hover": {
-        bg: colors.primaryBg,
-        color: colors.text,
-      }
-    }
   },
+
   forms: {
-    label: {
-      fontSize: "12px",
-      py: 1,
-    },
     input: {
-      fontFamily: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-      fontSize: "12px",
-      fontWeight: 300,
-      borderRadius: "8px",
-      padding: "8px",
-      borderColor: colors.neutralOff,
-      color: colors.textOff,
-      outlineColor: colors.primary,
+      fontFamily: "input",
+      borderRadius: radius.main,
+      p: space.s,
+      borderColor: colors.grey800,
+      color: colors.grey300,
+      outlineColor: themeColors.primary,
       "&:hover": {
-        color: colors.text,
-        borderColor: colors.neutral,
+        color: themeColors.text,
+        borderColor: colors.grey600,
       },
       "&:focus": {
-        color: colors.text,
-        borderColor: colors.neutral,
+        color: themeColors.text,
+        borderColor: colors.grey600,
       }
     },
     defaultCardRadio: {
       borderWidth: 0
     }
   },
+
+  styles: {
+    root: {
+      fontFamily: "body",
+      lineHeight: "body",
+      fontWeight: "body",
+      fontSize: "body"
+    },
+  },
 }
+
+console.log({theme})

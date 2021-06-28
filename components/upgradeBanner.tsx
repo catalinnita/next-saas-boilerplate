@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { Flex, Button, Text, Box } from "rebass"
 import { showPopup } from "../state/slices/popups"
-import { activateSubscription } from "../state/slices/subscription"
+import { activateSubscription, getSubscription } from "../state/slices/subscription"
 import { useStateSelector } from "../utils/useStateSelector"
 
 
@@ -13,9 +13,10 @@ export const dataTestIds = {
 
 export type Props = {
   openPopup?: (popup: string) => void
+  customerId: string
 }
 
-export const UpgradeBanner: React.FC<Props> = ({ openPopup }) => {
+export const UpgradeBanner: React.FC<Props> = ({ openPopup, customerId }) => {
   const dispatch = useDispatch()
   const { hasCard } = useStateSelector("cards")
   const subscription = useStateSelector("subscription") // ?
@@ -31,13 +32,17 @@ export const UpgradeBanner: React.FC<Props> = ({ openPopup }) => {
     }
   }
 
+  useEffect(() => {
+    customerId && dispatch(getSubscription(customerId))
+  }, [customerId])
+
   // add it to state
-  const hadTrial = false
-  const upgradeText = hadTrial ? "Upgrade to premium" : "Start premium trial"
+  // const hadTrial = false
+  const upgradeText = "Upgrade to premium"
 
   if (
     popupToShow ||
-    ['canceled', null].indexOf(subscription.status) !== -1
+    (subscription.status !== 'canceled' && subscription.status !== null)
    ) {
     return null
   }
@@ -46,7 +51,7 @@ export const UpgradeBanner: React.FC<Props> = ({ openPopup }) => {
     <Box width="100%" maxWidth="1080px" pt="32px" mx="auto">
       <Flex data-testid={dataTestIds.container} variant="infoBanner" justifyContent="center" alignItems="center">
         <Text fontSize="13px" fontWeight={400} mr="8px">FREE version is nice, but you are missing very important features ...</Text>
-        <Button data-testid={dataTestIds.button} variant="smallGhostGreen" onClick={(): void => { upgradeAction() }}>{upgradeText}</Button>
+        <Button data-testid={dataTestIds.button} variant="secondaryGhostMedium" onClick={(): void => { upgradeAction() }}>{upgradeText}</Button>
       </Flex>
     </Box>
   )

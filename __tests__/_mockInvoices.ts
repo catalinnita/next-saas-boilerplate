@@ -169,7 +169,7 @@ export default [{
         {
           "id": "il_tmp_43b8b5cbb51968",
           "object": "line_item",
-          "amount": 1000,
+          "amount": -1000,
           "currency": "gbp",
           "description": "1 × Membership (at £10.00 / month)",
           "discount_amounts": [],

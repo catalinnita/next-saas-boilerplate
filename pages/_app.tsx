@@ -9,13 +9,19 @@ import Head from "next/head"
 import store from '../state/store'
 import { Provider } from 'react-redux'
 import '../components/formCreditCard.css'
+
+export const dataTestIds = {
+  themeProvider: "app-theme-provider",
+  storeProvider: "app-store-provider",
+  component: "app-theme-component",
+}
 class MyApp extends App<AppProps> {
+
   render(): React.ReactElement {
     const { Component, pageProps } = this.props
-
     return (
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
+      <ThemeProvider theme={theme} data-testid={dataTestIds.themeProvider}>
+        <Provider store={store} data-testid={dataTestIds.storeProvider}>
           <Head>
             <link rel="preconnect" href="https://fonts.gstatic.com" />
             <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet" />

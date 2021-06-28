@@ -1,76 +1,186 @@
 import React from "react"
-import { fireEvent, render } from "@testing-library/react"
-import { FormProfile, Props, dataTestIds } from "../components/formProfile"
-import { InputMessage }  from "../components/inputMessage"
-import { validateNickname, validateEmail } from "../utils/formValidation"
-import { updateUserById } from "../utils/auth0"
+import { act, fireEvent, render } from "@testing-library/react";
+import { useDispatch } from "react-redux"
+import { useStateSelector } from "../utils/useStateSelector"
+import { updateProfile, setProfile } from "../state/slices/user"
+import { FormProfile, dataTestIds } from "../components/formProfile"
 
-const props: Props = {
-  user: {
-    email: "joe@test.com",
-    nickname: "Joe"
-  },
-  token: "tokenstring",
-  setUser: jest.fn()
-}
-it("should render FormProfile component", async () => {
-  const { getByTestId } = render(<FormProfile {...props} />)
-  expect(getByTestId(dataTestIds.container)).toBeInTheDocument()
+const mockDispatch = jest.fn();
+const mockUseStateSelector = jest.fn(() => {});
+const mockSetProfile = jest.fn((attr) => attr);
+const mockUpdateProfile = jest.fn((attr) => attr);
+
+jest.mock('react-redux', () => ({
+  useDispatch: () => () => mockDispatch()
+}));
+
+jest.mock('../utils/useStateSelector', () => ({
+  useStateSelector: () => mockUseStateSelector()
+}));
+
+jest.mock("../state/slices/user", () => ({
+  setProfile: (attr) => mockSetProfile(attr),
+  updateProfile: (attr) => mockUpdateProfile(attr)
+}));
+
+beforeEach(() => {
+  mockDispatch.mockImplementation(() => { })
+  mockUseStateSelector.mockImplementation(() => ({
+    email: "",
+    name: "",
+    error: {
+      profile: null,
+    },
+    loading: {
+      profile: null,
+    },
+    validation: {
+      nickname: null,
+      email: null,
+    },
+    success: {
+      profile: null,
+    },
+  }))
+  mockSetProfile.mockImplementation((attr) => attr)
+  mockUpdateProfile.mockImplementation((attr) => attr)
 })
 
-it("should render the Name field", async () => {
-  const { getByTestId } = render(<FormProfile {...props} />)
-  expect(getByTestId(dataTestIds.nameField)).toBeInTheDocument()
+afterEach(() => {
+  mockDispatch.mockClear()
+  mockUseStateSelector.mockClear()
+  mockSetProfile.mockClear()
+  mockUpdateProfile.mockClear()
 })
 
-it("should render the Email field", async () => {
-  const { getByTestId } = render(<FormProfile {...props} />)
-  expect(getByTestId(dataTestIds.emailField)).toBeInTheDocument()
+it("dispatches setProfile when inputs values change", () => {
+  const { queryByTestId } = render(<FormProfile />)
+  const email = queryByTestId(dataTestIds.emailField)
+
+  act(() => {
+    fireEvent.change(email, { target: { value: 'test@test.com' } })
+  })
+  expect(mockDispatch).toBeCalledTimes(1)
+  expect(mockSetProfile).toBeCalledTimes(1)
+  expect(mockSetProfile).toBeCalledWith({
+    email: 'test@test.com'
+  })
+
+  mockDispatch.mockClear()
+  mockSetProfile.mockClear()
+
+  const name = queryByTestId(dataTestIds.nameField)
+
+  act(() => {
+    fireEvent.change(name, { target: { value: 'john doe' } })
+  })
+  expect(mockDispatch).toBeCalledTimes(1)
+  expect(mockSetProfile).toBeCalledTimes(1)
+  expect(mockSetProfile).toBeCalledWith({
+    nickname: 'john doe'
+  })
 })
 
-jest.mock("../components/inputMessage", () => {
-  return {
-    InputMessage: jest.fn(() => null),
-  };
-});
+it("dispatches updateProfile when submit button is clicked", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    email: "mockedEmail",
+    name: "mockedName",
+    error: {
+      profile: null,
+    },
+    loading: {
+      profile: null,
+    },
+    validation: {
+      nickname: null,
+      email: null,
+    },
+    success: {
+      profile: null,
+    },
+  }))
 
-jest.mock("../utils/formValidation", () => {
-  return {
-    validateNickname: jest.fn(() => null),
-    validateEmail: jest.fn(() => null),
-  };
-});
+  const { queryByTestId } = render(<FormProfile />)
+  const submitButton = queryByTestId(dataTestIds.submitButton)
 
+  act(() => {
+    fireEvent.click(submitButton)
+  })
 
-it("should validate the Name field when the name is changed", async () => {
-  const { getByTestId } = render(<FormProfile {...props} />)
-  const nameField = getByTestId(dataTestIds.nameField)
-  fireEvent.change(nameField, { target: { value: "Joe Doe" } })
+  expect(mockDispatch).toBeCalledTimes(1)
+  expect(mockUpdateProfile).toBeCalledTimes(1)
+  expect(mockUpdateProfile).toBeCalledWith({
+    email: 'mockedEmail',
+    nickname: 'mockedName',
+  })
 
-  expect(validateNickname).toHaveBeenCalledWith("Joe Doe")
-  expect(InputMessage).toHaveBeenCalled()
 })
 
+it("shows the Loader when loading is true", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    email: "mockedEmail",
+    name: "mockedName",
+    error: {
+      profile: null,
+    },
+    loading: {
+      profile: true,
+    },
+    validation: {
+      nickname: null,
+      email: null,
+    },
+    success: {
+      profile: null,
+    },
+  }))
 
-it("should validate the Email field when the email is changed", async () => {
-  const { getByTestId } = render(<FormProfile {...props} />)
-  const emailField = getByTestId(dataTestIds.emailField)
-  fireEvent.change(emailField, { target: { value: "joedoe@test.com" } })
-
-  expect(validateEmail).toHaveBeenCalledWith("joedoe@test.com")
-  expect(InputMessage).toHaveBeenCalled()
+  const { queryByTestId } = render(<FormProfile />)
+  expect(queryByTestId(dataTestIds.loader)).toBeInTheDocument()
 })
 
-jest.mock("../utils/auth0", () => {
-  return {
-    updateUserById: jest.fn(() => null),
-  };
-});
+it("shows the error message when an error is set", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    email: "mockedEmail",
+    name: "mockedName",
+    error: {
+      profile: "errorMessage",
+    },
+    loading: {
+      profile: null,
+    },
+    validation: {
+      nickname: null,
+      email: null,
+    },
+    success: {
+      profile: null,
+    },
+  }))
 
-// it("calls updateUserById when form is submit", async () => {
-//   const { getByTestId } = render(<FormProfile {...props} />)
-//   const formButton = getByTestId(dataTestIds.submitButton)
+  const { queryByTestId } = render(<FormProfile />)
+  expect(queryByTestId(dataTestIds.errorMessage)).toBeInTheDocument()
+})
 
-//   fireEvent.click(formButton)
-//   expect(updateUserById).toHaveBeenCalled()
-// })
+it("shows the success message when success is set", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    email: "mockedEmail",
+    name: "mockedName",
+    error: {
+      profile: null,
+    },
+    loading: {
+      profile: null,
+    },
+    validation: {
+      nickname: null,
+      email: null,
+    },
+    success: {
+      profile: "successMessage",
+    },
+  }))
+
+  const { queryByTestId } = render(<FormProfile />)
+  expect(queryByTestId(dataTestIds.successMessage)).toBeInTheDocument()
+})

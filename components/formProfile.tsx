@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import Loader from "react-loader-spinner";
 import { Box, Button, Flex, Heading, Text } from "rebass"
 import { Label, Input } from "@rebass/forms"
@@ -15,9 +15,12 @@ export const dataTestIds = {
   nameFieldMessage: "form-profile-name-message",
   emailFieldMessage: "form-profile-email-message",
   submitButton: "form-profile-submit-button",
+  errorMessage: "form-profile-error-message",
+  successMessage: "form-profile-success-message",
+  loader: "form-profile-loader-icon"
 }
 
-export const FormProfile: React.FC<Props> = () => {
+export const FormProfile: React.FC = () => {
   const dispatch = useDispatch()
 
   const {
@@ -32,7 +35,7 @@ export const FormProfile: React.FC<Props> = () => {
   return (
     <Block
       gridTemplateColumns={[30, 70]}
-      headerLeft={<Heading as="h3" fontSize="18px">Update your profile</Heading>}
+      headerLeft={<Heading as="h3">Update your profile</Heading>}
       as='form'
       onSubmit={(e): void => e.preventDefault()}
     >
@@ -79,12 +82,12 @@ export const FormProfile: React.FC<Props> = () => {
       <Box variant="rowStyle"></Box>
       <Box variant="rowStyle">
         <Box>
-        {error.profile && <Text variant="error" mb="8px">{error.profile}</Text>}
-        {success.profile && <Text variant="success" mb="8px">{success.profile}</Text>}
+        {error.profile && <Text data-testid={dataTestIds.errorMessage} variant="error" mb="8px">{error.profile}</Text>}
+        {success.profile && <Text data-testid={dataTestIds.successMessage} variant="success" mb="8px">{success.profile}</Text>}
           <Button
             display="flex"
             data-testid={dataTestIds.submitButton}
-            variant="small"
+            variant="primarySmall"
             onClick={(): void => {
               dispatch(updateProfile({
                 email,
@@ -93,13 +96,14 @@ export const FormProfile: React.FC<Props> = () => {
             }}>
           Update profile
           {loading.profile &&
-            <Loader
+            <Box data-testid={dataTestIds.loader}>
+              <Loader
               type="ThreeDots"
               height={12}
               width={18}
               color="#0984e3"
-              style={{marginLeft: "4px", marginBottom: "-4px"}}
-              />}
+              // style={{marginLeft: "4px", marginBottom: "-4px"}}
+              /></Box>}
           </Button>
         </Box>
       </Box>

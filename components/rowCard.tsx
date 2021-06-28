@@ -8,6 +8,12 @@ import { useDispatch } from "react-redux"
 import { updateDefaultCard } from "../state/slices/customer"
 import { removeCard } from "../state/slices/cards"
 
+export const dataTestIds = {
+  cardRow: "card-row",
+  defaultCardRadio: "card-radio",
+  removeCardButton: "card-remocec"
+}
+
 export type Props = {
   card: Stripe.Card
 }
@@ -15,12 +21,12 @@ export type Props = {
 export const RowCard: React.FC<Props> = ({ card }) => {
   const dispatch = useDispatch()
   const { id, defaultCardId } = useStateSelector("customer")
-
   return (
     <>
-      <Box key={`${card.id}-default`} variant="rowStyle">
+      <Box data-testid={dataTestIds.cardRow} variant="rowStyle">
         <Label>
           <Radio
+            data-testid={dataTestIds.defaultCardRadio}
             title="Set as default"
             variant="defaultCardRadio"
             size={18}
@@ -51,7 +57,8 @@ export const RowCard: React.FC<Props> = ({ card }) => {
 
       <Box variant="rowStyle" sx={{ justifySelf: "end" }}>
         <Button
-          variant="smallGhostGrey"
+          data-testid={dataTestIds.removeCardButton}
+          variant="greyGhostSmall"
           onClick={() => {
             dispatch(
               removeCard({

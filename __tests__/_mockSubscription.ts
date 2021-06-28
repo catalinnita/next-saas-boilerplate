@@ -1,4 +1,4 @@
-export const subscriptionCanceledMock = {
+export const mockSubscriptionCanceled = {
   "id": "sub_J1wnT5X6ETnjJx",
   "object": "subscription",
   "application_fee_percent": null,
@@ -152,7 +152,7 @@ export const subscriptionTrialMock = {
   "trial_start": 1614532699
 }
 
-export const subscriptionActiveMock = {
+export const mockSubscriptionActive = {
   "id": "sub_J1wnT5X6ETnjJx",
   "object": "subscription",
   "application_fee_percent": null,

@@ -59,7 +59,6 @@ export const customer = createSlice({
   initialState,
   reducers: {
     setDefaultCard: (state, action) => {
-      console.log(action)
       state.defaultCardId = action.payload.default_source
     }
   },

@@ -1,77 +1,180 @@
 import React from "react"
-import { fireEvent, render } from "@testing-library/react"
-import { FormPassword, Props, dataTestIds } from "../components/formPassword"
-import { InputMessage }  from "../components/inputMessage"
-import { validatePassword, verifyPasswords } from "../utils/formValidation"
-import { updateUserById } from "../utils/auth0"
+import { act, fireEvent, render } from "@testing-library/react";
+import { useDispatch } from "react-redux"
+import { useStateSelector } from "../utils/useStateSelector"
+import { setPassword, updatePassword } from "../state/slices/user"
+import { FormPassword, dataTestIds } from "../components/formPassword"
 
-const props: Props = {
-  user: {
-    email: "joe@test.com",
-    nickname: "Joe"
-  },
-  token: "tokenstring"
-}
-it("should render FormPassword component", async () => {
-  const { getByTestId } = render(<FormPassword {...props} />)
-  expect(getByTestId(dataTestIds.container)).toBeInTheDocument()
+const mockDispatch = jest.fn();
+const mockUseStateSelector = jest.fn(() => {});
+const mockSetPassword = jest.fn((attr) => attr);
+const mockUpdatePassword = jest.fn((attr) => attr);
+
+jest.mock('react-redux', () => ({
+  useDispatch: () => () => mockDispatch()
+}));
+
+jest.mock('../utils/useStateSelector', () => ({
+  useStateSelector: () => mockUseStateSelector()
+}));
+
+jest.mock("../state/slices/user", () => ({
+  setPassword: (attr) => mockSetPassword(attr),
+  updatePassword: (attr) => mockUpdatePassword(attr)
+}));
+
+beforeEach(() => {
+  mockDispatch.mockImplementation(() => { })
+  mockUseStateSelector.mockImplementation(() => ({
+    password: null,
+    error: {
+      password: null,
+    },
+    loading: {
+      password: null,
+    },
+    validation: {
+      password: null,
+      password1: null,
+    },
+    success: {
+      password: null,
+    }
+  }))
+  mockSetPassword.mockImplementation((attr) => attr)
+  mockUpdatePassword.mockImplementation((attr) => attr)
 })
 
-it("should render the Passowrd1 field", async () => {
-  const { getByTestId } = render(<FormPassword {...props} />)
-  expect(getByTestId(dataTestIds.password1Field)).toBeInTheDocument()
+afterEach(() => {
+  mockDispatch.mockClear()
+  mockUseStateSelector.mockClear()
+  mockSetPassword.mockClear()
+  mockUpdatePassword.mockClear()
 })
 
-it("should render the Passowrd2 field", async () => {
-  const { getByTestId } = render(<FormPassword {...props} />)
-  expect(getByTestId(dataTestIds.password2Field)).toBeInTheDocument()
+it("dispatches setPassword when inputs values change", () => {
+  const { queryByTestId } = render(<FormPassword />)
+  const password1 = queryByTestId(dataTestIds.password1Field)
+
+  act(() => {
+    fireEvent.change(password1, { target: { value: 'pass1' } })
+  })
+  expect(mockDispatch).toBeCalledTimes(1)
+  expect(mockSetPassword).toBeCalledTimes(1)
+  expect(mockSetPassword).toBeCalledWith({
+    password: 'pass1'
+  })
+
+  mockDispatch.mockClear()
+  mockSetPassword.mockClear()
+
+  const password2 = queryByTestId(dataTestIds.password2Field)
+
+  act(() => {
+    fireEvent.change(password2, { target: { value: 'pass2' } })
+  })
+  expect(mockDispatch).toBeCalledTimes(1)
+  expect(mockSetPassword).toBeCalledTimes(1)
+  expect(mockSetPassword).toBeCalledWith({
+    password1: 'pass2'
+  })
 })
 
-jest.mock("../components/inputMessage", () => {
-  return {
-    InputMessage: jest.fn(() => null),
-  };
-});
+it("dispatches updatePassword when submit button is clicked", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    password: "mockedPassword",
+    error: {
+      password: null,
+    },
+    loading: {
+      password: null,
+    },
+    validation: {
+      password: null,
+      password1: null,
+    },
+    success: {
+      password: null,
+    }
+  }))
 
-jest.mock("../utils/formValidation", () => {
-  return {
-    validatePassword: jest.fn(() => null),
-    verifyPasswords: jest.fn(() => null),
-  };
-});
+  const { queryByTestId } = render(<FormPassword />)
+  const submitButton = queryByTestId(dataTestIds.submitButton)
 
+  act(() => {
+    fireEvent.click(submitButton)
+  })
 
-it("should validate the Password1 field when the password is changed", async () => {
-  const { getByTestId } = render(<FormPassword {...props} />)
-  const password1Field = getByTestId(dataTestIds.password1Field)
-  fireEvent.change(password1Field, { target: { value: "Test123" } })
+  expect(mockDispatch).toBeCalledTimes(1)
+  expect(mockUpdatePassword).toBeCalledTimes(1)
+  expect(mockUpdatePassword).toBeCalledWith({
+    password: 'mockedPassword'
+  })
 
-  expect(validatePassword).toHaveBeenCalledWith("Test123")
-  expect(InputMessage).toHaveBeenCalled()
 })
 
+it("shows the Loader when loading is true", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    password: "mockedPassword",
+    error: {
+      password: null,
+    },
+    loading: {
+      password: true,
+    },
+    validation: {
+      password: null,
+      password1: null,
+    },
+    success: {
+      password: null,
+    }
+  }))
 
-it("should verify the first password and seconda password when the Password2 is changed", async () => {
-  const { getByTestId } = render(<FormPassword {...props} />)
-  const password1Field = getByTestId(dataTestIds.password1Field)
-  const password2Field = getByTestId(dataTestIds.password2Field)
-  fireEvent.change(password1Field, { target: { value: "Test123" } })
-  fireEvent.change(password2Field, { target: { value: "Test12" } })
-
-  expect(verifyPasswords).toHaveBeenCalledWith("Test123", "Test12")
-  expect(InputMessage).toHaveBeenCalled()
+  const { queryByTestId } = render(<FormPassword />)
+  expect(queryByTestId(dataTestIds.loader)).toBeInTheDocument()
 })
 
-jest.mock("../utils/auth0", () => {
-  return {
-    updateUserById: jest.fn(() => null),
-  };
-});
+it("shows the error message when an error is set", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    password: "mockedPassword",
+    error: {
+      password: "mockerError",
+    },
+    loading: {
+      password: null,
+    },
+    validation: {
+      password: null,
+      password1: null,
+    },
+    success: {
+      password: null,
+    }
+  }))
 
-// it("calls updateUserById when form is submit", async () => {
-//   const { getByTestId } = render(<FormPassword {...props} />)
-//   const formButton = getByTestId(dataTestIds.submitButton)
+  const { queryByTestId } = render(<FormPassword />)
+  expect(queryByTestId(dataTestIds.errorMessage)).toBeInTheDocument()
+})
 
-//   fireEvent.click(formButton)
-//   expect(updateUserById).toHaveBeenCalled()
-// })
+it("shows the success message when success is set", () => {
+  mockUseStateSelector.mockImplementation(() => ({
+    password: "mockedPassword",
+    error: {
+      password: null,
+    },
+    loading: {
+      password: null,
+    },
+    validation: {
+      password: null,
+      password1: null,
+    },
+    success: {
+      password: "mockedSuccess",
+    }
+  }))
+
+  const { queryByTestId } = render(<FormPassword />)
+  expect(queryByTestId(dataTestIds.successMessage)).toBeInTheDocument()
+})

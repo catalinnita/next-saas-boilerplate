@@ -3,9 +3,13 @@ import Head from "next/head"
 import { NextPage } from "next"
 import { Link, Flex } from "rebass"
 
+export const dataTestIds = {
+  container: "index-page"
+}
+
 const Page: NextPage = () => {
   return (
-    <div>
+    <div data-testid={dataTestIds.container}>
       <Head>
         <title>Next Saas boilerplate</title>
         <link rel="icon" href="/favicon.ico" />

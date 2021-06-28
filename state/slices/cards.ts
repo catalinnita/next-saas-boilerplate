@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import Stripe from 'stripe'
 import { RootState } from '../store'
+import { customer } from './customer'
 
 export const getCards = createAsyncThunk(
   'api/cards/',
@@ -70,10 +71,12 @@ export const cards = createSlice({
       state.hasCard = state.cardsList.length > 0
     })
     builder.addCase(attachCard.fulfilled, (state, action) => {
+      console.log(action)
       state.cardsList = [
         ...state.cardsList,
         action.payload
       ]
+
       state.hasCard = state.cardsList.length > 0
     })
   }

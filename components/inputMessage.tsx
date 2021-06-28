@@ -44,7 +44,6 @@ export const InputMessage: React.FC<Error> = ({
               p={2}
               >{message}</Text>
           </>
-
         }
       </Flex>
    : null)

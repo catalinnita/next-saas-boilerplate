@@ -9,6 +9,7 @@ import { RowInvoice } from "./rowInvoice"
 export const dataTestIds = {
   container: "invoices-container",
   invoice: "invoices-invoice",
+  loadMoreButton: "invoices-load-more"
 }
 
 export type Props = {
@@ -23,7 +24,7 @@ export const BlockInvoices: React.FC<Props> = ({ customerId }) => {
     dispatch(getInvoices({ customerId }))
   }, [customerId])
 
-  if (!invoicesList) {
+  if (!invoicesList || invoicesList.length < 1) {
     return null
   }
 
@@ -32,7 +33,7 @@ export const BlockInvoices: React.FC<Props> = ({ customerId }) => {
 
       <Block
         gridTemplateColumns={[35, 15, 15, 10, 10, 15]}
-        headerLeft={<Heading as="h3" fontSize="18px">Invoices</Heading>}
+        headerLeft={<Heading as="h3">Invoices</Heading>}
       >
         {invoicesList.map(invoice => (
           <RowInvoice
@@ -44,8 +45,9 @@ export const BlockInvoices: React.FC<Props> = ({ customerId }) => {
 
       { hasMore &&
         <Flex justifyContent="center">
-          <Button
-            variant="smallGhostGrey"
+        <Button
+            data-testid={dataTestIds.loadMoreButton}
+            variant="greyGhostSmall"
             onClick={() => {
               dispatch(
                 loadMoreInvoices({
