@@ -17,7 +17,7 @@ export type Props = {
 
 export const BlockSubscription: React.FC<Props> = ({ customerId }) => {
   const dispatch = useDispatch()
-  const { subscription } = useStateSelector("subscription")
+  const subscription = useStateSelector("subscription")
   const { hasCard } = useStateSelector("cards")
 
   useEffect(() => {

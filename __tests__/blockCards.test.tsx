@@ -48,7 +48,7 @@ it("doesn't render block component if cardsList is empty", () => {
     cardsList: []
   }));
 
-  const { queryByTestId } = render(<BlockCards customerId="" />)
+  const { queryByTestId } = render(<BlockCards customerId="1" />)
   expect(queryByTestId("block-container")).not.toBeInTheDocument()
 })
 
@@ -60,7 +60,7 @@ it("displays add card button if it has less than 5 cards", () => {
     ]
   }));
 
-  const { queryByTestId } = render(<BlockCards customerId="" />)
+  const { queryByTestId } = render(<BlockCards customerId="1" />)
   expect(queryByTestId(dataTestIds.addCardButton)).toBeInTheDocument()
 })
 
@@ -72,7 +72,7 @@ it("doesn't display add card button if it has 5 cards", () => {
     ]
   }));
 
-  const { queryByTestId } = render(<BlockCards customerId="" />)
+  const { queryByTestId } = render(<BlockCards customerId="1" />)
   expect(queryByTestId(dataTestIds.addCardButton)).not.toBeInTheDocument()
 })
 
@@ -85,7 +85,7 @@ it("renders one row for each card", () => {
     ]
   }));
 
-  const { queryAllByTestId } = render(<BlockCards customerId="" />)
+  const { queryAllByTestId } = render(<BlockCards customerId="1" />)
   const cardRows = queryAllByTestId("card-row")
   expect(cardRows.length).toBe(5)
 })
@@ -99,7 +99,7 @@ it("orders the cardsList before rendering", () => {
   }));
   mockOrderObjectById.mockImplementation((attr) => attr)
 
-  render(<BlockCards customerId="" />)
+  render(<BlockCards customerId="1" />)
 
   expect(mockOrderObjectById).toBeCalledTimes(1)
   expect(mockOrderObjectById).toBeCalledWith([...mockCards])
@@ -130,7 +130,7 @@ it("dispatches showPopup when add card button is clicked", () => {
     ]
   }));
 
-  const { getByTestId } = render(<BlockCards customerId="" />)
+  const { getByTestId } = render(<BlockCards customerId="1" />)
   const addCardButton = getByTestId(dataTestIds.addCardButton)
 
   act(() => {

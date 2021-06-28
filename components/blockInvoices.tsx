@@ -21,7 +21,7 @@ export const BlockInvoices: React.FC<Props> = ({ customerId }) => {
   const { invoicesList, hasMore, lastObject } = useStateSelector("invoices")
 
   useEffect(() => {
-    dispatch(getInvoices({ customerId }))
+    customerId && dispatch(getInvoices({ customerId }))
   }, [customerId])
 
   if (!invoicesList || invoicesList.length < 1) {

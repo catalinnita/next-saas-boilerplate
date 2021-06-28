@@ -36,7 +36,7 @@ jest.mock('../state/slices/popups', () => ({
 beforeEach(() => {
   mockDispatch.mockImplementation(() => { })
   mockUseStateSelector.mockImplementation(() => ({
-    subscription: {...mockSubscriptionActive}
+   ...mockSubscriptionActive
   }));
   mockCancelSubscription.mockImplementation((attr) => attr)
   mockGetSubscription.mockImplementation((attr) => attr)
@@ -63,7 +63,6 @@ it("dispatches getSubscription when component is mounted", () => {
 
 it("displays free text when subscription status is not set", () => {
   mockUseStateSelector.mockImplementation(() => ({
-    subscription: {}
   }));
 
   const { getByText } = render(<BlockSubscription customerId="1" />)
@@ -86,10 +85,8 @@ it("displays next invoice date when subscription status is active", () => {
 
 it("displays end of trial date when subscription status is trialing", () => {
   mockUseStateSelector.mockImplementation(() => ({
-    subscription: {
-      ...mockSubscriptionActive,
-      status: "trialing"
-    }
+    ...mockSubscriptionActive,
+    status: "trialing"
   }));
 
   const { getByText } = render(<BlockSubscription customerId="1" />)
@@ -118,10 +115,8 @@ it("dispatches cancelSubscription when cancel button is clicked", () => {
 
 it("renders upgrade button when subscription status is not set", () => {
   mockUseStateSelector.mockImplementation(() => ({
-    subscription: {
-      ...mockSubscriptionActive,
-      status: null
-    }
+    ...mockSubscriptionActive,
+    status: null
   }));
 
   const { queryByTestId } = render(<BlockSubscription customerId="1" />)
@@ -130,10 +125,8 @@ it("renders upgrade button when subscription status is not set", () => {
 
 it("dispatches showPopup setup when upgrade button is clicked", () => {
   mockUseStateSelector.mockImplementation(() => ({
-    subscription: {
-      ...mockSubscriptionActive,
-      status: null
-    }
+    ...mockSubscriptionActive,
+    status: null
   }));
   const { queryByTestId } = render(<BlockSubscription customerId="1" />)
   const upgradeButton = queryByTestId(dataTestIds.activateButton)
@@ -150,10 +143,8 @@ it("dispatches showPopup setup when upgrade button is clicked", () => {
 
 it("renders activate button when subscription status is canceled", () => {
   mockUseStateSelector.mockImplementation(() => ({
-    subscription: {
-      ...mockSubscriptionActive,
-      status: "canceled"
-    }
+    ...mockSubscriptionActive,
+    status: "canceled"
   }));
 
   const { queryByTestId } = render(<BlockSubscription customerId="1" />)
@@ -162,10 +153,8 @@ it("renders activate button when subscription status is canceled", () => {
 
 it("dispatches activateSubscription when active button is clicked and hasCard is true", () => {
   mockUseStateSelector.mockImplementation(() => ({
-    subscription: {
-      ...mockSubscriptionActive,
-      status: "canceled"
-    },
+    ...mockSubscriptionActive,
+    status: "canceled",
     hasCard: true,
   }));
   const { queryByTestId } = render(<BlockSubscription customerId="1" />)
@@ -181,10 +170,8 @@ it("dispatches activateSubscription when active button is clicked and hasCard is
 
 it("dispatches showPopup upgrade when active button is clicked and hasCard is false", () => {
   mockUseStateSelector.mockImplementation(() => ({
-    subscription: {
-      ...mockSubscriptionActive,
-      status: "canceled"
-    },
+    ...mockSubscriptionActive,
+    status: "canceled",
     hasCard: false,
   }));
   const { queryByTestId } = render(<BlockSubscription customerId="1" />)

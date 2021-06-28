@@ -71,7 +71,6 @@ export const cards = createSlice({
       state.hasCard = state.cardsList.length > 0
     })
     builder.addCase(attachCard.fulfilled, (state, action) => {
-      console.log(action)
       state.cardsList = [
         ...state.cardsList,
         action.payload

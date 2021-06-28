@@ -26,7 +26,7 @@ export const BlockCards: React.FC<Props> = ({ customerId }) => {
   const orderedCards = orderObjectById(cardsList)
 
   useEffect(() => {
-    dispatch(getCards({ customerId }))
+    customerId && dispatch(getCards({ customerId }))
   }, [customerId])
 
   if (!cardsList.length) {

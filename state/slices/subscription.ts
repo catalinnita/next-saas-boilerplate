@@ -64,11 +64,11 @@ export interface subscriptionState {
   name: string
   price: string
   currencySymbol: string
-  period: 'day' | 'month' | 'week' | 'year'
-  createdDate: string
-  trialEnd: string
-  invoiceDate: string
-  status: 'active' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'past_due' | 'trialing' | 'unpaid'
+  period: 'day' | 'month' | 'week' | 'year' | null
+  createdDate: string | null
+  trialEnd: string | null
+  invoiceDate: string | null
+  status: 'active' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'past_due' | 'trialing' | 'unpaid' | 'none' | null
   loading: {
     creating: boolean
     cancelling: boolean
@@ -77,10 +77,10 @@ export interface subscriptionState {
 }
 
 export const initialState = {
-  id: null,
+  id: "",
   name: "SCRAMBLED DATA PREMIUM",
   price: "",
-  currencySymbol: null,
+  currencySymbol: "",
   period: null,
   createdDate: null,
   trialEnd: null,

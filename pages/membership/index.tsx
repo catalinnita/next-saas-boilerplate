@@ -31,7 +31,6 @@ const Page: NextPage = (props) => {
   const dispatch = useDispatch()
 
   const customer = useStateSelector("customer")
-
   useEffect(() => {
     dispatch(setUser(initialUser))
     dispatch(setToken(token))
