@@ -39,22 +39,34 @@ export const user = createSlice({
     password: null,
     password1: null,
     loading: {
-      profile: false,
-      password: false,
+      profile: false as boolean | string,
+      password: false as boolean | string,
     },
     error: {
-      profile: false,
-      password: false,
+      profile: false as boolean | string,
+      password: false as boolean | string,
     },
     success: {
-      profile: false,
-      password: false,
+      profile: false as boolean | string,
+      password: false as boolean | string,
     },
     validation: {
-      email: false,
-      nickname: false,
-      password: false,
-      password1: false
+      email: {
+        valid: false,
+        message: "",
+      },
+      nickname: {
+        valid: false,
+        message: "",
+      },
+      password: {
+        valid: false,
+        message: "",
+      },
+      password1: {
+        valid: false,
+        message: "",
+      }
     }
   },
   reducers: {
@@ -99,8 +111,14 @@ export const user = createSlice({
     builder.addCase(updateProfile.pending, (state, action) => {
       state.success.profile = false
       state.error.profile = false
-      state.validation.email = false
-      state.validation.nickname = false
+      state.validation.email = {
+        message: state.validation.email.message,
+        valid: false
+      }
+      state.validation.nickname = {
+        message: state.validation.nickname.message,
+        valid: false
+      }
       state.loading.profile = true
     })
     builder.addCase(updateProfile.fulfilled, (state, action) => {
@@ -116,8 +134,14 @@ export const user = createSlice({
     builder.addCase(updatePassword.pending, (state, action) => {
       state.success.password = false
       state.error.password = false
-      state.validation.password = false
-      state.validation.password1 = false
+      state.validation.password = {
+        message: state.validation.password.message,
+        valid: false
+      }
+      state.validation.password1 = {
+        message: state.validation.password1.message,
+        valid: false
+      }
       state.loading.password = true
     })
     builder.addCase(updatePassword.fulfilled, (state, action) => {
