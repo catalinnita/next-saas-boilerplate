@@ -216,7 +216,7 @@ export const EventsPerDay: React.FC = () => {
         />
       }
     >
-      <Line data={data} options={options} />
+      <Line type="line" data={data} options={options} />
     </BlockChart>
   )
 }
