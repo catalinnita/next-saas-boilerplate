@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model events {
+  id             BigInt          @id @default(autoincrement())
+  projects_id    BigInt?
+  sdsid          String?         @db.VarChar
+  url            String?         @db.VarChar
+  type           String?         @db.VarChar
+  pos_x          BigInt?
+  pos_y          BigInt?
+  time_abs       DateTime?       @db.Timestamp(6)
+  time_rel       Float?
+  projects       projects?       @relation(fields: [projects_id], references: [id])
+  users_sessions users_sessions? @relation(fields: [sdsid], references: [sdsid])
+  events_data    events_data[]
+}
+
+model events_data {
+  id        BigInt  @id @default(autoincrement())
+  events_id BigInt?
+  name      String? @db.VarChar
+  value     String? @db.VarChar
+  events    events? @relation(fields: [events_id], references: [id])
+}
+
+model projects {
+  id       BigInt   @id @default(autoincrement())
+  name     String?  @db.VarChar
+  base_url String?  @db.VarChar
+  events   events[]
+}
+
+model users {
+  id            BigInt          @id @default(autoincrement())
+  email         String?         @db.VarChar
+  users_devices users_devices[]
+}
+
+model users_devices {
+  id             BigInt           @id @default(autoincrement())
+  sduid          String?          @unique @db.VarChar
+  created        DateTime?        @db.Timestamp(6)
+  users_id       BigInt?
+  os             String?          @db.VarChar
+  browser        String?          @db.VarChar
+  res_x          BigInt?
+  res_y          BigInt?
+  users          users?           @relation(fields: [users_id], references: [id])
+  users_sessions users_sessions[]
+}
+
+model users_sessions {
+  id            BigInt         @id @default(autoincrement())
+  sdsid         String?        @unique @db.VarChar
+  sduid         String?        @db.VarChar
+  created       DateTime?      @db.Timestamp(6)
+  users_devices users_devices? @relation(fields: [sduid], references: [sduid])
+  events        events[]
+}

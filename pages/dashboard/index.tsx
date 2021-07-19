@@ -6,10 +6,13 @@ import { IncomingMessage, ServerResponse } from "http"
 import { Header } from "../../components/header"
 import { PopupsWrapper } from "../../components/popupsWrapper"
 import { UpgradeBanner } from "../../components/upgradeBanner"
-import { customer, getCustomer } from "../../state/slices/customer"
+import { getCustomer } from "../../state/slices/customer"
 import { setToken, setUser } from "../../state/slices/user"
 import { useStateSelector } from "../../utils/useStateSelector"
 import { useDispatch } from "react-redux"
+import { BarChart } from "../../components/barChart"
+import { EventsPerDay } from "../../components/eventsPerDay"
+import { MostFiredEvents } from "../../components/mostFiredEvents"
 
 export interface Props {
   user?: Record<string, any>,
@@ -49,9 +52,12 @@ const Page: NextPage<Props> = (props) => {
           <Header />
           <UpgradeBanner customerId={customer.id} />
 
-          <Flex width="100%" maxWidth="1080px" p={3} mx="auto" justifyContent="flex-start">
-            <Box width={3 / 4}>
-              Build your SPA here
+          <Flex width="90%" maxWidth="1600px" p={3} mx="auto" justifyContent="flex-start">
+            <Box width={1/2} p="12px">
+              <EventsPerDay />
+            </Box>
+            <Box width={1/2} p="12px">
+              <MostFiredEvents />
             </Box>
           </Flex>
 
