@@ -160,7 +160,7 @@ export const MostFiredEvents: React.FC = () => {
         />
       }
     >
-      <Bar data={data} options={options} />
+      <Bar type="bar" data={data} options={options} />
     </BlockChart>
   )
 }
