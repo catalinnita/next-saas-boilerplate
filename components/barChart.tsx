@@ -45,6 +45,6 @@ const options = {
 
 export const BarChart: React.FC = () => {
   return (
-    <Bar data={data} options={options} />
+    <Bar type="bar" data={data} options={options} />
   )
 }
