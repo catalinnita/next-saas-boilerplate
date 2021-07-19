@@ -177,9 +177,9 @@ export const EventsPerDay: React.FC = () => {
   const [dateRange, setDateRange] = useState([defaultStartDate, defaultEndDate]);
   const [startDate, endDate] = dateRange;
 
-  options.scales.yAxes.type = chartGrid
+  // options.scales.yAxes.type = chartGrid
 
-
+  // @ts-ignore
   const DateInput = forwardRef(({ value, onClick }, ref) => (
     <Button variant="primaryGhostSmall" onClick={onClick} ref={ref}>
       {value}
