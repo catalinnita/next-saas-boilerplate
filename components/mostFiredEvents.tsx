@@ -129,7 +129,7 @@ export const MostFiredEvents: React.FC = () => {
 
   // options.scales.yAxes.type = chartGrid
 
-
+  // @ts-ignore
   const DateInput = forwardRef(({ value, onClick }, ref) => (
     <Button variant="primaryGhostSmall" onClick={onClick} ref={ref}>
       {value}
