@@ -2,24 +2,7 @@ class SDEvents {
   constructor(key) {
     this.key = key
     this.eventsUrl = "https://192.168.10.103:3000/api/events"
-    this.userUrl = "https://192.168.10.103:3000/api/user"
   }
-
-  // generateId() {
-  //   var current_date = (new Date()).getTime().valueOf().toString();
-  //   var random = Math.random().toString().replace("0.","");
-  //   return `${current_date}${random}`;
-  // }
-
-  // setCookie(name, days = 0) {
-  //   var hasCookie = this.getCookie(name)
-  //   if (hasCookie) {
-  //     return
-  //   }
-  //   const x = `${name}=${this.generateId()}; path=/; max-age=${60 * 60 * 24 * days}; SameSite=None; Secure`
-  //   console.log(x)
-  //   document.cookie = x
-  // }
 
   getCookie(name) {
     var value = `; ${document.cookie}`;
@@ -70,25 +53,7 @@ class SDEvents {
     })
   }
 
-  // setUserId() {
-  //   this.setCookie('sduid', 365*2)
-  // }
-
-  // setSessionId() {
-  //   this.setCookie('sdsid', 1)
-  // }
-
-  setClient() {
-    // create email alias so you can track all uids on the same user
-  }
-
-  // setUser() {
-  //   this.setUserId()
-  //   this.setSessionId()
-  // }
   init() {
-    // this.setUser()
-
     window.addEventListener("load", this.trackEvent.bind(this))
     document.addEventListener("click", this.trackEvent.bind(this))
     // document.addEventListener("mouseover", this.trackEvent.bind(this))

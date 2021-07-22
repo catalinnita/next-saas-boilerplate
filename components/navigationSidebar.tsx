@@ -16,6 +16,7 @@ export const NavigationSidebar: React.FC = () => {
         </Flex>
       <Link variant="sidebarMenuLink" href="/profile">Profile</Link>
       <Link variant="sidebarMenuLink" href="/membership">Membership</Link>
+      <Link variant="sidebarMenuLink" href="/projects">Projects</Link>
     </Box>
   )
 }

@@ -5,6 +5,7 @@ import customerReducer from "./slices/customer"
 import cardsReducer from "./slices/cards"
 import invoicesReducer from "./slices/invoices"
 import popupsReducer from "./slices/popups"
+import projectsReducer from "./slices/projects"
 
 const reducer = {
   subscription: subscriptionReducer,
@@ -13,6 +14,7 @@ const reducer = {
   cards: cardsReducer,
   invoices: invoicesReducer,
   popups: popupsReducer,
+  projects: projectsReducer,
 }
 
 const store = configureStore({
