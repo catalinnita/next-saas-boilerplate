@@ -3,12 +3,12 @@ import App, { AppProps } from "next/app"
 import { Router } from "next/dist/client/router"
 import { AppContextType, AppInitialProps } from "next/dist/next-server/lib/utils"
 import { ThemeProvider } from "theme-ui"
+import Head from "next/head"
+import { Provider } from "react-redux"
 import { theme } from "../config/theme"
 import { auth0, getToken, getUser } from "../utils/auth0"
-import Head from "next/head"
-import store from '../state/store'
-import { Provider } from 'react-redux'
-import '../components/formCreditCard.css'
+import store from "../state/store"
+import "../components/formCreditCard.css"
 
 export const dataTestIds = {
   themeProvider: "app-theme-provider",
@@ -41,7 +41,7 @@ MyApp.getInitialProps = async (ctx: AppContextType<Router>):Promise<AppInitialPr
     const { res, req } = pageProps
 
     // check if user is logged in
-    const session = await auth0.getSession(req)
+    const session = auth0.getSession(res, req)
     // if it's not logged in redirect to login page
     if (!session) {
       res.writeHead(302, { Location: "/api/account/login" })

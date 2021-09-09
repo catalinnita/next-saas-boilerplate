@@ -1,14 +1,12 @@
 import { PrismaClient } from '@prisma/client'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-export const getProjects = createAsyncThunk(
-  'projects/',
-  async () => {
-    console.log("dddd")
+const prisma = new PrismaClient()
 
-    console.log({prisma})
+export const getProjects = createAsyncThunk(
+  "projects/",
+  async () => {
     const projects = await prisma.projects.findMany()
-    console.log({projects})
     await prisma.$disconnect()
     return projects
   }
@@ -26,7 +24,7 @@ type projectsState = {
 }
 
 export const projects = createSlice({
-  name: 'cards',
+  name: "cards",
   initialState: {
     projectsList: [],
     loading: {
