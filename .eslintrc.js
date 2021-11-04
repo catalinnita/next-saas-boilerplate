@@ -20,7 +20,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "import/no-extraneous-dependencies": "off",
-    "quotes": [2, "double"]
+    "quotes": [2, "single"]
   },
   plugins: ["jsx-a11y"],
 }

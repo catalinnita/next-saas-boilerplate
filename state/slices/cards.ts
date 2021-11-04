@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import Stripe from 'stripe'
 import { RootState } from '../store'
-import { customer } from './customer'
 
 export const getCards = createAsyncThunk(
   'api/cards/',
@@ -81,6 +80,6 @@ export const cards = createSlice({
   }
 })
 
-export const { } = cards.actions
+// export const { } = cards.actions
 
 export default cards.reducer
