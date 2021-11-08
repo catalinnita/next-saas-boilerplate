@@ -1,16 +1,16 @@
 import React, { useEffect } from "react"
 import Head from "next/head"
 import { Box, Flex } from "rebass"
-import { NextPage, NextPageContext } from "next"
+import { NextPage } from "next"
 import { IncomingMessage, ServerResponse } from "http"
+import { useDispatch } from "react-redux"
+import { withPageAuthRequired } from "@auth0/nextjs-auth0"
 import { Header } from "../../components/header"
 import { PopupsWrapper } from "../../components/popupsWrapper"
 import { UpgradeBanner } from "../../components/upgradeBanner"
 import { getCustomer } from "../../state/slices/customer"
-import { setToken, setUser } from "../../state/slices/user"
+import { setUser } from "../../state/slices/user"
 import { useStateSelector } from "../../utils/useStateSelector"
-import { useDispatch } from "react-redux"
-import { BarChart } from "../../components/barChart"
 import { EventsPerDay } from "../../components/eventsPerDay"
 import { MostFiredEvents } from "../../components/mostFiredEvents"
 
@@ -26,16 +26,15 @@ export const dataTestIds = {
 }
 
 const Page: NextPage<Props> = (props) => {
-  const { token, user: initialUser } = props
+  const { user } = props
   const dispatch = useDispatch()
 
   const customer = useStateSelector("customer")
 
   useEffect(() => {
-    dispatch(setUser(initialUser))
-    dispatch(setToken(token))
-    dispatch(getCustomer(initialUser.name))
-  }, [token, initialUser])
+    dispatch(setUser(user))
+    dispatch(getCustomer(user.name))
+  }, [dispatch, user])
 
   const title = "Dashboard page"
 
@@ -68,13 +67,6 @@ const Page: NextPage<Props> = (props) => {
   )
 }
 
-Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
-  const { res, req } = ctx
-
-  return {
-    res,
-    req,
-  }
-}
+export const getServerSideProps = withPageAuthRequired();
 
 export default Page

@@ -5,8 +5,9 @@ import { AppContextType, AppInitialProps } from "next/dist/next-server/lib/utils
 import { ThemeProvider } from "theme-ui"
 import Head from "next/head"
 import { Provider } from "react-redux"
+import { UserProvider } from '@auth0/nextjs-auth0';
 import { theme } from "../config/theme"
-import { auth0, getToken, getUser } from "../utils/auth0"
+
 import store from "../state/store"
 import "../components/formCreditCard.css"
 
@@ -21,54 +22,19 @@ class MyApp extends App<AppProps> {
     const { Component, pageProps } = this.props
     return (
       <ThemeProvider theme={theme} data-testid={dataTestIds.themeProvider}>
-        <Provider store={store} data-testid={dataTestIds.storeProvider}>
-          <Head>
-            <link rel="preconnect" href="https://fonts.gstatic.com" />
-            <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet" />
-            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-            <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-          </Head>
-          <Component {...pageProps} />
-        </Provider>
+        <UserProvider>
+          <Provider store={store} data-testid={dataTestIds.storeProvider}>
+            <Head>
+              <link rel="preconnect" href="https://fonts.gstatic.com" />
+              <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet" />
+              <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+              <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+            </Head>
+            <Component {...pageProps} />
+          </Provider>
+        </UserProvider>
       </ThemeProvider>)
   }
 }
-
-MyApp.getInitialProps = async (ctx: AppContextType<Router>):Promise<AppInitialProps> => {
-  const { pageProps } = await App.getInitialProps(ctx);
-
-  if (pageProps.req) {
-    const { res, req } = pageProps
-
-    // check if user is logged in
-    const session = auth0.getSession(res, req)
-    // if it's not logged in redirect to login page
-    if (!session) {
-      res.writeHead(302, { Location: "/api/account/login" })
-      res.end()
-    }
-
-    // generate a token for auth0 requests
-    const token = await getToken()
-    // get user details, including stripe_customer_id
-    const user = await getUser(session.user.sub, token)
-    if (!user.user_id) {
-      res.writeHead(302, { Location: "/api/account/login" })
-      res.end()
-    }
-
-    return {
-      pageProps: {
-        token,
-        user,
-      }
-    }
-  }
-
-  return {
-    pageProps: {}
-  }
-}
-
 
 export default MyApp

@@ -1,17 +1,18 @@
 import React, { useEffect } from "react"
 import Head from "next/head"
-import { NextPage, NextPageContext } from "next"
+import { NextPage } from "next"
 import { IncomingMessage, ServerResponse } from "http"
 import { Box, Flex } from "rebass"
+import { useDispatch } from "react-redux"
+import { withPageAuthRequired } from "@auth0/nextjs-auth0"
 import { Header } from "../../components/header"
 import { PopupsWrapper } from "../../components/popupsWrapper"
 import { BlockCards } from "../../components/blockCards"
 import { BlockInvoices } from "../../components/blockInvoices"
 import { BlockSubscription } from "../../components/blockSubscription"
 import { NavigationSidebar } from "../../components/navigationSidebar"
-import { useDispatch } from 'react-redux'
-import { setUser, setToken } from '../../state/slices/user'
-import { getCustomer } from '../../state/slices/customer'
+import { setUser } from "../../state/slices/user"
+import { getCustomer } from "../../state/slices/customer"
 import { UpgradeBanner } from "../../components/upgradeBanner"
 import { useStateSelector } from "../../utils/useStateSelector"
 
@@ -27,15 +28,14 @@ export const dataTestIds = {
 }
 
 const Page: NextPage<Props> = (props) => {
-  const { token, user: initialUser } = props
+  const { user } = props
   const dispatch = useDispatch()
 
   const customer = useStateSelector("customer")
   useEffect(() => {
-    dispatch(setUser(initialUser))
-    dispatch(setToken(token))
-    dispatch(getCustomer(initialUser.name))
-  }, [token, initialUser])
+    dispatch(setUser(user))
+    dispatch(getCustomer(user.name))
+  }, [dispatch, user])
 
   const title = "Membership page"
 
@@ -84,13 +84,6 @@ const Page: NextPage<Props> = (props) => {
   )
 }
 
-Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
-  const { res, req } = ctx
-
-  return {
-    res,
-    req,
-  }
-}
+export const getServerSideProps = withPageAuthRequired();
 
 export default Page

@@ -15,7 +15,7 @@ export const NavigationAccount: React.FC = () => {
       <Box variant="accountMenuLink" sx={{borderBottom: `1px solid ${colors.grey200}`}}>Catalin Nita's Account</Box>
       <Link variant="accountMenuLink" href="/profile">Profile</Link>
       <Link variant="accountMenuLink" href="/membership">Membership</Link>
-      <Link variant="accountMenuLink" sx={{borderTop: `1px solid ${colors.grey200}`}} href="/api/account/logout">Logout</Link>
+      <Link variant="accountMenuLink" sx={{borderTop: `1px solid ${colors.grey200}`}} href="/api/auth/logout">Logout</Link>
     </Flex>
   )
 }

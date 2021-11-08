@@ -17,8 +17,8 @@ const Page: NextPage = () => {
 
       <main>
         <Flex width="100%" justifyContent="center">
-          <Link padding="0.2rem" href="/api/account/login">Login</Link>
-          <Link padding="0.2rem" href="/api/account/register">Create account</Link>
+          <Link padding="0.2rem" href="/api/auth/login">Login</Link>
+          <Link padding="0.2rem" href="/api/auth/register">Create account</Link>
         </Flex>
       </main>
 

@@ -1,14 +1,15 @@
 import React, { useEffect } from "react"
 import Head from "next/head"
 import { Box, Flex } from "rebass"
-import { NextPage, NextPageContext } from "next"
+import { NextPage } from "next"
 import { IncomingMessage, ServerResponse } from "http"
+import { useDispatch } from "react-redux"
+import { withPageAuthRequired } from "@auth0/nextjs-auth0"
 import { FormPassword } from "../../components/formPassword"
 import { FormProfile } from "../../components/formProfile"
 import { Header } from "../../components/header"
 import { NavigationSidebar } from "../../components/navigationSidebar"
-import { useDispatch, useSelector } from "react-redux"
-import { setToken, setUser } from "../../state/slices/user"
+import { setUser } from "../../state/slices/user"
 import { UpgradeBanner } from "../../components/upgradeBanner"
 import { getCustomer } from "../../state/slices/customer"
 import { useStateSelector } from "../../utils/useStateSelector"
@@ -26,16 +27,15 @@ export const dataTestIds = {
 }
 
 const Page: NextPage<Props> = (props) => {
-  const { token, user: initialUser } = props
+  const { user } = props
   const dispatch = useDispatch()
 
   const customer = useStateSelector("customer")
 
   useEffect(() => {
-    dispatch(setUser(initialUser))
-    dispatch(setToken(token))
-    dispatch(getCustomer(initialUser.name))
-  }, [token, initialUser])
+    dispatch(setUser(user))
+    dispatch(getCustomer(user.name))
+  }, [dispatch, user])
 
   const title = "Profile page"
 
@@ -59,8 +59,8 @@ const Page: NextPage<Props> = (props) => {
             </Box>
 
             <Box width={3 / 4} minHeight="80vh">
-              {initialUser && <FormProfile />}
-              {initialUser && <FormPassword />}
+              {user && <FormProfile />}
+              {user && <FormPassword />}
             </Box>
             </Flex>
 
@@ -71,14 +71,6 @@ const Page: NextPage<Props> = (props) => {
   )
 }
 
-Page.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
-  const { res, req } = ctx
-
-  return {
-    res,
-    req,
-  }
-}
-
+export const getServerSideProps = withPageAuthRequired();
 
 export default Page

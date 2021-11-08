@@ -1,5 +1,3 @@
-const path = require("path")
-
 module.exports = {
   extends: ["./node_modules/poetic/config/eslint/eslint-config.js", "plugin:jsx-a11y/recommended"],
   settings: {
@@ -20,7 +18,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "import/no-extraneous-dependencies": "off",
-    "quotes": [2, "single"]
+    "quotes": [2, "double"]
   },
   plugins: ["jsx-a11y"],
 }
