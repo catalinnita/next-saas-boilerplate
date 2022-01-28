@@ -31,7 +31,7 @@ export interface auth0User {
 
 export const getUser = async (userId: string, token: auth0Token, fields?: string[]): Promise<auth0User> => {
   const fieldsUrl = fields ? `?fields=${fields.join(",")}` : ""
-  const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${userId}${fieldsUrl}`
+  const url = `https://${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${userId}${fieldsUrl}`
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export const getUser = async (userId: string, token: auth0Token, fields?: string
 }
 
 export const updateUserById = async (token: auth0Token, userId: string, userData: Record<string,any>): Promise<Response> => {
-  const url = `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${userId}`
+  const url = `https://${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${userId}`
 
   try {
     const response = await fetch(url, {
