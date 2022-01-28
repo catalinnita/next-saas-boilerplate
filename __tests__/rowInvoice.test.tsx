@@ -1,8 +1,8 @@
 import React from "react"
-import mockInvoices from "./_mockInvoices"
 import { act, fireEvent, render } from "@testing-library/react"
-import { RowInvoice, dataTestIds } from "../components/rowInvoice"
 import Stripe from "stripe"
+import mockInvoices from "./_mockInvoices"
+import { RowInvoice, dataTestIds } from "../components/rowInvoice"
 
 
 it("updates the window location when download button is clicked", () => {
@@ -10,7 +10,7 @@ it("updates the window location when download button is clicked", () => {
   const downloadButton = getByTestId(dataTestIds.download)
 
   global.window = Object.create(window);
-  Object.defineProperty(window, 'location', {
+  Object.defineProperty(window, "location", {
     value: {
       href: ""
     }

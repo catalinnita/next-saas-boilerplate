@@ -10,11 +10,11 @@ const mockUseStateSelector = jest.fn(() => {});
 const mockSetProfile = jest.fn((attr) => attr);
 const mockUpdateProfile = jest.fn((attr) => attr);
 
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useDispatch: () => () => mockDispatch()
 }));
 
-jest.mock('../utils/useStateSelector', () => ({
+jest.mock("../utils/useStateSelector", () => ({
   useStateSelector: () => mockUseStateSelector()
 }));
 
@@ -58,12 +58,12 @@ it("dispatches setProfile when inputs values change", () => {
   const email = queryByTestId(dataTestIds.emailField)
 
   act(() => {
-    fireEvent.change(email, { target: { value: 'test@test.com' } })
+    fireEvent.change(email, { target: { value: "test@test.com" } })
   })
   expect(mockDispatch).toBeCalledTimes(1)
   expect(mockSetProfile).toBeCalledTimes(1)
   expect(mockSetProfile).toBeCalledWith({
-    email: 'test@test.com'
+    email: "test@test.com"
   })
 
   mockDispatch.mockClear()
@@ -72,12 +72,12 @@ it("dispatches setProfile when inputs values change", () => {
   const name = queryByTestId(dataTestIds.nameField)
 
   act(() => {
-    fireEvent.change(name, { target: { value: 'john doe' } })
+    fireEvent.change(name, { target: { value: "john doe" } })
   })
   expect(mockDispatch).toBeCalledTimes(1)
   expect(mockSetProfile).toBeCalledTimes(1)
   expect(mockSetProfile).toBeCalledWith({
-    nickname: 'john doe'
+    nickname: "john doe"
   })
 })
 
@@ -110,8 +110,8 @@ it("dispatches updateProfile when submit button is clicked", () => {
   expect(mockDispatch).toBeCalledTimes(1)
   expect(mockUpdateProfile).toBeCalledTimes(1)
   expect(mockUpdateProfile).toBeCalledWith({
-    email: 'mockedEmail',
-    nickname: 'mockedName',
+    email: "mockedEmail",
+    nickname: "mockedName",
   })
 
 })

@@ -1,14 +1,14 @@
 import React from "react"
 import { act, fireEvent, render, waitFor } from "@testing-library/react";
-import { PopupSetup, dataTestIds } from "../components/popupSetup";
 import { useDispatch } from "react-redux"
+import { setCookie, parseCookies } from "nookies"
+import { PopupSetup, dataTestIds } from "../components/popupSetup";
 import { attachCard } from "../state/slices/cards"
 import { createSubscription } from "../state/slices/subscription"
 import { closeAllPopups } from "../state/slices/popups"
 import { FormCreditCard } from "../components/formCreditCard"
 import { useStateSelector } from "../utils/useStateSelector"
 import { createCustomer } from "../state/slices/customer"
-import { setCookie, parseCookies } from 'nookies'
 
 const mockDispatch = jest.fn();
 const mockCloseAllPopups = jest.fn();
@@ -24,22 +24,22 @@ function MockFormCreditCard({
   onSubmitCallback
 }) {
   return (
-    <button data-testid="mockedButton" onClick={() => { onSubmitCallback({}) }}></button>
+    <button data-testid="mockedButton" onClick={() => { onSubmitCallback({}) }} />
   )
 }
 
 jest.mock("../components/formCreditCard", () => ({
-  ...jest.requireActual('../components/formCreditCard'),
+  ...jest.requireActual("../components/formCreditCard"),
   FormCreditCard: MockFormCreditCard
 }))
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useDispatch: () => () => mockDispatch()
 }));
 jest.mock("../state/slices/popups", () => ({
   closeAllPopups: () => mockCloseAllPopups()
 }));
-jest.mock('nookies', () => ({
-  ...jest.requireActual('nookies'),
+jest.mock("nookies", () => ({
+  ...jest.requireActual("nookies"),
   setCookie: (attr1, attr2, attr3) => mockSetCookie(attr1, attr2, attr3),
   parseCookies: () => mockParseCookies()
 }));
@@ -52,7 +52,7 @@ jest.mock("../state/slices/subscription", () => ({
 jest.mock("../state/slices/customer", () => ({
   createCustomer: (attr) => mockCreateCustomer(attr)
 }));
-jest.mock('../utils/useStateSelector', () => ({
+jest.mock("../utils/useStateSelector", () => ({
   useStateSelector: () => mockUseStateSelector()
 }));
 
@@ -78,7 +78,7 @@ afterEach(() => {
 })
 
 it("shows the skip link if showSkipLink is true", () => {
-  const { queryByTestId } = render(<PopupSetup showSkipLink={true} />)
+  const { queryByTestId } = render(<PopupSetup showSkipLink />)
   expect(queryByTestId(dataTestIds.skipLink)).toBeInTheDocument()
 })
 
@@ -88,7 +88,7 @@ it("doesn't show the skip link if showSkipLink is false", () => {
 })
 
 it("sets the setupPopupDisplayed cookie when skip link is clicked", () => {
-  const { queryByTestId } = render(<PopupSetup showSkipLink={true} />)
+  const { queryByTestId } = render(<PopupSetup showSkipLink />)
   const skipLink = queryByTestId(dataTestIds.skipLink)
 
   act(() => {
@@ -104,7 +104,7 @@ it("doesn't set the setupPopupDisplayed cookie if it's already set", () => {
     setupPopupDisplayed: "1"
   }))
 
-  const { queryByTestId } = render(<PopupSetup showSkipLink={true} />)
+  const { queryByTestId } = render(<PopupSetup showSkipLink />)
   const skipLink = queryByTestId(dataTestIds.skipLink)
 
   act(() => {

@@ -5,10 +5,9 @@ import { showPopup } from "../state/slices/popups"
 import { activateSubscription, getSubscription } from "../state/slices/subscription"
 import { useStateSelector } from "../utils/useStateSelector"
 
-
 export const dataTestIds = {
   container: "upgrade-banner-container",
-  button: "upgrade-button"
+  button: "upgrade-button",
 }
 
 export type Props = {
@@ -16,13 +15,13 @@ export type Props = {
   customerId: string
 }
 
-export const UpgradeBanner: React.FC<Props> = ({ openPopup, customerId }) => {
+export const UpgradeBanner: React.FC<Props> = ({ customerId }) => {
   const dispatch = useDispatch()
   const { hasCard } = useStateSelector("cards")
   const subscription = useStateSelector("subscription") // ?
   const { popupToShow } = useStateSelector("popups")
 
-  const upgradeAction = () => {
+  const upgradeAction = (): void => {
     if (!subscription.status) {
       dispatch(showPopup({ popup: "setup" }))
     } else if (!hasCard) {
@@ -33,26 +32,39 @@ export const UpgradeBanner: React.FC<Props> = ({ openPopup, customerId }) => {
   }
 
   useEffect(() => {
-    console.log({customerId})
-    customerId && dispatch(getSubscription(customerId))
-  }, [customerId])
+    if (customerId) {
+      dispatch(getSubscription(customerId))
+    }
+  }, [customerId, dispatch])
 
   // add it to state
   // const hadTrial = false
   const upgradeText = "Upgrade to premium"
 
-  if (
-    popupToShow ||
-    (subscription.status !== 'canceled' && subscription.status !== null)
-   ) {
+  if (popupToShow || (subscription.status !== "canceled" && subscription.status !== null)) {
     return null
   }
 
   return (
     <Box width="100%" maxWidth="1080px" pt="32px" mx="auto">
-      <Flex data-testid={dataTestIds.container} variant="infoBanner" justifyContent="center" alignItems="center">
-        <Text fontSize="13px" fontWeight={400} mr="8px">FREE version is nice, but you are missing very important features ...</Text>
-        <Button data-testid={dataTestIds.button} variant="secondaryGhostMedium" onClick={(): void => { upgradeAction() }}>{upgradeText}</Button>
+      <Flex
+        data-testid={dataTestIds.container}
+        variant="infoBanner"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Text fontSize="13px" fontWeight={400} mr="8px">
+          FREE version is nice, but you are missing very important features ...
+        </Text>
+        <Button
+          data-testid={dataTestIds.button}
+          variant="secondaryGhostMedium"
+          onClick={(): void => {
+            upgradeAction()
+          }}
+        >
+          {upgradeText}
+        </Button>
       </Flex>
     </Box>
   )

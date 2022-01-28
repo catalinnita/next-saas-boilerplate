@@ -1,6 +1,5 @@
 import React, { useEffect } from "react"
 import Head from "next/head"
-import { NextPage } from "next"
 import { IncomingMessage, ServerResponse } from "http"
 import { Box, Flex } from "rebass"
 import { useDispatch } from "react-redux"
@@ -17,17 +16,17 @@ import { UpgradeBanner } from "../../components/upgradeBanner"
 import { useStateSelector } from "../../utils/useStateSelector"
 
 export interface Props {
-  user?: Record<string, any>,
-  token?: string,
+  user?: Record<string, any>
+  token?: string
   res: ServerResponse
   req: IncomingMessage
 }
 
 export const dataTestIds = {
-  container: "membership-page"
+  container: "membership-page",
 }
 
-const Page: NextPage<Props> = (props) => {
+const Page: React.FC<Props> = (props) => {
   const { user } = props
   const dispatch = useDispatch()
 
@@ -46,44 +45,36 @@ const Page: NextPage<Props> = (props) => {
       </Head>
 
       <Flex justifyContent="flex-start" flexDirection="column">
-
         <PopupsWrapper>
-
           <Header />
           <UpgradeBanner customerId={customer.id} />
 
-          <Flex width="100%" maxWidth="1080px" py="32px" mx="auto" justifyContent="flex-start" minHeight="80vh">
-
-            <Box width={1 / 4}  mr="32px">
+          <Flex
+            width="100%"
+            maxWidth="1080px"
+            py="32px"
+            mx="auto"
+            justifyContent="flex-start"
+            minHeight="80vh"
+          >
+            <Box width={1 / 4} mr="32px">
               <NavigationSidebar />
             </Box>
 
-            <Box
-              width={3 / 4} minHeight="80vh">
+            <Box width={3 / 4} minHeight="80vh">
+              <BlockSubscription customerId={customer.id} />
 
-              <BlockSubscription
-                customerId={customer.id}
-              />
+              <BlockCards customerId={customer.id} />
 
-              <BlockCards
-                customerId={customer.id}
-              />
-
-              <BlockInvoices
-                customerId={customer.id}
-              />
-
+              <BlockInvoices customerId={customer.id} />
             </Box>
-
           </Flex>
-
         </PopupsWrapper>
-
       </Flex>
     </div>
   )
 }
 
-export const getServerSideProps = withPageAuthRequired();
+export const getServerSideProps = withPageAuthRequired()
 
 export default Page

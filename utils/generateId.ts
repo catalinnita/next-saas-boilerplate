@@ -1,5 +1,5 @@
-export const generateId = () => {
-  var current_date = (new Date()).getTime().valueOf().toString();
-  var random = Math.random().toString().replace("0.","");
-  return `${current_date}${random}`;
+export const generateId = (): string => {
+  const currentDate = new Date().getTime().valueOf().toString()
+  const random = Math.random().toString().replace("0.", "")
+  return `${currentDate}${random}`
 }

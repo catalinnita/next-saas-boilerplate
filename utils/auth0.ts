@@ -1,4 +1,5 @@
 import { Url } from "url";
+
 export interface auth0Token {
   "access_token": string,
   "refresh_token": string,
@@ -35,7 +36,7 @@ export const getUser = async (userId: string, token: auth0Token, fields?: string
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
-      "authorization": `Bearer ${token.access_token}`,
+      "Authorization": `Bearer ${token.access_token}`,
     },
   })
 
@@ -50,7 +51,7 @@ export const updateUserById = async (token: auth0Token, userId: string, userData
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(userData)
     });

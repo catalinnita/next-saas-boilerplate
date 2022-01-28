@@ -1,13 +1,12 @@
-import Stripe from 'stripe'
-import appConfig from '../../config/appConfig'
-import { createAsyncThunk } from '@reduxjs/toolkit'
-import { RootState } from '../store'
-import { createSlice } from '@reduxjs/toolkit'
-import getSymbolFromCurrency from 'currency-symbol-map'
-import { getDate } from '../../utils/getDate'
+import Stripe from "stripe"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import getSymbolFromCurrency from "currency-symbol-map"
+import { RootState } from "../store"
+import appConfig from "../../config/appConfig"
+import { getDate } from "../../utils/getDate"
 
 export const getSubscription = createAsyncThunk(
-  'api/subscriptions/',
+  "api/subscriptions/",
   async (customerId: string) => {
     const response = await fetch(`/api/subscriptions/${customerId}`)
     const subscription = await response.json()
@@ -15,30 +14,31 @@ export const getSubscription = createAsyncThunk(
   }
 )
 
-export const createSubscription = createAsyncThunk(
-  'api/subscriptions/add',
-  async (_, thunkApi) => {
-    const { customer: {id} } = thunkApi.getState() as RootState
-    const response = await fetch(`/api/subscriptions/${id}`, {
-      method: "POST",
-      body: JSON.stringify({
-        trialPeriodDays: appConfig.trialPeriod,
-      })
-    })
-    const subscription = await response.json()
-    return subscription as Stripe.Subscription
-  }
-)
+export const createSubscription = createAsyncThunk("api/subscriptions/add", async (_, thunkApi) => {
+  const {
+    customer: { id },
+  } = thunkApi.getState() as RootState
+  const response = await fetch(`/api/subscriptions/${id}`, {
+    method: "POST",
+    body: JSON.stringify({
+      trialPeriodDays: appConfig.trialPeriod,
+    }),
+  })
+  const subscription = await response.json()
+  return subscription as Stripe.Subscription
+})
 
 export const activateSubscription = createAsyncThunk(
-  'api/subscriptions/activate',
-  async(_, thunkApi) => {
-    const { customer: {id} } = thunkApi.getState() as RootState
+  "api/subscriptions/activate",
+  async (_, thunkApi) => {
+    const {
+      customer: { id },
+    } = thunkApi.getState() as RootState
     const response = await fetch(`/api/subscriptions/${id}`, {
       method: "POST",
       body: JSON.stringify({
         trialPeriodDays: 0,
-      })
+      }),
     })
     const subscription = await response.json()
     return subscription as Stripe.Subscription
@@ -46,13 +46,13 @@ export const activateSubscription = createAsyncThunk(
 )
 
 export const cancelSubscription = createAsyncThunk(
-  'api/subscriptions/cancel',
+  "api/subscriptions/cancel",
   async (subscriptionId: string) => {
-    const response = await fetch(`/api/subscriptions/`, {
+    const response = await fetch("/api/subscriptions/", {
       method: "DELETE",
       body: JSON.stringify({
-        subscriptionId
-      })
+        subscriptionId,
+      }),
     })
     const subscription = await response.json()
     return subscription as Stripe.Subscription
@@ -64,11 +64,20 @@ export interface subscriptionState {
   name: string
   price: string
   currencySymbol: string
-  period: 'day' | 'month' | 'week' | 'year' | null
+  period: "day" | "month" | "week" | "year" | null
   createdDate: string | null
   trialEnd: string | null
   invoiceDate: string | null
-  status: 'active' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'past_due' | 'trialing' | 'unpaid' | 'none' | null
+  status:
+    | "active"
+    | "canceled"
+    | "incomplete"
+    | "incomplete_expired"
+    | "past_due"
+    | "trialing"
+    | "unpaid"
+    | "none"
+    | null
   loading: {
     creating: boolean
     cancelling: boolean
@@ -90,11 +99,11 @@ export const initialState = {
     creating: false,
     cancelling: false,
     activating: false,
-  }
+  },
 } as subscriptionState
 
 export const subscription = createSlice({
-  name: 'subscription',
+  name: "subscription",
   initialState,
 
   reducers: {

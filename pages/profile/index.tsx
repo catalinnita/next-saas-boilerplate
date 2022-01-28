@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import Head from "next/head"
 import { Box, Flex } from "rebass"
-import { NextPage } from "next"
 import { IncomingMessage, ServerResponse } from "http"
 import { useDispatch } from "react-redux"
 import { withPageAuthRequired } from "@auth0/nextjs-auth0"
@@ -16,17 +15,17 @@ import { useStateSelector } from "../../utils/useStateSelector"
 import { PopupsWrapper } from "../../components/popupsWrapper"
 
 export interface Props {
-  user?: Record<string, any>,
-  token?: string,
+  user?: Record<string, any>
+  token?: string
   res: ServerResponse
   req: IncomingMessage
 }
 
 export const dataTestIds = {
-  container: "profile-page"
+  container: "profile-page",
 }
 
-const Page: NextPage<Props> = (props) => {
+const Page: React.FC<Props> = (props) => {
   const { user } = props
   const dispatch = useDispatch()
 
@@ -46,14 +45,18 @@ const Page: NextPage<Props> = (props) => {
       </Head>
 
       <Flex justifyContent="flex-start" flexDirection="column">
-
         <PopupsWrapper>
-
           <Header />
           <UpgradeBanner customerId={customer.id} />
 
-          <Flex width="100%" maxWidth="1080px" py="32px" mx="auto" justifyContent="flex-start" minHeight="80vh">
-
+          <Flex
+            width="100%"
+            maxWidth="1080px"
+            py="32px"
+            mx="auto"
+            justifyContent="flex-start"
+            minHeight="80vh"
+          >
             <Box width={1 / 4} mr="32px">
               <NavigationSidebar />
             </Box>
@@ -62,15 +65,13 @@ const Page: NextPage<Props> = (props) => {
               {user && <FormProfile />}
               {user && <FormPassword />}
             </Box>
-            </Flex>
-
-          </PopupsWrapper>
-
+          </Flex>
+        </PopupsWrapper>
       </Flex>
     </div>
   )
 }
 
-export const getServerSideProps = withPageAuthRequired();
+export const getServerSideProps = withPageAuthRequired()
 
 export default Page

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import Head from "next/head"
 import { Box, Flex } from "rebass"
-import { NextPage } from "next"
 import { IncomingMessage, ServerResponse } from "http"
 import { useDispatch } from "react-redux"
 import { withPageAuthRequired } from "@auth0/nextjs-auth0"
@@ -15,17 +14,17 @@ import { EventsPerDay } from "../../components/eventsPerDay"
 import { MostFiredEvents } from "../../components/mostFiredEvents"
 
 export interface Props {
-  user?: Record<string, any>,
-  token?: string,
+  user?: Record<string, any>
+  token?: string
   res: ServerResponse
   req: IncomingMessage
 }
 
 export const dataTestIds = {
-  container: "dashboard-page"
+  container: "dashboard-page",
 }
 
-const Page: NextPage<Props> = (props) => {
+const Page: React.FC<Props> = (props) => {
   const { user } = props
   const dispatch = useDispatch()
 
@@ -45,28 +44,24 @@ const Page: NextPage<Props> = (props) => {
       </Head>
 
       <Flex justifyContent="flex-start" flexDirection="column">
-
         <PopupsWrapper>
-
           <Header />
           <UpgradeBanner customerId={customer.id} />
 
           <Flex width="90%" maxWidth="1600px" p={3} mx="auto" justifyContent="flex-start">
-            <Box width={1/2} p="12px">
+            <Box width={1 / 2} p="12px">
               <EventsPerDay />
             </Box>
-            <Box width={1/2} p="12px">
+            <Box width={1 / 2} p="12px">
               <MostFiredEvents />
             </Box>
           </Flex>
-
         </PopupsWrapper>
-
       </Flex>
     </div>
   )
 }
 
-export const getServerSideProps = withPageAuthRequired();
+export const getServerSideProps = withPageAuthRequired()
 
 export default Page

@@ -1,11 +1,16 @@
-import React, { FormEvent } from "react"
+import React from "react"
 import { Box, Flex } from "rebass"
 
 type Props = {
   header?: React.ReactNode
   controlsLeft?: React.ReactNode
   controlsRight?: React.ReactNode
-  onSubmit?: (e: FormEvent) => void
+}
+
+const defaultProps = {
+  header: null,
+  controlsLeft: null,
+  controlsRight: null,
 }
 
 export const dataTestIds = {
@@ -19,48 +24,51 @@ export const BlockChart: React.FC<Props> = ({
   controlsRight,
   children,
   ...rest
-}) => {
-  return (
-    <Box
-      data-testid={dataTestIds.container}
-      variant="block"
-      bg="white"
-      pb="12px"
-      {...rest}
-    >
-      {header && <Flex
+}) => (
+  <Box data-testid={dataTestIds.container} variant="block" bg="white" pb="12px" {...rest}>
+    {header && (
+      <Flex
         data-testid={dataTestIds.header}
         variant="blockHeader"
         justifyContent="space-around"
-        alignItems="center">
+        alignItems="center"
+      >
         {header}
-      </Flex>}
-      {(controlsLeft || controlsRight) &&
-        <Flex
-          justifyContent="space-between"
+      </Flex>
+    )}
+    {(controlsLeft || controlsRight) && (
+      <Flex
+        justifyContent="space-between"
         p="16px 24px"
         sx={{
-          borderTop: '1px solid #efefef',
-          borderBottom: '1px solid #efefef'
+          borderTop: "1px solid #efefef",
+          borderBottom: "1px solid #efefef",
         }}
-        >
-          {controlsLeft && <Flex
+      >
+        {controlsLeft && (
+          <Flex
             data-testid={dataTestIds.header}
             variant="blockControls"
             justifyContent="space-around"
-            alignItems="flex-start">
+            alignItems="flex-start"
+          >
             {controlsLeft}
-          </Flex>}
-          {controlsRight && <Flex
+          </Flex>
+        )}
+        {controlsRight && (
+          <Flex
             data-testid={dataTestIds.header}
             variant="blockControls"
             justifyContent="space-around"
-            alignItems="flex-end">
+            alignItems="flex-end"
+          >
             {controlsRight}
-          </Flex>}
-        </Flex>
-      }
-      { children}
-    </Box>
-  )
-}
+          </Flex>
+        )}
+      </Flex>
+    )}
+    {children}
+  </Box>
+)
+
+BlockChart.defaultProps = defaultProps

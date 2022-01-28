@@ -1,5 +1,5 @@
-import { stripe } from "../../../utils/stripe"
 import { NextApiRequest, NextApiResponse } from "next"
+import { stripe } from "../../../utils/stripe"
 import config from "../../../config/appConfig"
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
@@ -16,9 +16,8 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
   }
 
   try {
-
     // get last subscription for a customer
-    if (method === 'GET') {
+    if (method === "GET") {
       const subscription = await stripe.subscriptions.list({
         customer: customerId.toString(),
         status: "all",
@@ -28,18 +27,18 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     }
 
     // create and add a new subscription to a customer
-    if (method === 'POST') {
+    if (method === "POST") {
       const subscription = await stripe.subscriptions.create({
         customer: customerId.toString(),
         items: [{ price: config.priceId }],
         trial_period_days: trialPeriodDays,
-      });
+      })
 
       res.end(JSON.stringify(subscription))
     }
-
   } catch (error) {
-    console.error(error);
+    // eslint-disable-next-line no-console
+    console.error(error)
     res.status(error.status || 400).end(error.message)
   }
 }

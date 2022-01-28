@@ -1,12 +1,11 @@
 import React from "react"
-import mockSubscriptionActive from "./_mockSubscriptionState"
 import { act, fireEvent, render } from "@testing-library/react"
 import { useDispatch } from "react-redux"
+import mockSubscriptionActive from "./_mockSubscriptionState"
 import { useStateSelector } from "../utils/useStateSelector"
 import { activateSubscription, cancelSubscription, getSubscription } from "../state/slices/subscription"
 import { showPopup } from "../state/slices/popups"
-import { BlockSubscription } from "../components/blockSubscription"
-import { dataTestIds } from "../components/blockSubscription"
+import { BlockSubscription , dataTestIds } from "../components/blockSubscription"
 
 const mockDispatch = jest.fn();
 const mockUseStateSelector = jest.fn(() => {})
@@ -15,21 +14,21 @@ const mockCancelSubscription = jest.fn((attr) => attr)
 const mockActivateSubscription = jest.fn((attr) => attr)
 const mockShowPopup = jest.fn((attr) => attr)
 
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useDispatch: () => () => mockDispatch()
 }));
 
-jest.mock('../utils/useStateSelector', () => ({
+jest.mock("../utils/useStateSelector", () => ({
   useStateSelector: () => mockUseStateSelector()
 }));
 
-jest.mock('../state/slices/subscription', () => ({
+jest.mock("../state/slices/subscription", () => ({
   activateSubscription: (attr) => mockActivateSubscription(attr),
   cancelSubscription: (attr) => mockCancelSubscription(attr),
   getSubscription: (attr) => mockGetSubscription(attr),
 }));
 
-jest.mock('../state/slices/popups', () => ({
+jest.mock("../state/slices/popups", () => ({
   showPopup: (attr) => mockShowPopup(attr)
 }));
 
@@ -66,7 +65,7 @@ it("displays free text when subscription status is not set", () => {
   }));
 
   const { getByText } = render(<BlockSubscription customerId="1" />)
-  expect(getByText('ScrambledData Free')).toBeInTheDocument()
+  expect(getByText("ScrambledData Free")).toBeInTheDocument()
 })
 
 it("displays premium text when a subscription status is set", () => {

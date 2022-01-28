@@ -1,34 +1,39 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { updateUserById } from "../../utils/auth0";
-import { RootState } from '../store';
-import { validateEmail, validateNickname, Error, validatePassword, verifyPasswords } from "../../utils/formValidation"
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { updateUserById } from "../../utils/auth0"
+import { RootState } from "../store"
+import {
+  validateEmail,
+  validateNickname,
+  Error,
+  validatePassword,
+  verifyPasswords,
+} from "../../utils/formValidation"
 
 export const updateProfile = createAsyncThunk(
-  'updateProfile',
+  "updateProfile",
   async (userDetails: Record<string, any>, { getState }) => {
     const { user } = getState() as RootState
     const { token, id } = user
     const fetchedUser = await updateUserById(token, id, {
-      ...userDetails
+      ...userDetails,
     })
     return fetchedUser
   }
 )
 
 export const updatePassword = createAsyncThunk(
-  'updatePassword',
+  "updatePassword",
   async (userDetails: Record<string, any>, { getState }) => {
     const { user } = getState() as RootState
     const { token, id } = user
     return await updateUserById(token, id, {
-      ...userDetails
+      ...userDetails,
     })
   }
 )
 
 export const user = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     token: null,
     id: null,
@@ -66,8 +71,8 @@ export const user = createSlice({
       password1: {
         valid: false,
         message: "",
-      }
-    }
+      },
+    },
   },
   reducers: {
     setUser: (state, action) => {
@@ -113,11 +118,11 @@ export const user = createSlice({
       state.error.profile = false
       state.validation.email = {
         message: state.validation.email.message,
-        valid: false
+        valid: false,
       }
       state.validation.nickname = {
         message: state.validation.nickname.message,
-        valid: false
+        valid: false,
       }
       state.loading.profile = true
     })
@@ -136,11 +141,11 @@ export const user = createSlice({
       state.error.password = false
       state.validation.password = {
         message: state.validation.password.message,
-        valid: false
+        valid: false,
       }
       state.validation.password1 = {
         message: state.validation.password1.message,
-        valid: false
+        valid: false,
       }
       state.loading.password = true
     })
@@ -152,9 +157,9 @@ export const user = createSlice({
       state.error.password = action.error.message
       state.loading.password = false
     })
-  }
+  },
 })
 
-export const { upgrade, downgrade, setUser, setToken, setProfile, setPassword} = user.actions
+export const { upgrade, downgrade, setUser, setToken, setProfile, setPassword } = user.actions
 
 export default user.reducer

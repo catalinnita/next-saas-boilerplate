@@ -1,11 +1,8 @@
-import { stripe } from "../../../utils/stripe"
 import { NextApiRequest, NextApiResponse } from "next"
+import { stripe } from "../../../utils/stripe"
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-  const {
-    method,
-    body,
-  } = req
+  const { method, body } = req
 
   const { subscriptionId } = body && JSON.parse(body)
 
@@ -14,16 +11,14 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
   }
 
   try {
-    const subscription = await stripe.subscriptions.del(
-      subscriptionId.toString(),
-      {
-        invoice_now: true,
-        prorate: true,
-      }
-    );
+    const subscription = await stripe.subscriptions.del(subscriptionId.toString(), {
+      invoice_now: true,
+      prorate: true,
+    })
     res.end(JSON.stringify(subscription))
   } catch (error) {
-    console.error(error);
-    res.status(error.status || 400).end(error.message);
+    // eslint-disable-next-line no-console
+    console.error(error)
+    res.status(error.status || 400).end(error.message)
   }
 }

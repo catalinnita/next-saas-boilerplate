@@ -1,8 +1,8 @@
 import React from "react"
-import mockInvoices from "./_mockInvoices"
 import { act, fireEvent, render } from "@testing-library/react"
-import { BlockInvoices, dataTestIds } from "../components/blockInvoices"
 import { useDispatch } from "react-redux"
+import mockInvoices from "./_mockInvoices"
+import { BlockInvoices, dataTestIds } from "../components/blockInvoices"
 import { useStateSelector } from "../utils/useStateSelector"
 import { getInvoices, loadMoreInvoices } from "../state/slices/invoices"
 
@@ -11,15 +11,15 @@ const mockUseStateSelector = jest.fn(() => {})
 const mockGetInvoices = jest.fn((attr) => attr)
 const mockLoadMoreInvoices = jest.fn((attr) => attr)
 
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useDispatch: () => () => mockDispatch()
 }));
 
-jest.mock('../utils/useStateSelector', () => ({
+jest.mock("../utils/useStateSelector", () => ({
   useStateSelector: () => mockUseStateSelector()
 }));
 
-jest.mock('../state/slices/invoices', () => ({
+jest.mock("../state/slices/invoices", () => ({
   getInvoices: (attr) => mockGetInvoices(attr),
   loadMoreInvoices: (attr) => mockLoadMoreInvoices(attr)
 }));

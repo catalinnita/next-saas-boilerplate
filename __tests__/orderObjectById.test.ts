@@ -1,6 +1,6 @@
+import { Stripe } from "stripe"
 import mockCards from "./_mockCards"
 import { orderObjectById } from "../utils/orderObjectById"
-import { Stripe } from "stripe"
 
 it("orders the list by id property", () => {
   const orderedList = orderObjectById(mockCards as Stripe.Card[])

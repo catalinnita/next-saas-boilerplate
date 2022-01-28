@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { Box, Button, Flex, Heading, Link } from "rebass"
+import { Box, Button, Flex, Heading } from "rebass"
 import { getInvoices, loadMoreInvoices } from "../state/slices/invoices"
 import { useStateSelector } from "../utils/useStateSelector"
 import { Block } from "./block"
@@ -9,7 +9,7 @@ import { RowInvoice } from "./rowInvoice"
 export const dataTestIds = {
   container: "invoices-container",
   invoice: "invoices-invoice",
-  loadMoreButton: "invoices-load-more"
+  loadMoreButton: "invoices-load-more",
 }
 
 export type Props = {
@@ -21,8 +21,10 @@ export const BlockInvoices: React.FC<Props> = ({ customerId }) => {
   const { invoicesList, hasMore, lastObject } = useStateSelector("invoices")
 
   useEffect(() => {
-    customerId && dispatch(getInvoices({ customerId }))
-  }, [customerId])
+    if (customerId) {
+      dispatch(getInvoices({ customerId }))
+    }
+  }, [customerId, dispatch])
 
   if (!invoicesList || invoicesList.length < 1) {
     return null
@@ -30,34 +32,33 @@ export const BlockInvoices: React.FC<Props> = ({ customerId }) => {
 
   return (
     <Box data-testid={dataTestIds.container}>
-
       <Block
         gridTemplateColumns={[35, 15, 15, 10, 10, 15]}
         headerLeft={<Heading as="h3">Invoices</Heading>}
       >
-        {invoicesList.map(invoice => (
-          <RowInvoice
-            key={invoice.id}
-            invoice={invoice}
-          />)
-        )}
+        {invoicesList.map((invoice) => (
+          <RowInvoice key={invoice.id} invoice={invoice} />
+        ))}
       </Block>
 
-      { hasMore &&
+      {hasMore && (
         <Flex justifyContent="center">
-        <Button
+          <Button
             data-testid={dataTestIds.loadMoreButton}
             variant="greyGhostSmall"
-            onClick={() => {
+            onClick={(): void => {
               dispatch(
                 loadMoreInvoices({
                   customerId,
-                  lastObject
+                  lastObject,
                 })
               )
             }}
-          >Load More</Button>
-        </Flex>}
+          >
+            Load More
+          </Button>
+        </Flex>
+      )}
     </Box>
   )
 }

@@ -10,11 +10,11 @@ const mockUseStateSelector = jest.fn(() => {});
 const mockSetPassword = jest.fn((attr) => attr);
 const mockUpdatePassword = jest.fn((attr) => attr);
 
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useDispatch: () => () => mockDispatch()
 }));
 
-jest.mock('../utils/useStateSelector', () => ({
+jest.mock("../utils/useStateSelector", () => ({
   useStateSelector: () => mockUseStateSelector()
 }));
 
@@ -57,12 +57,12 @@ it("dispatches setPassword when inputs values change", () => {
   const password1 = queryByTestId(dataTestIds.password1Field)
 
   act(() => {
-    fireEvent.change(password1, { target: { value: 'pass1' } })
+    fireEvent.change(password1, { target: { value: "pass1" } })
   })
   expect(mockDispatch).toBeCalledTimes(1)
   expect(mockSetPassword).toBeCalledTimes(1)
   expect(mockSetPassword).toBeCalledWith({
-    password: 'pass1'
+    password: "pass1"
   })
 
   mockDispatch.mockClear()
@@ -71,12 +71,12 @@ it("dispatches setPassword when inputs values change", () => {
   const password2 = queryByTestId(dataTestIds.password2Field)
 
   act(() => {
-    fireEvent.change(password2, { target: { value: 'pass2' } })
+    fireEvent.change(password2, { target: { value: "pass2" } })
   })
   expect(mockDispatch).toBeCalledTimes(1)
   expect(mockSetPassword).toBeCalledTimes(1)
   expect(mockSetPassword).toBeCalledWith({
-    password1: 'pass2'
+    password1: "pass2"
   })
 })
 
@@ -108,7 +108,7 @@ it("dispatches updatePassword when submit button is clicked", () => {
   expect(mockDispatch).toBeCalledTimes(1)
   expect(mockUpdatePassword).toBeCalledTimes(1)
   expect(mockUpdatePassword).toBeCalledWith({
-    password: 'mockedPassword'
+    password: "mockedPassword"
   })
 
 })

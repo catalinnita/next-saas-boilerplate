@@ -1,14 +1,14 @@
 import React, { useState } from "react"
 import { act, fireEvent, render } from "@testing-library/react"
-import { Header, dataTestIds } from "../components/header"
 import { useThemeUI } from "theme-ui"
+import { Header, dataTestIds } from "../components/header"
 
 const mockUseThemeUI = jest.fn()
 const mockUseState = jest.fn()
 const mockSetShowAccountMenu = jest.fn((attr) => attr)
 
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
+jest.mock("react", () => ({
+  ...jest.requireActual("react"),
   useState: () => mockUseState()
 }));
 

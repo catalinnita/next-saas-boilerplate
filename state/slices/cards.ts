@@ -1,9 +1,9 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import Stripe from 'stripe'
-import { RootState } from '../store'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import Stripe from "stripe"
+import { RootState } from "../store"
 
 export const getCards = createAsyncThunk(
-  'api/cards/',
+  "api/cards/",
   async ({ customerId }: { customerId: string }) => {
     const response = await fetch(`/api/cards/${customerId}`)
     const cards = await response.json()
@@ -12,13 +12,13 @@ export const getCards = createAsyncThunk(
 )
 
 export const removeCard = createAsyncThunk(
-  'api/cards/remove',
-  async ({ customerId, sourceId }: { customerId: string, sourceId: string }) => {
+  "api/cards/remove",
+  async ({ customerId, sourceId }: { customerId: string; sourceId: string }) => {
     const response = await fetch(`/api/cards/${customerId}`, {
       method: "DELETE",
       body: JSON.stringify({
-        sourceId
-      })
+        sourceId,
+      }),
     })
     const card = await response.json()
     return card as Stripe.Card
@@ -26,15 +26,17 @@ export const removeCard = createAsyncThunk(
 )
 
 export const attachCard = createAsyncThunk(
-  'api/cards/add',
+  "api/cards/add",
   async ({ cardToken }: { cardToken: string }, thunkApi) => {
-    const { customer: {id} } = thunkApi.getState() as RootState
+    const {
+      customer: { id },
+    } = thunkApi.getState() as RootState
 
     const response = await fetch(`/api/cards/${id}`, {
       method: "PUT",
       body: JSON.stringify({
-        cardToken
-      })
+        cardToken,
+      }),
     })
     const card = await response.json()
     return card
@@ -42,13 +44,13 @@ export const attachCard = createAsyncThunk(
 )
 
 type cardsState = {
-  cardsList: Stripe.Card[],
-  hasCard: boolean,
+  cardsList: Stripe.Card[]
+  hasCard: boolean
   loading: Record<string, boolean>
 }
 
 export const cards = createSlice({
-  name: 'cards',
+  name: "cards",
   initialState: {
     cardsList: [],
     hasCard: false,
@@ -56,28 +58,24 @@ export const cards = createSlice({
       addingCard: false,
       removingCard: false,
       changingDefaultCard: false,
-    }
+    },
   } as cardsState,
-  reducers: {
-  },
-  extraReducers: (builder) =>  {
+  reducers: {},
+  extraReducers: (builder) => {
     builder.addCase(getCards.fulfilled, (state, action) => {
       state.cardsList = action.payload
       state.hasCard = state.cardsList.length > 0
     })
     builder.addCase(removeCard.fulfilled, (state, action) => {
-      state.cardsList = state.cardsList.filter(card => action.payload.id !== card.id)
+      state.cardsList = state.cardsList.filter((card) => action.payload.id !== card.id)
       state.hasCard = state.cardsList.length > 0
     })
     builder.addCase(attachCard.fulfilled, (state, action) => {
-      state.cardsList = [
-        ...state.cardsList,
-        action.payload
-      ]
+      state.cardsList = [...state.cardsList, action.payload]
 
       state.hasCard = state.cardsList.length > 0
     })
-  }
+  },
 })
 
 // export const { } = cards.actions

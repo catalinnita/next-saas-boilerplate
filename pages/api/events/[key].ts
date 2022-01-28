@@ -1,23 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { PrismaClient } from '@prisma/client'
-import { generateId } from '../../../utils/generateId'
+import { PrismaClient } from "@prisma/client"
+import { generateId } from "../../../utils/generateId"
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-  const {
-    method,
-    body,
-    headers,
-    cookies,
-  } = req
-
-  // console.log({ req })
-  // console.log({ cookies })
-  // console.log({ method })
-  // console.log({ cookies })
-  // console.log({ headers })
+  const { method, body, headers, cookies } = req
 
   if (method === "OPTIONS") {
-    console.log("options")
     res.status(200).end()
   }
 
@@ -46,31 +34,31 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
         // save it in db
         await prisma.users_devices.create({
           data: {
-            sduid: sduid,
+            sduid,
             created: new Date(),
             // users_id: 1,
-            os: 'windows',
-            browser: 'chrome',
+            os: "windows",
+            browser: "chrome",
             res_x: 1000,
             res_y: 1000,
-          }
+          },
         })
 
-        serverCookies.push(`sduid=${sduid}; path=/; max-age=${60 * 60 * 24 * 365 * 2}; SameSite=None; Secure`)
+        serverCookies.push(
+          `sduid=${sduid}; path=/; max-age=${60 * 60 * 24 * 365 * 2}; SameSite=None; Secure`
+        )
       }
 
       if (sduid && !sdsid) {
         sdsid = generateId()
 
-        console.log(sduid)
-
         // save it in db
         await prisma.users_sessions.create({
           data: {
-            sdsid: sdsid,
-            sduid: sduid,
+            sdsid,
+            sduid,
             created: new Date(),
-          }
+          },
         })
 
         serverCookies.push(`sdsid=${sdsid}; path=/; SameSite=None; Secure`)
@@ -87,8 +75,8 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
           pos_y: event.pos.y || 0,
           time_abs: new Date(event.time.timestamp),
           time_rel: event.time.sinceLoaded,
-          sdsid: sdsid,
-        }
+          sdsid,
+        },
       })
 
       // await prisma.events_data.createMany({
@@ -96,13 +84,15 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
 
       await prisma.$disconnect()
 
-      res.writeHead(200, {
-        'Set-Cookie': serverCookies
-      }).end("event tracked")
-
+      res
+        .writeHead(200, {
+          "Set-Cookie": serverCookies,
+        })
+        .end("event tracked")
     } catch (error) {
-      console.error(error);
-      res.status(error.status || 400).end(JSON.stringify(error));
+      // eslint-disable-next-line no-console
+      console.error(error)
+      res.status(error.status || 400).end(JSON.stringify(error))
     }
   }
 }

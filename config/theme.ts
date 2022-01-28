@@ -1,5 +1,3 @@
-import { isAbsolute } from "path"
-
 const colors = {
   navy: "#273c75",
 
@@ -46,10 +44,10 @@ const space = {
 }
 
 const fonts = {
-  main: `Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif`,
-  mono: `"Roboto Mono", Courier`,
-  heading: `Rubik`,
-  menu: `Rubik`,
+  main: "Roboto, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+  mono: "\"Roboto Mono\", Courier",
+  heading: "Rubik",
+  menu: "Rubik",
 }
 
 const themeFonts = {
@@ -105,7 +103,7 @@ const border = {
 export const theme = {
   breakpoints: Object.values(breakpoints),
   space: Object.values(space),
-  fontSizes: Object.values(fontSizes).map(val => parseInt(val)),
+  fontSizes: Object.values(fontSizes).map(val => parseInt(val, 10)),
   colors: { ...themeColors },
   fonts: { ...themeFonts },
   fontWeights: { ...themeFontWeights },
@@ -171,7 +169,7 @@ export const theme = {
     accountMenuLink: {
       color: themeColors.text,
       fontSize: fontSizes.m,
-      textDecoration: 'none',
+      textDecoration: "none",
       px: space.l,
       py: space.m,
       minWidth: "200px",
@@ -183,7 +181,7 @@ export const theme = {
     sidebarMenuLink: {
       bg: colors.white,
       color: themeColors.text,
-      textDecoration: 'none',
+      textDecoration: "none",
       px: space.l,
       py: space.s,
       fontSize: fontSizes.m,
@@ -196,7 +194,7 @@ export const theme = {
       fontSize: fontSizes.l,
       fontFamily: fonts.menu,
       color: colors.white,
-      textDecoration: 'none',
+      textDecoration: "none",
       fontWeight: 400,
       mx: space.l,
       "&:hover": {

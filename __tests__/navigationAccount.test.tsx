@@ -1,7 +1,7 @@
 import React from "react"
 import { render } from "@testing-library/react"
-import { NavigationAccount, dataTestIds } from "../components/navigationAccount"
 import { useThemeUI } from "theme-ui"
+import { NavigationAccount, dataTestIds } from "../components/navigationAccount"
 
 const mockUseThemeUI = jest.fn()
 jest.mock("theme-ui", () => ({

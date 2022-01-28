@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { Button, Heading } from "rebass"
-import { showPopup } from '../state/slices/popups'
 import { useDispatch } from "react-redux"
+import { showPopup } from "../state/slices/popups"
 import { RowCard } from "./rowCard"
 import { useStateSelector } from "../utils/useStateSelector"
 import { Block } from "./block"
@@ -10,14 +10,10 @@ import { getProjects } from "../state/slices/projects"
 export const dataTestIds = {
   card: "payment-methods-card",
   addCardButton: "add-card-button",
-  cardRow: "card-row"
+  cardRow: "card-row",
 }
 
-export type Props = {
-  customerId: string,
-}
-
-export const BlockProjects: React.FC = ({ }) => {
+export const BlockProjects: React.FC = () => {
   const dispatch = useDispatch()
   const { projectsList } = useStateSelector("projects")
 
@@ -27,8 +23,6 @@ export const BlockProjects: React.FC = ({ }) => {
     dispatch(getProjects())
   })
 
-  console.log({ projectsList })
-
   if (!projectsList.length) {
     return null
   }
@@ -36,29 +30,28 @@ export const BlockProjects: React.FC = ({ }) => {
   return (
     <Block
       gridTemplateColumns={[5, 5, 25, 55, 10]}
-      headerLeft={
-        <Heading as="h3">Payment methods</Heading>
-      }
+      headerLeft={<Heading as="h3">Payment methods</Heading>}
       headerRight={
-        canAddMoreProjects &&
-        <Button
-          data-testid={dataTestIds.addCardButton}
-          variant="primarySmall"
-          onClick={() => {
-            dispatch(showPopup({
-              popup: "paymentMethod"
-            }))
-          }}>
-          Add project
-        </Button>
+        canAddMoreProjects && (
+          <Button
+            data-testid={dataTestIds.addCardButton}
+            variant="primarySmall"
+            onClick={(): void => {
+              dispatch(
+                showPopup({
+                  popup: "paymentMethod",
+                })
+              )
+            }}
+          >
+            Add project
+          </Button>
+        )
       }
-      >
-        {projectsList.map(card => (
-          <RowCard
-            key={card.id}
-            card={card}
-          />
-        ))}
+    >
+      {projectsList.map((card) => (
+        <RowCard key={card.id} card={card} />
+      ))}
     </Block>
   )
 }

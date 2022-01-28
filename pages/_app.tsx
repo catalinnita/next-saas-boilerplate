@@ -3,7 +3,7 @@ import App, { AppProps } from "next/app"
 import { ThemeProvider } from "theme-ui"
 import Head from "next/head"
 import { Provider } from "react-redux"
-import { UserProvider } from '@auth0/nextjs-auth0';
+import { UserProvider } from "@auth0/nextjs-auth0";
 import { theme } from "../config/theme"
 
 import store from "../state/store"

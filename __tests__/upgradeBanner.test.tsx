@@ -1,7 +1,7 @@
 import React from "react"
 import { act, fireEvent, render } from "@testing-library/react";
-import { UpgradeBanner, dataTestIds} from "../components/upgradeBanner";
 import { useDispatch } from "react-redux"
+import { UpgradeBanner, dataTestIds} from "../components/upgradeBanner";
 import { useStateSelector } from "../utils/useStateSelector"
 import { showPopup } from "../state/slices/popups"
 import { activateSubscription, getSubscription } from "../state/slices/subscription"
@@ -13,11 +13,11 @@ const mockActivateSubscription = jest.fn((attr) => attr);
 const mockGetSubscription = jest.fn((attr) => attr);
 
 
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useDispatch: () => () => mockDispatch()
 }));
 
-jest.mock('../utils/useStateSelector', () => ({
+jest.mock("../utils/useStateSelector", () => ({
   useStateSelector: () => mockUseStateSelector()
 }));
 

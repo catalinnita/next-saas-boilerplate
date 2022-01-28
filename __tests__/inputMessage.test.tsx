@@ -3,7 +3,7 @@ import { render } from "@testing-library/react"
 import { InputMessage, dataTestIds } from "../components/inputMessage"
 
 it("renders the success message if valid is true ", () => {
-  const { queryByTestId } = render(<InputMessage valid={true} message="success message" />)
+  const { queryByTestId } = render(<InputMessage valid message="success message" />)
   expect(queryByTestId(dataTestIds.successText).textContent).toBe("success message")
 })
 

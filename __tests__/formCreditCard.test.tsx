@@ -1,15 +1,15 @@
 import React from "react"
 import { act, fireEvent, render, waitFor } from "@testing-library/react";
+import { useStripe, useElements } from "@stripe/react-stripe-js"
 import { FormCreditCard, dataTestIds } from "../components/formCreditCard";
-import { useStripe, useElements } from '@stripe/react-stripe-js'
 import { StripeElementsProvider } from "../components/stripeElementsProvider";
 
 const mockUseStripe = jest.fn()
 const mockUseElements = jest.fn()
 const mockOnSubmitCallback = jest.fn((attr) => attr)
 
-jest.mock('@stripe/react-stripe-js', () => ({
-  ...jest.requireActual('@stripe/react-stripe-js'),
+jest.mock("@stripe/react-stripe-js", () => ({
+  ...jest.requireActual("@stripe/react-stripe-js"),
   useStripe: () => mockUseStripe(() => {}),
   useElements: () => mockUseElements(() => {}),
 }))

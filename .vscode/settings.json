@@ -1,3 +1,7 @@
 {
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "eslint.options": {
+        "configFile": "/Users/catalinnita/Dev/next-saas-boilerplate/.eslintrc.js"
+    },
+    "eslint.format.enable": true
 }

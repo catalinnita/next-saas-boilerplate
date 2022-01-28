@@ -8,8 +8,8 @@ module.exports = {
     },
   },
   rules: {
-    "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
+    "no-use-before-define": "off",
     "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
     "react/destructuring-assignment": "off",
@@ -18,7 +18,8 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "import/no-extraneous-dependencies": "off",
-    quotes: [2, "singlequote"],
+    "react/function-component-definition": [2, { namedComponents: "arrow-function" }],
+    quotes: [2, "double"],
   },
   plugins: ["jsx-a11y"],
 }

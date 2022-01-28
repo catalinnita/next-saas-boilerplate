@@ -2,16 +2,16 @@ import Stripe from "stripe"
 import React from "react"
 import { Box, Button, Text } from "rebass"
 import { Label, Radio } from "@rebass/forms"
+import { useDispatch } from "react-redux"
 import { CardIcon } from "./cardIcon"
 import { useStateSelector } from "../utils/useStateSelector"
-import { useDispatch } from "react-redux"
 import { updateDefaultCard } from "../state/slices/customer"
 import { removeCard } from "../state/slices/cards"
 
 export const dataTestIds = {
   cardRow: "card-row",
   defaultCardRadio: "card-radio",
-  removeCardButton: "card-remocec"
+  removeCardButton: "card-remocec",
 }
 
 export type Props = {
@@ -33,13 +33,15 @@ export const RowCard: React.FC<Props> = ({ card }) => {
             name="defaultCard"
             value={card.id}
             checked={defaultCardId === card.id}
-            onChange={() => {
-              dispatch(updateDefaultCard({
-                customerId: id,
-                sourceId: card.id,
-              }))
+            onChange={(): void => {
+              dispatch(
+                updateDefaultCard({
+                  customerId: id,
+                  sourceId: card.id,
+                })
+              )
             }}
-            />
+          />
         </Label>
       </Box>
 
@@ -48,24 +50,28 @@ export const RowCard: React.FC<Props> = ({ card }) => {
       </Box>
 
       <Box variant="rowStyle">
-        <Text as="span" variant="cardNumber">**** **** **** {card.last4}</Text>
+        <Text as="span" variant="cardNumber">
+          **** **** **** {card.last4}
+        </Text>
       </Box>
 
-      <Box variant="rowStyle">
-        {`${card.exp_month}/${card.exp_year}`}
-      </Box>
+      <Box variant="rowStyle">{`${card.exp_month}/${card.exp_year}`}</Box>
 
       <Box variant="rowStyle" sx={{ justifySelf: "end" }}>
         <Button
           data-testid={dataTestIds.removeCardButton}
           variant="greyGhostSmall"
-          onClick={() => {
+          onClick={(): void => {
             dispatch(
               removeCard({
                 customerId: id,
-                sourceId: card.id
-              }))
-          }}>remove</Button>
+                sourceId: card.id,
+              })
+            )
+          }}
+        >
+          remove
+        </Button>
       </Box>
     </>
   )

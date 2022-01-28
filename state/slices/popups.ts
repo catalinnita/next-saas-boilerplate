@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit"
 
 export const popups = createSlice({
-  name: 'popups',
+  name: "popups",
   initialState: {
     popupToShow: null,
     showCloseButton: true,
@@ -13,7 +13,7 @@ export const popups = createSlice({
     },
     closeAllPopups: (state) => {
       state.popupToShow = null
-    }
+    },
   },
 })
 

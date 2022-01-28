@@ -1,8 +1,8 @@
 import React from "react"
-import mockCards from "./_mockCards"
 import { act, fireEvent, render } from "@testing-library/react"
-import { BlockCards, dataTestIds } from "../components/blockCards"
 import { useDispatch } from "react-redux"
+import mockCards from "./_mockCards"
+import { BlockCards, dataTestIds } from "../components/blockCards"
 import { useStateSelector } from "../utils/useStateSelector"
 import { getCards } from "../state/slices/cards"
 import { showPopup } from "../state/slices/popups"
@@ -14,23 +14,23 @@ const mockGetCards = jest.fn((attr) => attr)
 const mockShowPopup = jest.fn((attr) => attr)
 const mockOrderObjectById = jest.fn((attr) => attr)
 
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useDispatch: () => () => mockDispatch()
 }));
 
-jest.mock('../utils/useStateSelector', () => ({
+jest.mock("../utils/useStateSelector", () => ({
   useStateSelector: () => mockUseStateSelector()
 }));
 
-jest.mock('../state/slices/cards', () => ({
+jest.mock("../state/slices/cards", () => ({
   getCards: (attr) => mockGetCards(attr)
 }));
 
-jest.mock('../state/slices/popups', () => ({
+jest.mock("../state/slices/popups", () => ({
   showPopup: (attr) => mockShowPopup(attr)
 }));
 
-jest.mock('../utils/orderObjectById', () => ({
+jest.mock("../utils/orderObjectById", () => ({
   orderObjectById: (attr) => mockOrderObjectById(attr)
 }))
 

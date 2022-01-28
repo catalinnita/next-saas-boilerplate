@@ -1,31 +1,31 @@
 import React from "react"
-import mockCards from "./_mockCards"
 import { act, fireEvent, render } from "@testing-library/react"
-import { RowCard, dataTestIds } from "../components/rowCard"
 import { useDispatch } from "react-redux"
+import Stripe from "stripe"
+import mockCards from "./_mockCards"
+import { RowCard, dataTestIds } from "../components/rowCard"
 import { useStateSelector } from "../utils/useStateSelector"
 import { updateDefaultCard } from "../state/slices/customer"
 import { removeCard } from "../state/slices/cards"
-import Stripe from "stripe"
 
 const mockDispatch = jest.fn();
 const mockUseStateSelector = jest.fn(() => {})
 const mockUpdateDefaultCard = jest.fn((attr) => attr)
 const mockRemoveCard = jest.fn((attr) => attr)
 
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useDispatch: () => () => mockDispatch()
 }));
 
-jest.mock('../utils/useStateSelector', () => ({
+jest.mock("../utils/useStateSelector", () => ({
   useStateSelector: () => mockUseStateSelector()
 }));
 
-jest.mock('../state/slices/customer', () => ({
+jest.mock("../state/slices/customer", () => ({
   updateDefaultCard: (attr) => mockUpdateDefaultCard(attr)
 }));
 
-jest.mock('../state/slices/cards', () => ({
+jest.mock("../state/slices/cards", () => ({
   removeCard: (attr) => mockRemoveCard(attr)
 }));
 

@@ -1,10 +1,10 @@
-import { useStateSelector } from "../utils/useStateSelector"
 import { useSelector } from "react-redux"
+import { useStateSelector } from "../utils/useStateSelector"
 import store from "../state/store"
 
 const mockUseSelector = jest.fn(() => {})
 
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useSelector: () => mockUseSelector()
 }));
 

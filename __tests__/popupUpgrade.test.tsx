@@ -1,7 +1,7 @@
 import React from "react"
 import { act, fireEvent, render } from "@testing-library/react";
-import { PopupUpgrade } from "../components/popupUpgrade";
 import { useDispatch } from "react-redux"
+import { PopupUpgrade } from "../components/popupUpgrade";
 import { attachCard } from "../state/slices/cards"
 import { activateSubscription } from "../state/slices/subscription"
 import { closeAllPopups } from "../state/slices/popups"
@@ -17,15 +17,15 @@ function MockFormCreditCard({
   onSubmitCallback
 }) {
   return (
-    <button data-testid="mockedButton" onClick={() => { onSubmitCallback({}) }}></button>
+    <button data-testid="mockedButton" onClick={() => { onSubmitCallback({}) }} />
   )
 }
 
 jest.mock("../components/formCreditCard", () => ({
-  ...jest.requireActual('../components/formCreditCard'),
+  ...jest.requireActual("../components/formCreditCard"),
   FormCreditCard: MockFormCreditCard
 }))
-jest.mock('react-redux', () => ({
+jest.mock("react-redux", () => ({
   useDispatch: () => () => mockDispatch()
 }));
 jest.mock("../state/slices/popups", () => ({

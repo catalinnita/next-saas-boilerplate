@@ -6,9 +6,9 @@ it("renders the header if there is a headerLeft prop", () => {
   const { getByTestId } = render(
     <Block
       gridTemplateColumns={[10, 50, 40]}
-      headerLeft={<div className="headerLeft"></div>}
+      headerLeft={<div className="headerLeft" />}
     >
-      <div></div>
+      <div />
     </Block>)
 
   const headerLeft = getByTestId(dataTestIds.container).getElementsByClassName("headerLeft")
@@ -20,9 +20,9 @@ it("renders the header if there is a headerRight prop", () => {
   const { getByTestId } = render(
     <Block
       gridTemplateColumns={[10, 50, 40]}
-      headerRight={<div className="headerRight"></div>}
+      headerRight={<div className="headerRight" />}
     >
-      <div></div>
+      <div />
     </Block>)
 
   const headerRight = getByTestId(dataTestIds.container).getElementsByClassName("headerRight")
@@ -35,7 +35,7 @@ it("doesn't render the header if there is not header props", () => {
     <Block
       gridTemplateColumns={[10, 50, 40]}
     >
-      <div></div>
+      <div />
     </Block>)
 
   expect(queryByTestId(dataTestIds.header)).not.toBeInTheDocument()
@@ -46,8 +46,8 @@ it("renders the children of the block component", () => {
     <Block
       gridTemplateColumns={[10, 50, 40]}
     >
-      <div className="child-1"></div>
-      <div className="child-2"></div>
+      <div className="child-1" />
+      <div className="child-2" />
     </Block>)
 
   const child1 = getByTestId(dataTestIds.container).getElementsByClassName("child-1")

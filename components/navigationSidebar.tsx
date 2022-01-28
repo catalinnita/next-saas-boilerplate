@@ -5,8 +5,7 @@ export const dataTestIds = {
   container: "container"
 }
 
-export const NavigationSidebar: React.FC = () => {
-  return (
+export const NavigationSidebar: React.FC = () => (
     <Box data-testid={dataTestIds.container} variant="menuStyle">
        <Flex justifyContent="space-between" alignItems="center"
           backgroundColor="white"
@@ -19,4 +18,3 @@ export const NavigationSidebar: React.FC = () => {
       <Link variant="sidebarMenuLink" href="/projects">Projects</Link>
     </Box>
   )
-}

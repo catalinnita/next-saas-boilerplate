@@ -1,25 +1,25 @@
 import React from "react"
 import { Box, Heading, Text } from "rebass"
+import { useDispatch } from "react-redux"
 import { Popup } from "./popup"
 import AppConfig from "../config/appConfig"
 import { StripeElementsProvider } from "./stripeElementsProvider"
 import { FormCreditCard } from "./formCreditCard"
-import { useDispatch } from "react-redux"
 import { attachCard } from "../state/slices/cards"
 import { closeAllPopups } from "../state/slices/popups"
 
 export const dataTestIds = {
-  container: "popup-payment-method-container"
+  container: "popup-payment-method-container",
 }
 
 export type Props = {
   dataTestid?: string
 }
 
-export const PopupAddPaymentMethod: React.FC<Props> = ({ dataTestid }) => {
+export const PopupAddPaymentMethod: React.FC<Props> = () => {
   const dispatch = useDispatch()
 
-  const onSubmitCallback = ({ cardToken }: Record<string, any>) => {
+  const onSubmitCallback = ({ cardToken }: Record<string, any>): void => {
     dispatch(attachCard({ cardToken }))
     dispatch(closeAllPopups())
   }
@@ -32,7 +32,9 @@ export const PopupAddPaymentMethod: React.FC<Props> = ({ dataTestid }) => {
         <StripeElementsProvider>
           <FormCreditCard
             buttonText="Add Card"
-            onSubmitCallback={(args) => { onSubmitCallback(args) }}
+            onSubmitCallback={(args): void => {
+              onSubmitCallback(args)
+            }}
           />
         </StripeElementsProvider>
       </Box>
