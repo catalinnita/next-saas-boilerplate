@@ -1,7 +1,5 @@
 import React from "react"
 import App, { AppProps } from "next/app"
-import { Router } from "next/dist/client/router"
-import { AppContextType, AppInitialProps } from "next/dist/next-server/lib/utils"
 import { ThemeProvider } from "theme-ui"
 import Head from "next/head"
 import { Provider } from "react-redux"

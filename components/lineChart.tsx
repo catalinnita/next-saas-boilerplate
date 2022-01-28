@@ -40,6 +40,7 @@ const options = {
 
 export const LineChart: React.FC = () => {
   return (
-    <Line type="line" data={data} options={options} />
+    // <Line type="line" data={data} options={options} />
+    <></>
   )
 }

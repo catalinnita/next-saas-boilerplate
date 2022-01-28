@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 import { Bar } from 'react-chartjs-2';
 
 const data = {
@@ -45,6 +45,7 @@ const options = {
 
 export const BarChart: React.FC = () => {
   return (
-    <Bar type="bar" data={data} options={options} />
+    // <Bar type="bar" data={data} options={options} />
+    <></>
   )
 }
