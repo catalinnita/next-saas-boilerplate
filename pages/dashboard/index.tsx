@@ -29,10 +29,9 @@ const Page: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
 
   const customer = useStateSelector("customer")
-
   useEffect(() => {
     dispatch(setUser(user))
-    dispatch(getCustomer(user.name))
+    dispatch(getCustomer(user.name)) // update here with a different value
   }, [dispatch, user])
 
   const title = "Dashboard page"

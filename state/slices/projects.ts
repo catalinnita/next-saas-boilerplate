@@ -32,7 +32,6 @@ export const projects = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getProjects.fulfilled, (state, action) => {
-      console.log({ action })
       state.projectsList = action.payload
     })
   },

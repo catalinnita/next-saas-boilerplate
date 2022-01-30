@@ -10,6 +10,7 @@ export const getSubscription = createAsyncThunk(
   async (customerId: string) => {
     const response = await fetch(`/api/subscriptions/${customerId}`)
     const subscription = await response.json()
+
     return subscription as Stripe.Subscription
   }
 )

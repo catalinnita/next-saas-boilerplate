@@ -41,8 +41,8 @@ export interface customerState {
 }
 
 const initialState = {
-  id: null,
-  defaultCardId: null,
+  id: undefined,
+  defaultCardId: undefined,
   loading: {
     creatingCustomer: false,
   },
@@ -60,6 +60,10 @@ export const customer = createSlice({
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.id = action.payload.id
       state.defaultCardId = action.payload.default_source?.toString()
+    })
+
+    builder.addCase(getCustomer.rejected, (state, action) => {
+      state.id = null
     })
 
     builder.addCase(updateDefaultCard.fulfilled, (state, action) => {

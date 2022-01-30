@@ -18,8 +18,7 @@ export type Props = {
 export const UpgradeBanner: React.FC<Props> = ({ customerId }) => {
   const dispatch = useDispatch()
   const { hasCard } = useStateSelector("cards")
-  const subscription = useStateSelector("subscription") // ?
-  const { popupToShow } = useStateSelector("popups")
+  const subscription = useStateSelector("subscription")
 
   const upgradeAction = (): void => {
     if (!subscription.status) {
@@ -41,7 +40,7 @@ export const UpgradeBanner: React.FC<Props> = ({ customerId }) => {
   // const hadTrial = false
   const upgradeText = "Upgrade to premium"
 
-  if (popupToShow || (subscription.status !== "canceled" && subscription.status !== null)) {
+  if (subscription.status !== "canceled" && customerId !== null) {
     return null
   }
 
