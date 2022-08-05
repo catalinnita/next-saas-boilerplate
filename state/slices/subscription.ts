@@ -80,6 +80,7 @@ export interface subscriptionState {
     | "none"
     | null
   loading: {
+    pending: boolean
     creating: boolean
     cancelling: boolean
     activating: boolean
@@ -97,6 +98,7 @@ export const initialState = {
   invoiceDate: null,
   status: null,
   loading: {
+    pending: false,
     creating: false,
     cancelling: false,
     activating: false,
@@ -118,10 +120,21 @@ export const subscription = createSlice({
       state.price = `${action.payload.items.data[0].price.unit_amount / 100}`
       state.period = action.payload.items.data[0].price.recurring.interval
     },
+    stopSubscriptionLoading: (state, action) => {
+      state.loading.pending = false
+    },
+    startSubscriptionLoading: (state, action) => {
+      state.loading.pending = true
+    },
   },
 
   extraReducers: (builder) => {
+    builder.addCase(getSubscription.pending, (state, action) => {
+      subscription.caseReducers.startSubscriptionLoading(state, action)
+    })
+
     builder.addCase(getSubscription.fulfilled, (state, action) => {
+      subscription.caseReducers.stopSubscriptionLoading(state, action)
       subscription.caseReducers.setSubscriptionInfo(state, action)
     })
 
@@ -139,6 +152,7 @@ export const subscription = createSlice({
   },
 })
 
-export const { setSubscriptionInfo } = subscription.actions
+export const { setSubscriptionInfo, startSubscriptionLoading, stopSubscriptionLoading } =
+  subscription.actions
 
 export default subscription.reducer

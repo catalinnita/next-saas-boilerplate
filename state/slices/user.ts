@@ -14,6 +14,8 @@ export const updateProfile = createAsyncThunk(
   async (userDetails: Record<string, any>, { getState }) => {
     const { user } = getState() as RootState
     const { token, id } = user
+    console.log({ userDetails, user })
+
     const fetchedUser = await updateUserById(token, id, {
       ...userDetails,
     })
@@ -26,9 +28,10 @@ export const updatePassword = createAsyncThunk(
   async (userDetails: Record<string, any>, { getState }) => {
     const { user } = getState() as RootState
     const { token, id } = user
-    return await updateUserById(token, id, {
+    const fetchedUser = await updateUserById(token, id, {
       ...userDetails,
     })
+    return fetchedUser
   }
 )
 
@@ -76,7 +79,8 @@ export const user = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      state.id = action.payload.user_id
+      console.log({ action })
+      state.id = action.payload.sub
       state.email = action.payload.email
       state.username = action.payload.name
       state.name = action.payload.nickname

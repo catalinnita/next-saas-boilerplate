@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux"
 import { Box, Button, Flex, Heading, Text } from "rebass"
 import { showPopup } from "../state/slices/popups"
 import {
+  startSubscriptionLoading,
   activateSubscription,
   cancelSubscription,
   getSubscription,
@@ -26,6 +27,7 @@ export const BlockSubscription: React.FC<Props> = ({ customerId }) => {
 
   useEffect(() => {
     if (customerId) {
+      dispatch(startSubscriptionLoading)
       dispatch(getSubscription(customerId))
     }
   }, [customerId, dispatch])
@@ -36,11 +38,13 @@ export const BlockSubscription: React.FC<Props> = ({ customerId }) => {
       headerLeft={<Heading as="h3">Membership</Heading>}
     >
       <Box variant="rowStyle">
-        <Text as="span" fontWeight={500}>
-          {!subscription.status
-            ? "ScrambledData Free"
-            : `ScrambledData Premium - ${subscription.currencySymbol}${subscription.price} / ${subscription.period}`}
-        </Text>
+        {customerId !== undefined && !subscription.loading.pending && (
+          <Text as="span" fontWeight={500}>
+            {!subscription.status
+              ? "ScrambledData Free"
+              : `ScrambledData Premium - ${subscription.currencySymbol}${subscription.price} / ${subscription.period}`}
+          </Text>
+        )}
       </Box>
 
       <Box variant="rowStyle">{subscription.createdDate}</Box>

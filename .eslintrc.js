@@ -19,6 +19,7 @@ module.exports = {
     "@typescript-eslint/ban-ts-ignore": "off",
     "import/no-extraneous-dependencies": "off",
     "react/function-component-definition": [2, { namedComponents: "arrow-function" }],
+    "no-param-reassign": 0,
     quotes: [2, "double"],
   },
   plugins: ["jsx-a11y"],

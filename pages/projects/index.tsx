@@ -27,7 +27,6 @@ export const dataTestIds = {
 const Page: React.FC<Props> = (props) => {
   const { user } = props
   const dispatch = useDispatch()
-
   const customer = useStateSelector("customer")
 
   useEffect(() => {

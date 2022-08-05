@@ -3,7 +3,7 @@ import App, { AppProps } from "next/app"
 import { ThemeProvider } from "theme-ui"
 import Head from "next/head"
 import { Provider } from "react-redux"
-import { UserProvider } from "@auth0/nextjs-auth0";
+import { UserProvider } from "@auth0/nextjs-auth0"
 import { theme } from "../config/theme"
 
 import store from "../state/store"
@@ -15,7 +15,6 @@ export const dataTestIds = {
   component: "app-theme-component",
 }
 class MyApp extends App<AppProps> {
-
   render(): React.ReactElement {
     const { Component, pageProps } = this.props
     return (
@@ -24,14 +23,24 @@ class MyApp extends App<AppProps> {
           <Provider store={store} data-testid={dataTestIds.storeProvider}>
             <Head>
               <link rel="preconnect" href="https://fonts.gstatic.com" />
-              <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet" />
-              <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-              <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+              <link
+                href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+                rel="stylesheet"
+              />
+              <link
+                href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"
+                rel="stylesheet"
+              />
+              <link
+                href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap"
+                rel="stylesheet"
+              />
             </Head>
             <Component {...pageProps} />
           </Provider>
         </UserProvider>
-      </ThemeProvider>)
+      </ThemeProvider>
+    )
   }
 }
 

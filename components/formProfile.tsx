@@ -25,6 +25,11 @@ export const FormProfile: React.FC = () => {
 
   const { email, name: nickname, error, loading, validation, success } = useStateSelector("user")
 
+  console.log({
+    email,
+    nickname,
+  })
+
   return (
     <Block
       gridTemplateColumns={[30, 70]}
